@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Android</string>
+    <string name="app_name">DateNode.cz</string>
+    <string name="action_settings">Nastavení</string>
 </resources>
