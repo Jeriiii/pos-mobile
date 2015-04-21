@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="POStheme" parent="@style/_POStheme"/>
+
+  <style name="_POStheme" parent="android:Theme.Holo.Light">
+
+    <item name="android:editTextBackground">@drawable/postheme_edit_text_holo_light</item>
+
+    <item name="android:textColorHighlight">#99cf0707</item>
+    <item name="android:textSelectHandleLeft">@drawable/postheme_text_select_handle_left</item>
+    <item name="android:textSelectHandleRight">@drawable/postheme_text_select_handle_right</item>
+    <item name="android:textSelectHandle">@drawable/postheme_text_select_handle_middle</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewPOStheme</item>
+
+    <item name="android:listChoiceIndicatorMultiple">@drawable/postheme_btn_check_holo_light</item>
+
+    <item name="android:listChoiceIndicatorSingle">@drawable/postheme_btn_radio_holo_light</item>
+
+    <item name="android:buttonStyle">@style/ButtonPOStheme</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonPOStheme</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerPOStheme</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarPOStheme</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarPOStheme</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarPOStheme</item>
+
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigPOStheme</item>
+
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallPOStheme</item>
+
+    <item name="android:buttonStyleToggle">@style/TogglePOStheme</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/postheme_list_selector_holo_light</item>
+
+    <item name="android:activatedBackgroundIndicator">@drawable/postheme_activated_background_holo_light</item>
+
+    <item name="android:fastScrollThumbDrawable">@drawable/postheme_fastscroll_thumb_holo</item>
+
+  </style>
+
+</resources>
