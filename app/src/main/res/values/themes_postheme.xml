@@ -6,6 +6,7 @@
   <style name="POStheme" parent="@style/_POStheme"/>
 
   <style name="_POStheme" parent="android:Theme.Holo.Light">
+    <item name="android:actionBarStyle">@style/ActionBarPOStheme</item>
 
     <item name="android:editTextBackground">@drawable/postheme_edit_text_holo_light</item>
 

@@ -3,6 +3,10 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="ActionBarPOStheme" parent="android:Widget.Holo.ActionBar">
+        <item name="android:logo">@android:color/transparent</item>
+    </style>
+
   <style name="AutoCompleteTextViewPOStheme" parent="android:Widget.Holo.Light.AutoCompleteTextView">
       <item name="android:dropDownSelector">@drawable/postheme_list_selector_holo_light</item>
 	    <item name="android:background">@drawable/postheme_edit_text_holo_light</item>
