@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class JSONParser {
+public class JSONParser extends HttpConection {
 
     static InputStream is = null;
     static JSONObject jObj = null;
@@ -37,35 +37,14 @@ public class JSONParser {
 
     // function get json from url
     // by making HTTP POST or GET mehtod
-    public JSONObject makeHttpRequest(String url, String method,
+    public JSONObject getJSONmakeHttpRequest(String url, String method,
                                       List<NameValuePair> params) {
 
         // Making HTTP request
         try {
-
-            // check for request method
-            if(method == "POST"){
-                // request method is POST
-                // defaultHttpClient
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(url);
-                httpPost.setEntity(new UrlEncodedFormEntity(params));
-
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
-
-            }else if(method == "GET"){
-                // request method is GET
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                String paramString = URLEncodedUtils.format(params, "utf-8");
-                url += "?" + paramString;
-                HttpGet httpGet = new HttpGet(url);
-
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
-            }
+            HttpResponse httpResponse = super.makeHttpRequest(url, method, params);
+            HttpEntity httpEntity = httpResponse.getEntity();
+            is = httpEntity.getContent();
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

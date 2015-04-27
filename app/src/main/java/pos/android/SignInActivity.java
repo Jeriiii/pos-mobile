@@ -33,11 +33,18 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -286,19 +293,40 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+            String url = "http://priznaniosexu.cz/sign/in?do=signInForm-submit";
+            List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
+            urlParams.add(new BasicNameValuePair("signEmail", mEmail));
+            urlParams.add(new BasicNameValuePair("signPassword", mPassword));
+            HttpConection con = new HttpConection();
+            HttpResponse response = con.makeHttpRequest(url, "POST", urlParams);
+            int status = response.getStatusLine().getStatusCode();
+            if(status >= 400) {
+                return false; //nedokázal jsem se připojit
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            try {
+                InputStream is = response.getEntity().getContent();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        is, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
                 }
+                is.close();
+                String json = sb.toString();
+
+                Header cookie = response.getFirstHeader("Set-Cookie");
+                String cookieStr = cookie.getValue();
+                //uložit honotu cookiesStr
+                /*http://stackoverflow.com/questions/7175238/android-how-to-login-into-webpage-programmatically-using-httpsurlconnection
+                a pak to použít takto
+                HttpGet getContacts = new HttpGet(GMAIL_CONTACTS);
+                getContacts.setHeader("Cookie", cookie);
+                response = httpClient.execute(getContacts);*/
+            } catch (Exception ex) {
+
             }
 
             // TODO: register the new account here.
