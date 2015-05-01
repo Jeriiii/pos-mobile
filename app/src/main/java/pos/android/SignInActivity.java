@@ -65,14 +65,6 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             "foo@example.com:hello", "bar@example.com:world"
     };
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
