@@ -5,8 +5,7 @@
 
   <style name="POStheme" parent="@style/_POStheme"/>
 
-  <style name="_POStheme" parent="android:Theme.Holo.Light">
-    <item name="android:actionBarStyle">@style/ActionBarPOStheme</item>
+  <style name="_POStheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
 
     <item name="android:editTextBackground">@drawable/postheme_edit_text_holo_light</item>
 
@@ -44,6 +43,19 @@
     <item name="android:activatedBackgroundIndicator">@drawable/postheme_activated_background_holo_light</item>
 
     <item name="android:fastScrollThumbDrawable">@drawable/postheme_fastscroll_thumb_holo</item>
+
+    <item name="android:actionBarItemBackground">@drawable/selectable_background_postheme</item>
+    <item name="android:popupMenuStyle">@style/PopupMenu.Postheme</item>
+    <item name="android:dropDownListViewStyle">@style/DropDownListView.Postheme</item>
+    <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Postheme</item>
+    <item name="android:actionDropDownStyle">@style/DropDownNav.Postheme</item>
+    <item name="android:actionBarStyle">@style/ActionBar.Solid.Postheme</item>
+    <item name="android:actionModeBackground">@drawable/cab_background_top_postheme</item>
+    <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_postheme</item>
+    <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Postheme</item>
+
+    <!-- Light.DarkActionBar specific -->
+    <item name="android:actionBarWidgetTheme">@style/Theme.Postheme.Widget</item>
 
   </style>
 
