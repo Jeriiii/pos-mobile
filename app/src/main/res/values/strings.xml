@@ -4,4 +4,5 @@
     <string name="title_activity_chat">Chat</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_stream">StreamActivity</string>
 </resources>
