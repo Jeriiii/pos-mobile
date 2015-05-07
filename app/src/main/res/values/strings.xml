@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">DateNode.cz</string>
     <string name="action_settings">Nastavení</string>
+    <string name="title_activity_chat">ChatActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
