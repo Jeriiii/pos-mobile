@@ -1,4 +1,4 @@
-package pos.android.Menus;
+package pos.android.Components.Menus;
 
 import android.app.Activity;
 import android.content.Intent;
