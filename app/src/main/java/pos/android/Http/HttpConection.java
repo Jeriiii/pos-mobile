@@ -1,4 +1,4 @@
-package pos.android;
+package pos.android.Http;
 
 import android.util.Log;
 
@@ -38,7 +38,7 @@ public class HttpConection {
     /**
      * Vytvoří nový http context
      */
-    public HttpContext createHttpContext() {
+    public static HttpContext createHttpContext() {
         HttpContext httpContext = new BasicHttpContext();
         CookieStore cookieStore = new BasicCookieStore();
         httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);

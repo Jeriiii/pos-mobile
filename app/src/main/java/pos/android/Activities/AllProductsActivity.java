@@ -1,4 +1,4 @@
-package pos.android;
+package pos.android.Activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +22,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import pos.android.Http.JSONParser;
+import pos.android.R;
 
 public class AllProductsActivity extends ListActivity {
 

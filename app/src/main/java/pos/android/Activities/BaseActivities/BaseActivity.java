@@ -1,4 +1,4 @@
-package pos.android.BaseActivities;
+package pos.android.Activities.BaseActivities;
 
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import pos.android.Components.Menus.MainMenu;
+import pos.android.Activities.Menus.MainMenu;
 
 /////////////////////////////
 

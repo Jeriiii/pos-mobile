@@ -9,13 +9,14 @@
 
     <!-- Internet Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
         android:theme="@style/POStheme" >
         <activity
-            android:name=".SignInActivity"
+            android:name=".Activities.SignInActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
@@ -25,15 +26,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AllProductsActivity"
+            android:name=".Activities.AllProductsActivity"
             android:label="All Products" >
         </activity>
         <activity
-            android:name=".Chat.ChatActivity"
+            android:name=".Activities.Chat.ChatActivity"
             android:label="@string/title_activity_chat" >
         </activity>
         <activity
-            android:name=".Stream.StreamActivity"
+            android:name=".Activities.Stream.StreamActivity"
             android:label="@string/title_activity_stream" >
         </activity>
     </application>

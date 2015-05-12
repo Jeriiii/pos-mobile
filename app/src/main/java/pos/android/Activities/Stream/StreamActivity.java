@@ -1,9 +1,9 @@
-package pos.android.Stream;
+package pos.android.Activities.Stream;
 
 import android.os.Bundle;
 
 
-import pos.android.BaseActivities.BaseActivity;
+import pos.android.Activities.BaseActivities.BaseActivity;
 import pos.android.R;
 
 public class StreamActivity extends BaseActivity {

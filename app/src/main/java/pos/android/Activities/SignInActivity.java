@@ -1,12 +1,10 @@
-package pos.android;
+package pos.android.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -19,39 +17,35 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import pos.android.Activities.Stream.StreamActivity;
+import pos.android.Http.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import pos.android.Http.HttpConection;
+import pos.android.R;
+import pos.android.User.UserSessionManager;
 
 /////////////////////////////
 
@@ -166,19 +160,19 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            HttpContext httpContext = HttpConection.createHttpContext();
+            UserSessionManager session = new UserSessionManager(this.getApplicationContext());
+            mAuthTask = new UserLoginTask(email, password, httpContext, session);
             mAuthTask.execute((Void) null);
         }
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 3;
     }
 
     /**
@@ -279,71 +273,37 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         private final String mEmail;
         private final String mPassword;
+        private HttpContext httpContext;
+        private UserSessionManager session;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, HttpContext httpContext, UserSessionManager session) {
             mEmail = email;
             mPassword = password;
+            this.httpContext = httpContext;
+            this.session = session;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             String url = "http://priznaniosexu.cz/sign/in?do=signInForm-submit";
+
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
-            urlParams.add(new BasicNameValuePair("signEmail", "p.kukral@seznam.cz"));
-            urlParams.add(new BasicNameValuePair("signPassword", "kkukki1317"));
+            urlParams.add(new BasicNameValuePair("signEmail", mEmail));
+            urlParams.add(new BasicNameValuePair("signPassword", mPassword));
             urlParams.add(new BasicNameValuePair("mobile", "true"));
-            HttpConection con = new HttpConection();
-            HttpContext httpContext = con.createHttpContext();
-            HttpResponse response = con.makeHttpRequest(url, "POST", urlParams, httpContext);
-            int status = response.getStatusLine().getStatusCode();
-            if(status >= 400) {
-                return false; //nedokázal jsem se připojit
-            }
 
-            /* přihlásil jsem se nebo ne? */
-            CookieStore cookieStore = (CookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE);
-            List<org.apache.http.cookie.Cookie> cookies = cookieStore.getCookies();
-            for(Cookie cookie : cookies) {
-                String path = cookie.getPath();
-                String signIn = "sign";
-                if(path.toLowerCase().contains(signIn.toLowerCase())) {
-                    return false; /* přihlášení bylo neúspěšné */
-                }
-
-            }
-
+            JSONParser con = new JSONParser();
+            JSONObject json = con.getJSONmakeHttpRequest(url, "POST", urlParams, httpContext);
             try {
-                InputStream is = response.getEntity().getContent();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        is, "iso-8859-1"), 8);
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
+                if (((Integer) json.get("success")) == 1) {
+                    return true;
+                } else {
+                    return false;
                 }
-                is.close();
-                String json = sb.toString();
-
-                Header cookie = response.getFirstHeader("Set-Cookie");
-                String cookieStr = cookie.getValue();
-
-
-
-                //uložit honotu cookiesStr
-                /*http://stackoverflow.com/questions/7175238/android-how-to-login-into-webpage-programmatically-using-httpsurlconnection
-                a pak to použít takto
-                HttpGet getContacts = new HttpGet(GMAIL_CONTACTS);
-                getContacts.setHeader("Cookie", cookie);
-                response = httpClient.execute(getContacts);*/
-            } catch (Exception ex) {
-
+            } catch (Exception e) {
+                return false;
             }
-
-            // TODO: register the new account here.
-            return true;
         }
 
         @Override
@@ -353,6 +313,8 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
             if (success) {
                 finish();
+                Intent i = new Intent(getApplicationContext(), StreamActivity.class);
+                startActivity(i);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

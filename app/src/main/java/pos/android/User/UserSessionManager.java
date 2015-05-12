@@ -1,4 +1,4 @@
-package pos.android;
+package pos.android.User;
 
 import java.util.HashMap;
 
@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
+import pos.android.Activities.SignInActivity;
 
 /**
  * Created by Petr on 11.5.2015.
@@ -36,9 +38,6 @@ public class UserSessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
-    // Cookie přihlášeného uživatele.
-    public static final String KEY_COOKIE = "cookie";
-
     // Constructor
     public UserSessionManager(Context context){
         this._context = context;
@@ -47,7 +46,7 @@ public class UserSessionManager {
     }
 
     //Create login session
-    public void createUserLoginSession(String name, String email, String cookie){
+    public void createUserLoginSession(String name, String email){
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -56,9 +55,6 @@ public class UserSessionManager {
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
-
-        // Storing email in pref
-        editor.putString(KEY_COOKIE, cookie);
 
         // commit changes
         editor.commit();
@@ -105,9 +101,6 @@ public class UserSessionManager {
 
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-
-        // user cookie
-        user.put(KEY_COOKIE, pref.getString(KEY_COOKIE, null));
 
         // return user
         return user;
