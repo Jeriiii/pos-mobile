@@ -37,7 +37,11 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -287,13 +291,27 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
             String url = "http://priznaniosexu.cz/sign/in?do=signInForm-submit";
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
-            urlParams.add(new BasicNameValuePair("signEmail", mEmail));
-            urlParams.add(new BasicNameValuePair("signPassword", mPassword));
+            urlParams.add(new BasicNameValuePair("signEmail", "p.kukral@seznam.cz"));
+            urlParams.add(new BasicNameValuePair("signPassword", "kkukki1317"));
+            urlParams.add(new BasicNameValuePair("mobile", "true"));
             HttpConection con = new HttpConection();
-            HttpResponse response = con.makeHttpRequest(url, "POST", urlParams);
+            HttpContext httpContext = con.createHttpContext();
+            HttpResponse response = con.makeHttpRequest(url, "POST", urlParams, httpContext);
             int status = response.getStatusLine().getStatusCode();
             if(status >= 400) {
                 return false; //nedokázal jsem se připojit
+            }
+
+            /* přihlásil jsem se nebo ne? */
+            CookieStore cookieStore = (CookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE);
+            List<org.apache.http.cookie.Cookie> cookies = cookieStore.getCookies();
+            for(Cookie cookie : cookies) {
+                String path = cookie.getPath();
+                String signIn = "sign";
+                if(path.toLowerCase().contains(signIn.toLowerCase())) {
+                    return false; /* přihlášení bylo neúspěšné */
+                }
+
             }
 
             try {
@@ -311,6 +329,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
                 Header cookie = response.getFirstHeader("Set-Cookie");
                 String cookieStr = cookie.getValue();
+
+
+
                 //uložit honotu cookiesStr
                 /*http://stackoverflow.com/questions/7175238/android-how-to-login-into-webpage-programmatically-using-httpsurlconnection
                 a pak to použít takto
