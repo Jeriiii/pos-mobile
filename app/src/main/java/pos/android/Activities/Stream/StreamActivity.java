@@ -1,10 +1,12 @@
 package pos.android.Activities.Stream;
 
+import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 import org.apache.http.NameValuePair;
@@ -15,10 +17,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import pos.android.Activities.BaseActivities.BaseActivity;
-import pos.android.Http.HttpConection;
+import pos.android.Activities.BaseActivities.BaseListActivity;
 import pos.android.Http.JSONParser;
 import pos.android.R;
 
@@ -27,16 +30,46 @@ public class StreamActivity extends BaseActivity {
     /** Sata která se mají načíst do streamu. */
     ArrayList<HashMap<String, String>> streamItems;
 
-    private static final String TAG_STREAM_ITEMS = "items";
+    /** Tagy aplikace. */
+    private static final String TAG_STREAM_ITEMS = "data";
+
+    private static final String TAG_ID = "id";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stream_list);
+        setContentView(R.layout.activity_stream);
 
         streamItems = new ArrayList<HashMap<String, String>>();
 
         new LoadStream(httpContext).execute();
+
+        /*// Get listview
+        ListView lv = getListView();
+
+        // on seleting single product
+        // launching Edit Product Screen
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // getting values from selected ListItem
+                String pid = ((TextView) view.findViewById(R.id.pid)).getText()
+                        .toString();
+
+               *//* // Starting new intent
+                Intent in = new Intent(getApplicationContext(),
+                        EditProductActivity.class);
+                // sending pid to next activity
+                in.putExtra(TAG_PID, pid);
+
+                // starting new activity and expecting some response back
+                startActivityForResult(in, 100);*//*
+            }
+        });*/
 
 
     }
@@ -93,29 +126,41 @@ public class StreamActivity extends BaseActivity {
                 // Getting Array of Products
                 items = jsonItems.getJSONArray(TAG_STREAM_ITEMS);
 
-               /* // looping through All Products
-                for (int i = 0; i < products.length(); i++) {
-                    JSONObject c = products.getJSONObject(i);
+               // looping through All Products
+               for (int i = 0; i < items.length(); i++) {
 
-                    // Storing each json item in variable
-                    String id = c.getString(TAG_PID);
-                    String name = c.getString(TAG_NAME);
-                    String price = c.getString(TAG_PRICE);
 
-                    // creating new HashMap
-                    HashMap<String, String> map = new HashMap<String, String>();
 
-                    // adding each child node to HashMap key => value
-                    map.put(TAG_PID, id);
-                    map.put(TAG_NAME, name);
-                    map.put(TAG_PRICE, price);
+                   JSONObject c = items.getJSONObject(i);
+                   HashMap<String, String> item = getItem(c);
 
-                    // adding HashList to ArrayList
-                    productsList.add(map);
-                }*/
+                   streamItems.add(item);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        private HashMap<String, String> getItem(JSONObject item) throws JSONException{
+
+            // Storing each json item in variable
+            String id = null;
+            HashMap<String, String> map = new HashMap<String, String>();
+
+            Iterator<String> itr = item.keys();
+            while(itr.hasNext()) {
+                String name = itr.next();
+                String var = item.getString(name);
+
+                try {
+                    JSONObject jsonObject = item.getJSONObject(name);
+                } catch (JSONException e) {
+                    
+                }
+                map.put(name, var);
+            }
+
+            return map;
         }
 
         /**
