@@ -49,6 +49,14 @@ public class UserSessionManager {
         this.cookieStore = cookieStore;
     }
 
+    /**
+     * Vrátí aktuálně používanou cookieStore přihlášeným uživatelem.
+     * @return Aktuální cookieStore používaná přihlášeným uživatelem.
+     */
+    public PersistentCookieStore getCookieStore() {
+        return cookieStore;
+    }
+
     //Create login session
     public void createUserLoginSession(String name, String email){
         // Storing login value as TRUE

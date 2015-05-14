@@ -28,7 +28,7 @@ public class StreamActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stream);
 
-        HttpContext httpContext = HttpConection.createHttpContext(getApplicationContext(), false);
+
         new LoadStream(httpContext).execute();
 
 
