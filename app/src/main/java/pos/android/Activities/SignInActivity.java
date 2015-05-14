@@ -312,9 +312,11 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             showProgress(false);
 
             if (success) {
-                finish();
+                
+
                 Intent i = new Intent(getApplicationContext(), StreamActivity.class);
                 startActivity(i);
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
