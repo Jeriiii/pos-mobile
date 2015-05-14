@@ -279,6 +279,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         UserLoginTask(String email, String password, HttpContext httpContext, UserSessionManager session) {
             mEmail = email;
             mPassword = password;
+
+
+
             this.httpContext = httpContext;
             this.session = session;
         }
@@ -288,6 +291,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             String url = "http://priznaniosexu.cz/sign/in?do=signInForm-submit";
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
+
+
+
             urlParams.add(new BasicNameValuePair("signEmail", mEmail));
             urlParams.add(new BasicNameValuePair("signPassword", mPassword));
             urlParams.add(new BasicNameValuePair("mobile", "true"));
