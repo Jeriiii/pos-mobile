@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import pos.android.Activities.SignInActivity;
+import pos.android.Http.PersistentCookieStore;
 
 /**
  * Created by Petr on 11.5.2015.
@@ -38,11 +39,14 @@ public class UserSessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
+    private PersistentCookieStore cookieStore;
+
     // Constructor
-    public UserSessionManager(Context context){
+    public UserSessionManager(Context context, PersistentCookieStore cookieStore){
         this._context = context;
         pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
         editor = pref.edit();
+        this.cookieStore = cookieStore;
     }
 
     //Create login session
@@ -114,6 +118,9 @@ public class UserSessionManager {
         // Clearing all user data from Shared Preferences
         editor.clear();
         editor.commit();
+
+        // clear cookie
+        cookieStore.clear();
 
         // After logout redirect user to Login Activity
         Intent i = new Intent(_context, SignInActivity.class);

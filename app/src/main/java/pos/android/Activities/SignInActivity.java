@@ -30,8 +30,10 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
 
@@ -41,6 +43,7 @@ import pos.android.Http.JSONParser;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.CookieStore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,6 +83,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.loginRouter();
 
         setContentView(R.layout.activity_sign_in);
@@ -180,7 +184,10 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             // perform the user login attempt.
             showProgress(true);
             HttpContext httpContext = HttpConection.createHttpContext(getApplicationContext(), true);
-            UserSessionManager session = new UserSessionManager(this.getApplicationContext());
+            UserSessionManager session = new UserSessionManager(
+                    this.getApplicationContext(),
+                    (PersistentCookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE)
+            );
             mAuthTask = new UserLoginTask(email, password, httpContext, session);
             mAuthTask.execute((Void) null);
         }
@@ -309,8 +316,6 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
 
-
-
             urlParams.add(new BasicNameValuePair("signEmail", mEmail));
             urlParams.add(new BasicNameValuePair("signPassword", mPassword));
             urlParams.add(new BasicNameValuePair("mobile", "true"));
@@ -334,6 +339,8 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             showProgress(false);
 
             if (success) {
+                session.createUserLoginSession("Zatim Bezejmeny", mEmail);
+
                 Intent i = new Intent(getApplicationContext(), StreamActivity.class);
                 startActivity(i);
                 finish();
