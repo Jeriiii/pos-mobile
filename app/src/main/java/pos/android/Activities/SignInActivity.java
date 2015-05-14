@@ -30,6 +30,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
@@ -41,9 +42,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import pos.android.Http.HttpConection;
+import pos.android.Http.PersistentCookieStore;
 import pos.android.R;
 import pos.android.User.UserSessionManager;
 
@@ -77,6 +80,8 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.loginRouter();
+
         setContentView(R.layout.activity_sign_in);
 
         // Set up the login form.
@@ -105,6 +110,20 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private void loginRouter() {
+        PersistentCookieStore mCookieStore = new PersistentCookieStore(
+                getApplicationContext());
+
+        mCookieStore.clearExpired(new Date());
+        List<Cookie> cookies = mCookieStore.getCookies();
+        for (Cookie c : cookies) {
+            if (c.getName().equals("PHPSESSID")) {
+                startActivity(new Intent(this, StreamActivity.class));
+                finish();
+            }
+        }
     }
 
     private void populateAutoComplete() {
@@ -279,8 +298,6 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         UserLoginTask(String email, String password, HttpContext httpContext, UserSessionManager session) {
             mEmail = email;
             mPassword = password;
-
-
 
             this.httpContext = httpContext;
             this.session = session;
