@@ -9,6 +9,7 @@ import android.widget.SimpleAdapter;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.protocol.HttpContext;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,11 +24,17 @@ import pos.android.R;
 
 public class StreamActivity extends BaseActivity {
 
+    /** Sata která se mají načíst do streamu. */
+    ArrayList<HashMap<String, String>> streamItems;
+
+    private static final String TAG_STREAM_ITEMS = "items";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stream);
+        setContentView(R.layout.stream_list);
 
+        streamItems = new ArrayList<HashMap<String, String>>();
 
         new LoadStream(httpContext).execute();
 
@@ -35,6 +42,8 @@ public class StreamActivity extends BaseActivity {
     }
 
     class LoadStream extends AsyncTask<String, String, String> {
+
+        JSONArray items = null;
 
         /**
          * Http kontext pro čtení dat přihlášeného uživatele.
@@ -64,10 +73,49 @@ public class StreamActivity extends BaseActivity {
             JSONParser con = new JSONParser();
             JSONObject json = con.getJSONmakeHttpRequest(url, "GET", urlParams, httpContext);
 
+            if(json != null) {
+                saveItems(json);
+            } else {
+                //připojení se nezdařilo
+            }
 
             int i = 1;
 
             return null;
+        }
+
+        /**
+         * Uloží příspěvky.
+         */
+        private void saveItems(JSONObject jsonItems) {
+            try {
+                // products found
+                // Getting Array of Products
+                items = jsonItems.getJSONArray(TAG_STREAM_ITEMS);
+
+               /* // looping through All Products
+                for (int i = 0; i < products.length(); i++) {
+                    JSONObject c = products.getJSONObject(i);
+
+                    // Storing each json item in variable
+                    String id = c.getString(TAG_PID);
+                    String name = c.getString(TAG_NAME);
+                    String price = c.getString(TAG_PRICE);
+
+                    // creating new HashMap
+                    HashMap<String, String> map = new HashMap<String, String>();
+
+                    // adding each child node to HashMap key => value
+                    map.put(TAG_PID, id);
+                    map.put(TAG_NAME, name);
+                    map.put(TAG_PRICE, price);
+
+                    // adding HashList to ArrayList
+                    productsList.add(map);
+                }*/
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         /**
