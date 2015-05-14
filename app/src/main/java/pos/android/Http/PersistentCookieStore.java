@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
-package pos.android.Http;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;

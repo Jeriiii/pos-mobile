@@ -1,5 +1,7 @@
 package pos.android.Http;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -38,21 +40,28 @@ public class HttpConection {
     /**
      * Vytvoří nový http context
      */
-    public static HttpContext createHttpContext() {
+    public static HttpContext createHttpContext(Context context, boolean clear) {
         HttpContext httpContext = new BasicHttpContext();
-        CookieStore cookieStore = new BasicCookieStore();
+        CookieStore cookieStore = new PersistentCookieStore(context);
+        if(clear) {
+            cookieStore.clear();
+        }
+
+        //CookieStore cookieStore = new BasicCookieStore();
+
+        //cookieStore.clear();
         httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 
         return httpContext;
     }
 
-    public HttpResponse makeHttpRequest(String url, String method,
+    /*public HttpResponse makeHttpRequest(String url, String method,
                                         List<NameValuePair> params) {
 
         HttpContext httpContext = this.createHttpContext();
 
         return this.makeHttpRequest(url, method, params, httpContext);
-    }
+    }*/
 
     // by making HTTP POST or GET mehtod
     public HttpResponse makeHttpRequest(String url, String method,

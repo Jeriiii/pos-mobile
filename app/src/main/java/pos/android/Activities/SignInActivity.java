@@ -160,7 +160,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            HttpContext httpContext = HttpConection.createHttpContext();
+            HttpContext httpContext = HttpConection.createHttpContext(getApplicationContext(), true);
             UserSessionManager session = new UserSessionManager(this.getApplicationContext());
             mAuthTask = new UserLoginTask(email, password, httpContext, session);
             mAuthTask.execute((Void) null);
@@ -285,7 +285,6 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
             String url = "http://priznaniosexu.cz/sign/in?do=signInForm-submit";
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
@@ -312,8 +311,6 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             showProgress(false);
 
             if (success) {
-                
-
                 Intent i = new Intent(getApplicationContext(), StreamActivity.class);
                 startActivity(i);
                 finish();

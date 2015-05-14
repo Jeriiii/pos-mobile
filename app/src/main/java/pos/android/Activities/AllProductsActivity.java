@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +24,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.R;
 
@@ -128,7 +130,8 @@ public class AllProductsActivity extends ListActivity {
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             // getting JSON string from URL
-            JSONObject json = jParser.getJSONmakeHttpRequest(url_all_products, "GET", params);
+            HttpContext httpContext = HttpConection.createHttpContext(getApplicationContext(), true);
+            JSONObject json = jParser.getJSONmakeHttpRequest(url_all_products, "GET", params, httpContext);
 
             // Check your log cat for JSON reponse
             Log.d("All Products: ", json.toString());

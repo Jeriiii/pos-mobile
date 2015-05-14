@@ -35,11 +35,11 @@ public class JSONParser extends HttpConection {
 
     // function get json from url
     // by making HTTP POST or GET mehtod
-    public JSONObject getJSONmakeHttpRequest(String url, String method, List<NameValuePair> params) {
+    /*public JSONObject getJSONmakeHttpRequest(String url, String method, List<NameValuePair> params) {
         HttpContext httpContext = this.createHttpContext();
 
         return this.getJSONmakeHttpRequest(url, method, params, httpContext);
-    }
+    }*/
 
     // function get json from url
     // by making HTTP POST or GET mehtod
