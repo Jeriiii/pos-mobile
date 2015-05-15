@@ -1,4 +1,4 @@
-package pos.android;
+package pos.android.Http;
 
 /**
  * Created by Petr on 27.4.2015.
@@ -14,15 +14,13 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+
+import pos.android.Http.HttpConection;
 
 public class JSONParser extends HttpConection {
 
@@ -37,14 +35,27 @@ public class JSONParser extends HttpConection {
 
     // function get json from url
     // by making HTTP POST or GET mehtod
+    /*public JSONObject getJSONmakeHttpRequest(String url, String method, List<NameValuePair> params) {
+        HttpContext httpContext = this.createHttpContext();
+
+        return this.getJSONmakeHttpRequest(url, method, params, httpContext);
+    }*/
+
+    // function get json from url
+    // by making HTTP POST or GET mehtod
     public JSONObject getJSONmakeHttpRequest(String url, String method,
-                                      List<NameValuePair> params) {
+                                      List<NameValuePair> params, HttpContext httpContext) {
 
         // Making HTTP request
         try {
-            HttpResponse httpResponse = super.makeHttpRequest(url, method, params);
+            HttpResponse httpResponse = super.makeHttpRequest(url, method, params, httpContext);
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
+
+            int status = httpResponse.getStatusLine().getStatusCode();
+            if(status >= 400) {
+                return null; //nedokázal jsem se připojit
+            }
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

@@ -1,10 +1,7 @@
-package pos.android.Chat;
+package pos.android.Activities.Chat;
 
-import pos.android.Chat.ChatSlider.*;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import pos.android.Activities.Chat.ChatSlider.*;
+
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
@@ -14,13 +11,17 @@ import android.view.ViewGroup;
 
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.astuetz.PagerSlidingTabStrip;
 
-import pos.android.BaseActivities.BaseFragmentActivity;
+import pos.android.Activities.BaseActivities.BaseFragmentActivity;
+import pos.android.Activities.Chat.ServerRequests.GetConversationsRequest;
 import pos.android.R;
 
 public class ChatActivity extends BaseFragmentActivity {
@@ -39,6 +40,10 @@ public class ChatActivity extends BaseFragmentActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
+
+        //test of request
+        new GetConversationsRequest(getApplicationContext(), this.httpContext).execute();
+
 
     }
 

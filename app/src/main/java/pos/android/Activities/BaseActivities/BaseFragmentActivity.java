@@ -1,4 +1,4 @@
-package pos.android.BaseActivities;
+package pos.android.Activities.BaseActivities;
 
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
@@ -8,7 +8,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import pos.android.Components.Menus.MainMenu;
+import org.apache.http.protocol.HttpContext;
+
+import pos.android.Activities.Menus.MainMenu;
+import pos.android.Http.HttpConection;
+import pos.android.Http.PersistentCookieStore;
+import pos.android.User.UserSessionManager;
 
 /////////////////////////////
 
@@ -18,6 +23,25 @@ import pos.android.Components.Menus.MainMenu;
  */
 public class BaseFragmentActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 
+    /** Údaje o přihlášeném uživateli. */
+    protected UserSessionManager session;
+
+    /** httpContext pro posílání požadavků */
+    public HttpContext httpContext;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        /* načtení přihlášeného uživatele */
+        UserSessionManager session = new UserSessionManager(
+                this.getApplicationContext(),
+                new PersistentCookieStore(getApplicationContext())
+        );
+
+        /* načtení httpContextu pro posílání požadavků */
+        httpContext = HttpConection.createHttpContext(getApplicationContext(), false);
+    }
 
     /**
      * Horní menu

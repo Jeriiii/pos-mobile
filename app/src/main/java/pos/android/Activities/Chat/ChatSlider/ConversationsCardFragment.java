@@ -1,29 +1,25 @@
-package pos.android.Chat.ChatSlider;
+package pos.android.Activities.Chat.ChatSlider;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import pos.android.R;
 
 /**
- * Záložka jedné konverzace
+ * Záložka se všemi konverzacemi
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 10.5.2015.
  */
-public class SingleConversationCardFragment extends Fragment {
+public class ConversationsCardFragment extends Fragment {
 
     private static final String ARG_POSITION = "position";
 
     private int position;
 
-    public static SingleConversationCardFragment newInstance(int position) {
-        SingleConversationCardFragment f = new SingleConversationCardFragment();
+    public static ConversationsCardFragment newInstance(int position) {
+        ConversationsCardFragment f = new ConversationsCardFragment();
         Bundle b = new Bundle();
         b.putInt(ARG_POSITION, position);
         f.setArguments(b);
@@ -39,7 +35,7 @@ public class SingleConversationCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_sinconversation_slide, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, container, false);
         return view;
     }
 
