@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.astuetz.PagerSlidingTabStrip;
 
 import pos.android.Activities.BaseActivities.BaseFragmentActivity;
+import pos.android.Activities.Chat.ServerRequests.GetConversationsRequest;
 import pos.android.R;
 
 public class ChatActivity extends BaseFragmentActivity {
@@ -40,16 +41,9 @@ public class ChatActivity extends BaseFragmentActivity {
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        //test of request
+        new GetConversationsRequest(getApplicationContext(), this.httpContext).execute();
 
-            @Override
-            public void onClick(View view) {
-
-                Toast.makeText(getApplicationContext(), "Zvoleno Setting", Toast.LENGTH_LONG).show();
-                //http://ip.jsontest.com/
-            }
-        });
 
     }
 
