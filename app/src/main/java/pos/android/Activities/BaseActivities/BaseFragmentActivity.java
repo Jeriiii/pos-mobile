@@ -1,14 +1,14 @@
-package pos.android.BaseActivities;
+package pos.android.Activities.BaseActivities;
 
-import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import pos.android.Components.Menus.MainMenu;
+import pos.android.Activities.Menus.MainMenu;
 
 /////////////////////////////
 
@@ -16,7 +16,7 @@ import pos.android.Components.Menus.MainMenu;
 /**
  * A login screen that offers login via email/password.
  */
-public class BaseActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class BaseFragmentActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 
 
     /**
@@ -53,3 +53,9 @@ public class BaseActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     }
 }
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-package pos.android.Components.Menus;
+package pos.android.Activities.Menus;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,9 +6,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import pos.android.Chat.ChatActivity;
+import pos.android.Activities.Chat.ChatActivity;
 import pos.android.R;
-import pos.android.Stream.StreamActivity;
+import pos.android.Activities.Stream.StreamActivity;
 
 /**
  * Created by Jan Kotalík on 9.5.2015.

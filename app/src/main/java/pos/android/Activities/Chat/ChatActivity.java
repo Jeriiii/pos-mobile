@@ -1,10 +1,7 @@
-package pos.android.Chat;
+package pos.android.Activities.Chat;
 
-import pos.android.Chat.ChatSlider.*;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import pos.android.Activities.Chat.ChatSlider.*;
+
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
@@ -20,9 +17,10 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.astuetz.PagerSlidingTabStrip;
 
-import pos.android.BaseActivities.BaseFragmentActivity;
+import pos.android.Activities.BaseActivities.BaseFragmentActivity;
 import pos.android.R;
 
 public class ChatActivity extends BaseFragmentActivity {
@@ -47,8 +45,6 @@ public class ChatActivity extends BaseFragmentActivity {
 
             @Override
             public void onClick(View view) {
-                $json = new JsonResponse($data, "application/json; charset=utf-8");
-                $this->sendResponse($json);
 
                 Toast.makeText(getApplicationContext(), "Zvoleno Setting", Toast.LENGTH_LONG).show();
                 //http://ip.jsontest.com/

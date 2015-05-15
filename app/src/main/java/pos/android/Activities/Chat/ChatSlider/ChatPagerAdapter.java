@@ -1,4 +1,4 @@
-package pos.android.Chat.ChatSlider;
+package pos.android.Activities.Chat.ChatSlider;
 
 
 import android.support.v4.app.Fragment;
