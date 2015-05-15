@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -39,6 +41,19 @@ public class ChatActivity extends BaseFragmentActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
+
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                $json = new JsonResponse($data, "application/json; charset=utf-8");
+                $this->sendResponse($json);
+
+                Toast.makeText(getApplicationContext(), "Zvoleno Setting", Toast.LENGTH_LONG).show();
+                //http://ip.jsontest.com/
+            }
+        });
 
     }
 
