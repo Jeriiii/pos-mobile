@@ -28,17 +28,17 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
     /** vraceny json */
     protected JSONObject json;
 
+    public DatenodeJsonRequest(Context context, HttpContext httpContext) {
+        this.context = context;
+        this.httpContext = httpContext;
+    }
+
     /**
      * Before starting background thread Show Progress Dialog
      * */
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-    }
-
-    public DatenodeJsonRequest(Context context, HttpContext httpContext) {
-        this.context = context;
-        this.httpContext = httpContext;
     }
 
     /**

@@ -30,6 +30,10 @@
             android:label="All Products" >
         </activity>
         <activity
+            android:name=".Activities.BaseActivities.BaseListActivity"
+            android:label="All Products" >
+        </activity>
+        <activity
             android:name=".Activities.Chat.ChatActivity"
             android:label="@string/title_activity_chat" >
         </activity>

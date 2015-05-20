@@ -1,11 +1,15 @@
 package pos.android.Activities.Stream;
 
 import android.app.ListActivity;
+import android.app.LoaderManager;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 
@@ -25,7 +29,7 @@ import pos.android.Activities.BaseActivities.BaseListActivity;
 import pos.android.Http.JSONParser;
 import pos.android.R;
 
-public class StreamActivity extends BaseActivity {
+public class StreamActivity extends BaseListActivity {
 
     /** Sata která se mají načíst do streamu. */
     ArrayList<HashMap<String, String>> streamItems;
@@ -44,7 +48,22 @@ public class StreamActivity extends BaseActivity {
 
         streamItems = new ArrayList<HashMap<String, String>>();
 
-        new LoadStream(httpContext).execute();
+        //new LoadStream(httpContext).execute();
+
+        // For the cursor adapter, specify which columns go into which views
+        String[] fromColumns = {ContactsContract.Data.DISPLAY_NAME};
+        int[] toViews = {R.id.name_entry}; // The TextView in simple_list_item_1
+
+        // Create an empty adapter we will use to display the loaded data.
+        // We pass null for the cursor, then update it in onLoadFinished()
+        mAdapter = new SimpleCursorAdapter(this,
+                R.layout.list_example_entry, null,
+                fromColumns, toViews, 0);
+        setListAdapter(mAdapter);
+
+        // Prepare the loader.  Either re-connect with an existing one,
+        // or start a new one.
+        getLoaderManager().initLoader(0, null, this);
 
         /*// Get listview
         ListView lv = getListView();
@@ -99,7 +118,7 @@ public class StreamActivity extends BaseActivity {
          * getting All products from url
          * */
         protected String doInBackground(String... args) {
-            String url = "http://priznaniosexu.cz/one-page/stream-in-json";
+            String url = "http://10.0.2.2/nette/pos/public/www/one-page/stream-in-json";
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
 
@@ -128,8 +147,6 @@ public class StreamActivity extends BaseActivity {
 
                // looping through All Products
                for (int i = 0; i < items.length(); i++) {
-
-
 
                    JSONObject c = items.getJSONObject(i);
                    HashMap<String, String> item = getItem(c);

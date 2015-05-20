@@ -312,7 +312,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            String url = "http://priznaniosexu.cz/sign/in?do=signInForm-submit";
+            String url = "http://10.0.2.2/nette/pos/public/www/sign/in?do=signInForm-submit";
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
 
