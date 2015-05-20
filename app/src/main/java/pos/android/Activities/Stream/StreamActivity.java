@@ -149,18 +149,47 @@ public class StreamActivity extends BaseActivity {
 
             Iterator<String> itr = item.keys();
             while(itr.hasNext()) {
-                String name = itr.next();
+                Object nextItem = itr.next();
+                String name = (String) nextItem;
                 String var = item.getString(name);
 
+                /*if ( nextItem.get(key) instanceof JSONObject ) {
+
+                }
                 try {
                     JSONObject jsonObject = item.getJSONObject(name);
                 } catch (JSONException e) {
-                    
+                    //toto pole je schválně prázdné
+                }*/
+                if(isImportant(name, var)) {
+                    map.put(name, var);
                 }
-                map.put(name, var);
             }
 
             return map;
+        }
+
+        /**
+         * Rozhodne, zda jsou data ze streamu důležitá k uložení nebo ne.
+         * @param name Název dat ze streamu k posouzení.
+         * @param var Data ze streamu k posouzení.
+         * @return TRUE = data se mají uložit k pozdějšímu zobrazení, jinak FALSE
+         */
+        private boolean isImportant(String name, String var) {
+            if(var.equals("null") || var.equals("false")) {
+                return false;
+            }
+            if(name.equals("tallness")) {
+                return false;
+            }
+            if(name.equals("categoryID")) {
+                return false;
+            }
+            if(name.equals("type")) {
+                return false;
+            }
+
+            return true;
         }
 
         /**
