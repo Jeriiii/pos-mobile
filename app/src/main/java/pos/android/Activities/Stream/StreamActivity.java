@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -35,10 +36,12 @@ import pos.android.R;
 
 public class StreamActivity extends BaseListActivity {
 
-
-
     /** Sata která se mají načíst do streamu. */
     ArrayList<HashMap<String, String>> streamItems;
+
+    ItemAdapter adapter;
+
+    ProgressBar bar;
 
     /** Tagy aplikace. */
     private static final String TAG_STREAM_ITEMS = "data";
@@ -50,58 +53,14 @@ public class StreamActivity extends BaseListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_stream);
+        setContentView(R.layout.list_example);
 
-        //streamItems = new ArrayList<HashMap<String, String>>();
+        ArrayList<Item> arrayOfItems = new ArrayList<Item>();
+        adapter = new ItemAdapter(this, arrayOfItems);
+
+        bar = (ProgressBar) this.findViewById(R.id.progressBar);
 
         new LoadStream(httpContext).execute();
-
-
-        // Construct the data source
-        ArrayList<Item> arrayOfItems = new ArrayList<Item>();
-        // Create the adapter to convert the array to views
-        ItemAdapter adapter = new ItemAdapter(this, arrayOfItems);
-        // Attach the adapter to a ListView
-
-        // Add item to adapter
-        Item newItem = new Item("Nathan");
-        adapter.add(newItem);
-
-        /*mAdapter = new SimpleCursorAdapter(this,
-                R.layout.list_example_entry, matrixCursor,
-                null, toViews, 0);*/
-        setListAdapter(adapter);
-
-        // Prepare the loader.  Either re-connect with an existing one,
-        // or start a new one.
-        //getLoaderManager().initLoader(0, null, this);
-
-        /*// Get listview
-        ListView lv = getListView();
-
-        // on seleting single product
-        // launching Edit Product Screen
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // getting values from selected ListItem
-                String pid = ((TextView) view.findViewById(R.id.pid)).getText()
-                        .toString();
-
-               *//* // Starting new intent
-                Intent in = new Intent(getApplicationContext(),
-                        EditProductActivity.class);
-                // sending pid to next activity
-                in.putExtra(TAG_PID, pid);
-
-                // starting new activity and expecting some response back
-                startActivityForResult(in, 100);*//*
-            }
-        });*/
-
-
     }
 
     class LoadStream extends AsyncTask<String, String, String> {
@@ -123,6 +82,7 @@ public class StreamActivity extends BaseListActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            bar.setVisibility(View.VISIBLE);
         }
 
         /**
@@ -142,6 +102,8 @@ public class StreamActivity extends BaseListActivity {
                 //připojení se nezdařilo
             }
 
+
+
             int i = 1;
 
             return null;
@@ -160,41 +122,42 @@ public class StreamActivity extends BaseListActivity {
                for (int i = 0; i < items.length(); i++) {
 
                    JSONObject c = items.getJSONObject(i);
-                   HashMap<String, String> item = getItem(c);
+                   //HashMap<String, String> item = getItem(c);
+                   Item item = getItem(c);
 
-                   streamItems.add(item);
+                   adapter.add(item);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        private HashMap<String, String> getItem(JSONObject item) throws JSONException{
+        private Item getItem(JSONObject jsonObject) throws JSONException{
 
             // Storing each json item in variable
             String id = null;
-            HashMap<String, String> map = new HashMap<String, String>();
+            Item item = new Item(jsonObject.getString("id"));
 
-            Iterator<String> itr = item.keys();
+            /*Iterator<String> itr = item.keys();
             while(itr.hasNext()) {
                 Object nextItem = itr.next();
                 String name = (String) nextItem;
                 String var = item.getString(name);
 
-                /*if ( nextItem.get(key) instanceof JSONObject ) {
+                *//*if ( nextItem.get(key) instanceof JSONObject ) {
 
                 }
                 try {
                     JSONObject jsonObject = item.getJSONObject(name);
                 } catch (JSONException e) {
                     //toto pole je schválně prázdné
-                }*/
+                }*//*
                 if(isImportant(name, var)) {
                     map.put(name, var);
                 }
-            }
+            }*/
 
-            return map;
+            return item;
         }
 
         /**
@@ -224,24 +187,9 @@ public class StreamActivity extends BaseListActivity {
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
-            /*// dismiss the dialog after getting all products
-            *//*pDialog.dismiss();*//*
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    *//**
-                     * Updating parsed JSON data into ListView
-                     * *//*
-                    ListAdapter adapter = new SimpleAdapter(
-                            AllProductsActivity.this, productsList,
-                            R.layout.list_item, new String[] { TAG_PID,
-                            TAG_NAME, TAG_PRICE},
-                            new int[] { R.id.pid, R.id.name, R.id.price });
-                    // updating listview
-                    setListAdapter(adapter);
-                }
-            });*/
 
+            setListAdapter(adapter);
+            bar.setVisibility(View.GONE);
         }
     }
 
