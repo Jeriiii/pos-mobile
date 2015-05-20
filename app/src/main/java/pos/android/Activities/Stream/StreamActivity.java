@@ -1,40 +1,82 @@
 package pos.android.Activities.Stream;
 
+import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 import org.apache.http.NameValuePair;
 import org.apache.http.protocol.HttpContext;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import pos.android.Activities.BaseActivities.BaseActivity;
-import pos.android.Http.HttpConection;
+import pos.android.Activities.BaseActivities.BaseListActivity;
 import pos.android.Http.JSONParser;
 import pos.android.R;
 
 public class StreamActivity extends BaseActivity {
+
+    /** Sata která se mají načíst do streamu. */
+    ArrayList<HashMap<String, String>> streamItems;
+
+    /** Tagy aplikace. */
+    private static final String TAG_STREAM_ITEMS = "data";
+
+    private static final String TAG_ID = "id";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stream);
 
+        streamItems = new ArrayList<HashMap<String, String>>();
 
         new LoadStream(httpContext).execute();
+
+        /*// Get listview
+        ListView lv = getListView();
+
+        // on seleting single product
+        // launching Edit Product Screen
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // getting values from selected ListItem
+                String pid = ((TextView) view.findViewById(R.id.pid)).getText()
+                        .toString();
+
+               *//* // Starting new intent
+                Intent in = new Intent(getApplicationContext(),
+                        EditProductActivity.class);
+                // sending pid to next activity
+                in.putExtra(TAG_PID, pid);
+
+                // starting new activity and expecting some response back
+                startActivityForResult(in, 100);*//*
+            }
+        });*/
 
 
     }
 
     class LoadStream extends AsyncTask<String, String, String> {
+
+        JSONArray items = null;
 
         /**
          * Http kontext pro čtení dat přihlášeného uživatele.
@@ -64,10 +106,90 @@ public class StreamActivity extends BaseActivity {
             JSONParser con = new JSONParser();
             JSONObject json = con.getJSONmakeHttpRequest(url, "GET", urlParams, httpContext);
 
+            if(json != null) {
+                saveItems(json);
+            } else {
+                //připojení se nezdařilo
+            }
 
             int i = 1;
 
             return null;
+        }
+
+        /**
+         * Uloží příspěvky.
+         */
+        private void saveItems(JSONObject jsonItems) {
+            try {
+                // products found
+                // Getting Array of Products
+                items = jsonItems.getJSONArray(TAG_STREAM_ITEMS);
+
+               // looping through All Products
+               for (int i = 0; i < items.length(); i++) {
+
+
+
+                   JSONObject c = items.getJSONObject(i);
+                   HashMap<String, String> item = getItem(c);
+
+                   streamItems.add(item);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private HashMap<String, String> getItem(JSONObject item) throws JSONException{
+
+            // Storing each json item in variable
+            String id = null;
+            HashMap<String, String> map = new HashMap<String, String>();
+
+            Iterator<String> itr = item.keys();
+            while(itr.hasNext()) {
+                Object nextItem = itr.next();
+                String name = (String) nextItem;
+                String var = item.getString(name);
+
+                /*if ( nextItem.get(key) instanceof JSONObject ) {
+
+                }
+                try {
+                    JSONObject jsonObject = item.getJSONObject(name);
+                } catch (JSONException e) {
+                    //toto pole je schválně prázdné
+                }*/
+                if(isImportant(name, var)) {
+                    map.put(name, var);
+                }
+            }
+
+            return map;
+        }
+
+        /**
+         * Rozhodne, zda jsou data ze streamu důležitá k uložení nebo ne.
+         * @param name Název dat ze streamu k posouzení.
+         * @param var Data ze streamu k posouzení.
+         * @return TRUE = data se mají uložit k pozdějšímu zobrazení, jinak FALSE
+         */
+        private boolean isImportant(String name, String var) {
+            if(var.equals("null") || var.equals("false")) {
+                return false;
+            }
+            if(name.equals("tallness")) {
+                return false;
+            }
+            if(name.equals("categoryID")) {
+                return false;
+            }
+            if(name.equals("type")) {
+                return false;
+            }
+
+            return true;
         }
 
         /**
