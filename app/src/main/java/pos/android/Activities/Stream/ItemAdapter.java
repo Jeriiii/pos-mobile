@@ -26,13 +26,32 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         Item item = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_example_entry, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_example_entry, parent);
         }
         // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.name_entry);
         // Populate the data into the template view using the data object
-        tvName.setText(item.name);
+        setTextView(convertView, item.name, R.id.name);
+        setTextView(convertView, item.userName, R.id.userName);
+        setTextView(convertView, item.message, R.id.message);
+
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    /**
+     * Zobrazí políčko - text - obrázek, pokud existuje.
+     * @param convertView
+     * @param itemParam
+     */
+    private void setTextView(View convertView, String itemParam, int viewId) {
+        TextView tvName = (TextView) convertView.findViewById(viewId);
+        if(! itemParam.equals("")) {
+            tvName.setText(itemParam);
+            if(itemParam.equals("message")) {
+                itemParam = itemParam + "";
+            }
+        } else {
+            tvName.setVisibility(View.GONE);
+        }
     }
 }

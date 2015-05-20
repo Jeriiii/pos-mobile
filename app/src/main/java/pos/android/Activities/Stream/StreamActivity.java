@@ -135,29 +135,78 @@ public class StreamActivity extends BaseListActivity {
         private Item getItem(JSONObject jsonObject) throws JSONException{
 
             // Storing each json item in variable
-            String id = null;
-            Item item = new Item(jsonObject.getString("id"));
 
-            /*Iterator<String> itr = item.keys();
-            while(itr.hasNext()) {
-                Object nextItem = itr.next();
-                String name = (String) nextItem;
-                String var = item.getString(name);
+            Item item = new Item();
 
-                *//*if ( nextItem.get(key) instanceof JSONObject ) {
+            if(! jsonObject.getString("userGalleryID").equals("null")) {
+                item =  getUserGallery(jsonObject);
+            }
+            if(! jsonObject.getString("statusID").equals("null")) {
+                item = getStreamStatus(jsonObject);
+            }
+            if(! jsonObject.getString("confessionID").equals("null")) {
+                item = getConfession(jsonObject);
+            }
 
-                }
-                try {
-                    JSONObject jsonObject = item.getJSONObject(name);
-                } catch (JSONException e) {
-                    //toto pole je schválně prázdné
-                }*//*
-                if(isImportant(name, var)) {
-                    map.put(name, var);
-                }
-            }*/
+            addUserData(item, jsonObject);
 
             return item;
+        }
+
+        private Item addUserData(Item item, JSONObject jsonObject) throws JSONException{
+            JSONObject user = jsonObject.getJSONObject("user");
+
+            if(! user.equals("null")) {
+                item.userName = user.getString("user_name");
+            }
+
+            return item;
+        }
+
+        /**
+         * Vrátí uživatelskou galerii.
+         * @param jsonObject
+         * @return
+         * @throws JSONException
+         */
+        private Item getUserGallery(JSONObject jsonObject) throws JSONException{
+            JSONObject galleryObject = jsonObject.getJSONObject("userGallery");
+            String name = galleryObject.getString("name");
+            Item gallery = new Item(name);
+
+            return gallery;
+        }
+
+        /**
+         * Vrátí uživatelský status.
+         * @param jsonObject
+         * @return
+         * @throws JSONException
+         */
+        private Item getStreamStatus(JSONObject jsonObject) throws JSONException{
+            JSONObject galleryObject = jsonObject.getJSONObject("status");
+            String message = galleryObject.getString("message");
+
+            Item status = new Item();
+            status.message = message;
+
+            return status;
+        }
+
+        /**
+         * Vrátí přiznání.
+         * @param jsonObject
+         * @return
+         * @throws JSONException
+         */
+        private Item getConfession(JSONObject jsonObject) throws JSONException{
+            JSONObject galleryObject = jsonObject.getJSONObject("confession");
+            String message = galleryObject.getString("note");
+
+            Item conf = new Item();
+            conf.message = message;
+
+            return conf;
         }
 
         /**
