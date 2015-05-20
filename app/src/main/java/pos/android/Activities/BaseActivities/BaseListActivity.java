@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,6 +26,7 @@ import android.view.ViewGroup.LayoutParams;
 import org.apache.http.protocol.HttpContext;
 
 import pos.android.Activities.BaseActivities.BaseActivity;
+import pos.android.Activities.Menus.MainMenu;
 import pos.android.Http.HttpConection;
 import pos.android.Http.PersistentCookieStore;
 import pos.android.R;
@@ -103,5 +106,29 @@ public class BaseListActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Do something when a list item is clicked
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return MainMenu.onCreateOptionsMenu(this, menu, getMenuInflater());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean done = MainMenu.onOptionsItemSelected(this, item);
+
+        if (item.getItemId()== R.id.action_logout)
+        {
+            UserSessionManager session = new UserSessionManager(
+                    this.getApplicationContext(),
+                    new PersistentCookieStore(getApplicationContext())
+            );
+            session.logoutUser();
+        }
+
+        if(done){
+            return done;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
