@@ -3,11 +3,13 @@ package pos.android.Activities.Stream;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -29,7 +31,11 @@ import pos.android.Activities.BaseActivities.BaseListActivity;
 import pos.android.Http.JSONParser;
 import pos.android.R;
 
+
+
 public class StreamActivity extends BaseListActivity {
+
+
 
     /** Sata která se mají načíst do streamu. */
     ArrayList<HashMap<String, String>> streamItems;
@@ -46,24 +52,29 @@ public class StreamActivity extends BaseListActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_stream);
 
-        streamItems = new ArrayList<HashMap<String, String>>();
+        //streamItems = new ArrayList<HashMap<String, String>>();
 
         new LoadStream(httpContext).execute();
 
-        // For the cursor adapter, specify which columns go into which views
-        String[] fromColumns = {ContactsContract.Data.DISPLAY_NAME};
-        int[] toViews = {R.id.name_entry}; // The TextView in simple_list_item_1
 
-        // Create an empty adapter we will use to display the loaded data.
-        // We pass null for the cursor, then update it in onLoadFinished()
-        mAdapter = new SimpleCursorAdapter(this,
-                R.layout.list_example_entry, null,
-                fromColumns, toViews, 0);
-        setListAdapter(mAdapter);
+        // Construct the data source
+        ArrayList<Item> arrayOfItems = new ArrayList<Item>();
+        // Create the adapter to convert the array to views
+        ItemAdapter adapter = new ItemAdapter(this, arrayOfItems);
+        // Attach the adapter to a ListView
+
+        // Add item to adapter
+        Item newItem = new Item("Nathan");
+        adapter.add(newItem);
+
+        /*mAdapter = new SimpleCursorAdapter(this,
+                R.layout.list_example_entry, matrixCursor,
+                null, toViews, 0);*/
+        setListAdapter(adapter);
 
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
-        getLoaderManager().initLoader(0, null, this);
+        //getLoaderManager().initLoader(0, null, this);
 
         /*// Get listview
         ListView lv = getListView();

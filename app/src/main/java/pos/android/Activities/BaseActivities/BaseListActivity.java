@@ -33,7 +33,7 @@ import pos.android.User.UserSessionManager;
  * Created by Petr on 14.5.2015.
  * Aktivita pro zobrazení seznamu položek.
  */
-public class BaseListActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BaseListActivity extends ListActivity {
     /** Údaje o přihlášeném uživateli. */
     protected UserSessionManager session;
 
@@ -85,7 +85,7 @@ public class BaseListActivity extends ListActivity implements LoaderManager.Load
                 PROJECTION, SELECTION, null, null);
     }
 
-    // Called when a previously created loader has finished loading
+ /*   // Called when a previously created loader has finished loading
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Swap the new cursor in.  (The framework will take care of closing the
         // old cursor once we return.)
@@ -98,7 +98,7 @@ public class BaseListActivity extends ListActivity implements LoaderManager.Load
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
         mAdapter.swapCursor(null);
-    }
+    }*/
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
