@@ -44,11 +44,11 @@ public class StreamActivity extends BaseListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stream);
+        //setContentView(R.layout.activity_stream);
 
         streamItems = new ArrayList<HashMap<String, String>>();
 
-        //new LoadStream(httpContext).execute();
+        new LoadStream(httpContext).execute();
 
         // For the cursor adapter, specify which columns go into which views
         String[] fromColumns = {ContactsContract.Data.DISPLAY_NAME};
