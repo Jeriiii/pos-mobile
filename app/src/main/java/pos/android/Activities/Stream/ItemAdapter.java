@@ -33,6 +33,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 
         /* přidá výšku elementu do výšky listu */
         listHeight = listHeight + getViewHeight(convertView);
+        convertView.getLayoutParams().width = parent.getWidth();
 
         // Lookup view for data population
         // Populate the data into the template view using the data object

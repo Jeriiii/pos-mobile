@@ -241,6 +241,8 @@ public class StreamActivity extends BaseListActivity {
             String name = galleryObject.getString("name");
             Item gallery = new Item(name);
 
+            gallery.name = "Galerie";
+
             return gallery;
         }
 
@@ -256,6 +258,7 @@ public class StreamActivity extends BaseListActivity {
 
             Item status = new Item();
             status.message = message;
+            status.name = "Status";
 
             return status;
         }
@@ -272,6 +275,7 @@ public class StreamActivity extends BaseListActivity {
 
             Item conf = new Item();
             conf.message = message;
+            conf.name = "Přiznání";
 
             return conf;
         }
@@ -335,15 +339,14 @@ public class StreamActivity extends BaseListActivity {
             // Gets the layout params that will allow you to resize the layout
             ViewGroup.LayoutParams params = layout.getLayoutParams();
             // Changes the height and width to the specified *pixels*
-            params.height = 1000;
+            params.height = -1;
         }
 
         private int getTotalHeightofListView() {
             ListView lv = (ListView)findViewById(android.R.id.list);
-            ListAdapter LvAdapter = lv.getAdapter();
             int listviewElementsheight = 0;
-            for (int i = 0; i < LvAdapter.getCount(); i++) {
-                View mView = LvAdapter.getView(i, null, lv);
+            for (int i = 0; i < adapter.getCount(); i++) {
+                View mView = adapter.getView(i, null, lv);
                 mView.measure(
                         View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                         View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));

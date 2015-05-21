@@ -27,7 +27,7 @@ public class LayoutListener implements ViewTreeObserver.OnPreDrawListener {
         // Gets the layout params that will allow you to resize the layout
         ViewGroup.LayoutParams params = layout.getLayoutParams();
         // Changes the height and width to the specified *pixels*
-        params.height = 1000;
+        params.height = 10;
 
         layout.getViewTreeObserver().removeOnPreDrawListener( this );
 
