@@ -42,11 +42,16 @@ import pos.android.R;
 public class StreamActivity extends BaseListActivity {
 
     /** Sata která se mají načíst do streamu. */
-    ArrayList<HashMap<String, String>> streamItems;
+    ArrayList<Item> streamItems;
 
     ItemAdapter adapter;
 
+    /**
+     * Zobrazí se při načítání dalších příspěvků.
+     */
     ProgressBar bar;
+
+
 
     /** Tagy aplikace. */
     private static final String TAG_STREAM_ITEMS = "data";
@@ -60,8 +65,8 @@ public class StreamActivity extends BaseListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_example);
 
-        ArrayList<Item> arrayOfItems = new ArrayList<Item>();
-        adapter = new ItemAdapter(this, arrayOfItems);
+        streamItems = new ArrayList<Item>();
+        adapter = new ItemAdapter(this, streamItems);
 
         bar = (ProgressBar) this.findViewById(R.id.progressBar);
 
@@ -73,10 +78,21 @@ public class StreamActivity extends BaseListActivity {
      * Načte další příspěvky do streamu.
      */
     public void addItems() {
-        new LoadStream(this, httpContext).execute();
+        new LoadStream(this, httpContext, streamItems).execute();
     }
 
+    /**
+     * Načte nově přidané příspěvky do streamu.
+     */
+    public void notifyAdapter() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
 
+    }
 
     class LoadStream extends AsyncTask<String, String, String> {
 
@@ -92,9 +108,15 @@ public class StreamActivity extends BaseListActivity {
          */
         StreamActivity streamActivity;
 
-        public LoadStream(StreamActivity streamActivity, HttpContext httpContext) {
+        /**
+         * Seznam položek ve streamu.
+         */
+        ArrayList<Item> listItems;
+
+        public LoadStream(StreamActivity streamActivity, HttpContext httpContext, ArrayList<Item> listItems) {
             this.streamActivity = streamActivity;
             this.httpContext = httpContext;
+            this.listItems = listItems;
         }
 
         /**
@@ -123,9 +145,7 @@ public class StreamActivity extends BaseListActivity {
                 //připojení se nezdařilo
             }
 
-
-
-            int i = 1;
+            streamActivity.notifyAdapter();
 
             return null;
         }
@@ -146,7 +166,7 @@ public class StreamActivity extends BaseListActivity {
                    //HashMap<String, String> item = getItem(c);
                    Item item = getItem(c);
 
-                   adapter.add(item);
+                   listItems.add(item);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
