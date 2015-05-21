@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,14 +45,14 @@ public class StreamActivity extends BaseListActivity {
     /** Sata která se mají načíst do streamu. */
     ArrayList<Item> streamItems;
 
+    /** Adapter na data ve streamu. */
     ItemAdapter adapter;
 
-    /**
-     * Zobrazí se při načítání dalších příspěvků.
-     */
+    /** Zobrazí se při načítání dalších příspěvků. */
     ProgressBar bar;
 
-
+    /** Má již tlačítko k načtení dalších příspěvků. */
+    boolean haveMoreButton = false;
 
     /** Tagy aplikace. */
     private static final String TAG_STREAM_ITEMS = "data";
@@ -135,6 +136,8 @@ public class StreamActivity extends BaseListActivity {
             String url = "http://10.0.2.2/nette/pos/public/www/one-page/stream-in-json";
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
+            int countItems = listItems.size();
+            urlParams.add(new BasicNameValuePair("offset", Integer.toString(countItems)));
 
             JSONParser con = new JSONParser();
             JSONObject json = con.getJSONmakeHttpRequest(url, "GET", urlParams, httpContext);
@@ -154,16 +157,18 @@ public class StreamActivity extends BaseListActivity {
          * Uloží příspěvky.
          */
         private void saveItems(JSONObject jsonItems) {
+            JSONObject c;
+            int i;
+
             try {
                 // products found
                 // Getting Array of Products
                 items = jsonItems.getJSONArray(TAG_STREAM_ITEMS);
 
                // looping through All Products
-               for (int i = 0; i < items.length(); i++) {
+               for (i = 0; i < items.length(); i++) {
 
-                   JSONObject c = items.getJSONObject(i);
-                   //HashMap<String, String> item = getItem(c);
+                   c = items.getJSONObject(i);
                    Item item = getItem(c);
 
                    listItems.add(item);
@@ -179,13 +184,13 @@ public class StreamActivity extends BaseListActivity {
 
             Item item = new Item();
 
-            if(! jsonObject.getString("userGalleryID").equals("null")) {
+            if(isset(jsonObject, "userGalleryID")) {
                 item =  getUserGallery(jsonObject);
             }
-            if(! jsonObject.getString("statusID").equals("null")) {
+            if(isset(jsonObject, "statusID")) {
                 item = getStreamStatus(jsonObject);
             }
-            if(! jsonObject.getString("confessionID").equals("null")) {
+            if(isset(jsonObject, "confessionID")) {
                 item = getConfession(jsonObject);
             }
 
@@ -194,14 +199,35 @@ public class StreamActivity extends BaseListActivity {
             return item;
         }
 
+        /**
+         * Přidá k příspěvku data o uživateli.
+         * @param item Příspěvek, kam je potřeba přidat data.
+         * @param jsonObject Objekt, ze kterého se data čtou.
+         * @return Objekt, ke kterému byla přidána data o uživateli, pokud existují.
+         * @throws JSONException
+         */
         private Item addUserData(Item item, JSONObject jsonObject) throws JSONException{
-            JSONObject user = jsonObject.getJSONObject("user");
-
-            if(! user.equals("null")) {
-                item.userName = user.getString("user_name");
+            if(isset(jsonObject, "user")) {
+                JSONObject userObj = jsonObject.getJSONObject("user");
+                item.userName = userObj.getString("user_name");
             }
 
             return item;
+        }
+
+        /**
+         * Vrátí, zda je JSON hodnota nastavená, nebo je null či false
+         * @param jsonObject Objekt který se prohledává.
+         * @param paramName Název parametru, který se hledá.
+         * @return TRUE = hodnota je nastavená, jinak FALSE
+         */
+        private boolean isset(JSONObject jsonObject, String paramName) throws JSONException {
+            String user = jsonObject.getString(paramName);
+            if(! user.equals("null") && ! user.equals("false")) {
+                return true;
+            }
+
+            return false;
         }
 
         /**
@@ -277,24 +303,39 @@ public class StreamActivity extends BaseListActivity {
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
-            ListView layout = (ListView)findViewById(android.R.id.list);
-            View moreButton = getLayoutInflater().inflate(R.layout.stream_more_button, null);
+            ListView lv = (ListView)findViewById(android.R.id.list);
 
-            layout.addFooterView(moreButton);
+            this.addMoreButton(lv);
+            setListHeight(lv);
+            lv.setSelection(adapter.getCount() - 1);
 
             setListAdapter(adapter);
+
+            bar.setVisibility(View.GONE);
+            setListeners();
+        }
+
+        /**
+         * Přidá tlačítko pro načtení více příspěvků do streamu.
+         */
+        private void addMoreButton(ListView layout) {
+            if(! streamActivity.haveMoreButton) {
+                View moreButton = getLayoutInflater().inflate(R.layout.stream_more_button, null);
+                layout.addFooterView(moreButton);
+                streamActivity.haveMoreButton = true;
+            }
+        }
+
+        /**
+         * Dočasná metoda pro nastavení výšky streamu.
+         */
+        private void setListHeight(ListView layout) {
             //findViewById(R.id.layout_to_hide).setMinimumHeight(View.VISIBLE);
             layout = (ListView)findViewById(android.R.id.list);
             // Gets the layout params that will allow you to resize the layout
             ViewGroup.LayoutParams params = layout.getLayoutParams();
             // Changes the height and width to the specified *pixels*
             params.height = 1000;
-
-            /*layout = (ListView)findViewById(android.R.id.list);
-            ViewTreeObserver vto = layout.getViewTreeObserver();
-            vto.addOnPreDrawListener(new LayoutListener(streamActivity, adapter));*/
-            bar.setVisibility(View.GONE);
-            setListeners();
         }
 
         private int getTotalHeightofListView() {
