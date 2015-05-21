@@ -8,8 +8,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
@@ -60,8 +65,18 @@ public class StreamActivity extends BaseListActivity {
 
         bar = (ProgressBar) this.findViewById(R.id.progressBar);
 
-        new LoadStream(httpContext).execute();
+        addItems();
+
     }
+
+    /**
+     * Načte další příspěvky do streamu.
+     */
+    public void addItems() {
+        new LoadStream(this, httpContext).execute();
+    }
+
+
 
     class LoadStream extends AsyncTask<String, String, String> {
 
@@ -72,7 +87,13 @@ public class StreamActivity extends BaseListActivity {
          */
         private HttpContext httpContext;
 
-        public LoadStream(HttpContext httpContext) {
+        /**
+         * Stream aktivity
+         */
+        StreamActivity streamActivity;
+
+        public LoadStream(StreamActivity streamActivity, HttpContext httpContext) {
+            this.streamActivity = streamActivity;
             this.httpContext = httpContext;
         }
 
@@ -236,9 +257,50 @@ public class StreamActivity extends BaseListActivity {
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
+            ListView layout = (ListView)findViewById(android.R.id.list);
+            View moreButton = getLayoutInflater().inflate(R.layout.stream_more_button, null);
+
+            layout.addFooterView(moreButton);
 
             setListAdapter(adapter);
+            //findViewById(R.id.layout_to_hide).setMinimumHeight(View.VISIBLE);
+            layout = (ListView)findViewById(android.R.id.list);
+            // Gets the layout params that will allow you to resize the layout
+            ViewGroup.LayoutParams params = layout.getLayoutParams();
+            // Changes the height and width to the specified *pixels*
+            params.height = 1000;
+
+            /*layout = (ListView)findViewById(android.R.id.list);
+            ViewTreeObserver vto = layout.getViewTreeObserver();
+            vto.addOnPreDrawListener(new LayoutListener(streamActivity, adapter));*/
             bar.setVisibility(View.GONE);
+            setListeners();
+        }
+
+        private int getTotalHeightofListView() {
+            ListView lv = (ListView)findViewById(android.R.id.list);
+            ListAdapter LvAdapter = lv.getAdapter();
+            int listviewElementsheight = 0;
+            for (int i = 0; i < LvAdapter.getCount(); i++) {
+                View mView = LvAdapter.getView(i, null, lv);
+                mView.measure(
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                listviewElementsheight += mView.getMeasuredHeight();
+            }
+            return listviewElementsheight;
+        }
+
+        /**
+         * Nastaví listenery
+         */
+        private void setListeners() {
+            Button buttonOne = (Button) findViewById(R.id.more_button);
+            buttonOne.setOnClickListener(new Button.OnClickListener() {
+                public void onClick(View v) {
+                    streamActivity.addItems();
+                }
+            });
         }
     }
 

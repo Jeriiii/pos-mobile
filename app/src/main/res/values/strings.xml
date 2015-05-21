@@ -6,4 +6,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_stream">StreamActivity</string>
+
+    <!-- tlačítka -->
+    <string name="moder_data">více</string>
 </resources>
