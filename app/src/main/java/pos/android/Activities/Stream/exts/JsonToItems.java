@@ -70,6 +70,7 @@ public class JsonToItems {
 
         addUserData(item, jsonObject);
         item.id = jsonObject.getInt("id");
+        item.name = jsonObject.getString("id") + " > " + item.name;
 
         return item;
     }
