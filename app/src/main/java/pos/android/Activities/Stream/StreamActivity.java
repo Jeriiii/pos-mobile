@@ -1,24 +1,12 @@
 package pos.android.Activities.Stream;
 
-import android.app.ListActivity;
-import android.app.LoaderManager;
-import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 
 import org.apache.http.NameValuePair;
@@ -29,12 +17,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import pos.android.Activities.BaseActivities.BaseActivity;
 import pos.android.Activities.BaseActivities.BaseListActivity;
+import pos.android.Activities.Stream.exts.Item;
+import pos.android.Activities.Stream.exts.ItemAdapter;
+import pos.android.Activities.Stream.exts.JsonToItems;
 import pos.android.Http.JSONParser;
 import pos.android.R;
 
@@ -143,7 +131,9 @@ public class StreamActivity extends BaseListActivity {
             JSONObject json = con.getJSONmakeHttpRequest(url, "GET", urlParams, httpContext);
 
             if(json != null) {
-                saveItems(json);
+                JsonToItems jsonToItems = new JsonToItems(listItems);
+                jsonToItems.saveItemsToList(json);
+                //saveItems(json);
             } else {
                 //připojení se nezdařilo
             }

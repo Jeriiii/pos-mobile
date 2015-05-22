@@ -1,8 +1,10 @@
-package pos.android.Activities.Stream;
+package pos.android.Activities.Stream.exts;
 
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ListView;
+
+import pos.android.Activities.Stream.StreamActivity;
 
 /**
  * Created by Petr on 21.5.2015.

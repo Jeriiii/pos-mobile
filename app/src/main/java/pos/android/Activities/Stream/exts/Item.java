@@ -1,4 +1,4 @@
-package pos.android.Activities.Stream;
+package pos.android.Activities.Stream.exts;
 
 /**
  * Created by Petr on 20.5.2015.
