@@ -9,4 +9,5 @@
 
     <!-- tlačítka -->
     <string name="moder_data">více</string>
+    <string name="title_activity_item_actvity">ItemActvity</string>
 </resources>

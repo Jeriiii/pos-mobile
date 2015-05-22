@@ -33,6 +33,10 @@
             android:name=".Activities.Stream.StreamActivity"
             android:label="@string/title_activity_stream" >
         </activity>
+        <activity
+            android:name=".Activities.Stream.ItemActvity"
+            android:label="@string/title_activity_item_actvity" >
+        </activity>
     </application>
 
 </manifest>
