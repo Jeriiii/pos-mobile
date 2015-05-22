@@ -36,6 +36,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 
         // Lookup view for data population
         // Populate the data into the template view using the data object
+        setTextView(convertView, Integer.toString(item.id), R.id.id);
         setTextView(convertView, item.name, R.id.name);
         setTextView(convertView, item.userName, R.id.userName);
         setTextView(convertView, item.message, R.id.message);
