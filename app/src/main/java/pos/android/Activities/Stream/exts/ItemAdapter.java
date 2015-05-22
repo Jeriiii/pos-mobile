@@ -54,7 +54,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         if(! itemParam.equals("")) {
             tvName.setText(itemParam);
         } else {
-            tvName.setVisibility(View.GONE);
+            //tvName.setVisibility(View.GONE);
         }
     }
 
