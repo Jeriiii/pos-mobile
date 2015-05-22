@@ -1,5 +1,6 @@
 package pos.android.Activities.Stream;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -68,6 +69,13 @@ public class StreamActivity extends BaseListActivity {
      */
     public void addItems() {
         new LoadStream(this, httpContext, streamItems).execute();
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Intent intent = new Intent(getApplicationContext(), ItemActvity.class);
+
+        startActivity(intent);
     }
 
     /**

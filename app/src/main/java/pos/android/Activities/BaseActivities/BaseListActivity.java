@@ -104,11 +104,6 @@ public class BaseListActivity extends ListActivity {
     }*/
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        // Do something when a list item is clicked
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return MainMenu.onCreateOptionsMenu(this, menu, getMenuInflater());
     }

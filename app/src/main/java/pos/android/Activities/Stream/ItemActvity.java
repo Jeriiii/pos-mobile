@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import pos.android.Activities.BaseActivities.BaseActivity;
 import pos.android.R;
 
-public class ItemActvity extends ActionBarActivity {
+public class ItemActvity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
