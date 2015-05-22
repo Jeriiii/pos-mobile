@@ -23,6 +23,7 @@ import java.util.List;
 import pos.android.Activities.BaseActivities.BaseListActivity;
 import pos.android.Activities.Stream.exts.Item;
 import pos.android.Activities.Stream.exts.ItemAdapter;
+import pos.android.Activities.Stream.exts.ItemHolder;
 import pos.android.Activities.Stream.exts.JsonToItems;
 import pos.android.Http.JSONParser;
 import pos.android.R;
@@ -47,6 +48,8 @@ public class StreamActivity extends BaseListActivity {
     private static final String TAG_STREAM_ITEMS = "data";
 
     private static final String TAG_ID = "id";
+
+    public static final String TAG_ITEM = "stream_item";
 
 
 
@@ -75,7 +78,12 @@ public class StreamActivity extends BaseListActivity {
     public void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(getApplicationContext(), ItemActvity.class);
 
+        Item item = adapter.getItem(position);
+        ItemHolder.getInstance().item = item;
+
         startActivity(intent);
+
+        finish();
     }
 
     /**
@@ -141,7 +149,6 @@ public class StreamActivity extends BaseListActivity {
             if(json != null) {
                 JsonToItems jsonToItems = new JsonToItems(listItems);
                 jsonToItems.saveItemsToList(json);
-                //saveItems(json);
             } else {
                 //připojení se nezdařilo
             }
@@ -149,156 +156,6 @@ public class StreamActivity extends BaseListActivity {
             streamActivity.notifyAdapter();
 
             return null;
-        }
-
-        /**
-         * Uloží příspěvky.
-         */
-        private void saveItems(JSONObject jsonItems) {
-            JSONObject c;
-            int i;
-
-            try {
-                // products found
-                // Getting Array of Products
-                items = jsonItems.getJSONArray(TAG_STREAM_ITEMS);
-
-               // looping through All Products
-               for (i = 0; i < items.length(); i++) {
-
-                   c = items.getJSONObject(i);
-                   Item item = getItem(c);
-
-                   listItems.add(item);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private Item getItem(JSONObject jsonObject) throws JSONException{
-
-            // Storing each json item in variable
-
-            Item item = new Item();
-
-            if(isset(jsonObject, "userGalleryID")) {
-                item =  getUserGallery(jsonObject);
-            }
-            if(isset(jsonObject, "statusID")) {
-                item = getStreamStatus(jsonObject);
-            }
-            if(isset(jsonObject, "confessionID")) {
-                item = getConfession(jsonObject);
-            }
-
-            addUserData(item, jsonObject);
-
-            return item;
-        }
-
-        /**
-         * Přidá k příspěvku data o uživateli.
-         * @param item Příspěvek, kam je potřeba přidat data.
-         * @param jsonObject Objekt, ze kterého se data čtou.
-         * @return Objekt, ke kterému byla přidána data o uživateli, pokud existují.
-         * @throws JSONException
-         */
-        private Item addUserData(Item item, JSONObject jsonObject) throws JSONException{
-            if(isset(jsonObject, "user")) {
-                JSONObject userObj = jsonObject.getJSONObject("user");
-                item.userName = userObj.getString("user_name");
-            }
-
-            return item;
-        }
-
-        /**
-         * Vrátí, zda je JSON hodnota nastavená, nebo je null či false
-         * @param jsonObject Objekt který se prohledává.
-         * @param paramName Název parametru, který se hledá.
-         * @return TRUE = hodnota je nastavená, jinak FALSE
-         */
-        private boolean isset(JSONObject jsonObject, String paramName) throws JSONException {
-            String user = jsonObject.getString(paramName);
-            if(! user.equals("null") && ! user.equals("false")) {
-                return true;
-            }
-
-            return false;
-        }
-
-        /**
-         * Vrátí uživatelskou galerii.
-         * @param jsonObject
-         * @return
-         * @throws JSONException
-         */
-        private Item getUserGallery(JSONObject jsonObject) throws JSONException{
-            JSONObject galleryObject = jsonObject.getJSONObject("userGallery");
-            String name = galleryObject.getString("name");
-            Item gallery = new Item(name);
-
-            gallery.name = "Galerie";
-
-            return gallery;
-        }
-
-        /**
-         * Vrátí uživatelský status.
-         * @param jsonObject
-         * @return
-         * @throws JSONException
-         */
-        private Item getStreamStatus(JSONObject jsonObject) throws JSONException{
-            JSONObject galleryObject = jsonObject.getJSONObject("status");
-            String message = galleryObject.getString("message");
-
-            Item status = new Item();
-            status.message = message;
-            status.name = "Status";
-
-            return status;
-        }
-
-        /**
-         * Vrátí přiznání.
-         * @param jsonObject
-         * @return
-         * @throws JSONException
-         */
-        private Item getConfession(JSONObject jsonObject) throws JSONException{
-            JSONObject galleryObject = jsonObject.getJSONObject("confession");
-            String message = galleryObject.getString("note");
-
-            Item conf = new Item();
-            conf.message = message;
-            conf.name = "Přiznání";
-
-            return conf;
-        }
-
-        /**
-         * Rozhodne, zda jsou data ze streamu důležitá k uložení nebo ne.
-         * @param name Název dat ze streamu k posouzení.
-         * @param var Data ze streamu k posouzení.
-         * @return TRUE = data se mají uložit k pozdějšímu zobrazení, jinak FALSE
-         */
-        private boolean isImportant(String name, String var) {
-            if(var.equals("null") || var.equals("false")) {
-                return false;
-            }
-            if(name.equals("tallness")) {
-                return false;
-            }
-            if(name.equals("categoryID")) {
-                return false;
-            }
-            if(name.equals("type")) {
-                return false;
-            }
-
-            return true;
         }
 
         /**

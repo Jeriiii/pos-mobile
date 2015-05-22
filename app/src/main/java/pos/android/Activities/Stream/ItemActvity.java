@@ -4,8 +4,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import pos.android.Activities.BaseActivities.BaseActivity;
+import pos.android.Activities.Stream.exts.Item;
+import pos.android.Activities.Stream.exts.ItemHolder;
 import pos.android.R;
 
 public class ItemActvity extends BaseActivity {
@@ -14,6 +17,12 @@ public class ItemActvity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_actvity);
+
+        Item item = ItemHolder.getInstance().item;
+
+        ((TextView)findViewById(R.id.name)).setText(item.name);
+        ((TextView)findViewById(R.id.message)).setText(item.message);
+        ((TextView)findViewById(R.id.userName)).setText(item.userName);
     }
 
 
