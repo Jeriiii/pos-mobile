@@ -6,9 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.protocol.HttpContext;
 
 import java.util.ArrayList;
 
+import pos.android.Http.HttpConection;
 import pos.android.R;
 
 /**
@@ -20,6 +24,11 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         super(context, 0, users);
     }
     public int listHeight = 0;
+    private HttpContext httpContext;
+
+    public void setHttpContext(HttpContext httpContext) {
+        this.httpContext = httpContext;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -40,6 +49,8 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         setTextView(convertView, item.name, R.id.name);
         setTextView(convertView, item.userName, R.id.userName);
         setTextView(convertView, item.message, R.id.message);
+        setLikesView(convertView, item.countLikes, R.id.likes, item);
+        setCommentsView(convertView, item.countComments, R.id.comments);
 
         // Return the completed view to render on screen
         return convertView;
@@ -57,6 +68,27 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         } else {
             //tvName.setVisibility(View.GONE);
         }
+    }
+
+
+    private void setLikesView(View convertView, int countLikes, int viewId, Item item) {
+        String text = "Líbí";
+        if(countLikes != 0) {
+            text = text + " " + "(" + Integer.toString(countLikes) + ")" ;
+        }
+
+        TextView tvLike = (TextView) convertView.findViewById(viewId);
+        tvLike.setOnClickListener(new LikeOnClickListener(getContext(), item, httpContext));
+
+        setTextView(convertView, text, viewId);
+    }
+
+    private void setCommentsView(View convertView, int countComments, int viewId) {
+        String text = "Přidat komentář";
+        if(countComments != 0) {
+            text = "Komentáře " + "(" + Integer.toString(countComments) + ")" ;
+        }
+        setTextView(convertView, text, viewId);
     }
 
     /**

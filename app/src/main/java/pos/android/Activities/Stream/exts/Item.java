@@ -5,9 +5,20 @@ package pos.android.Activities.Stream.exts;
  */
 public class Item {
     public int id;
+    public int parentId;
+    public int userId;
+    public int countComments = 0;
+    public int countLikes = 0;
     public String name = "";
     public String userName = "";
     public String message = "";
+
+    /* specifické pro galerie */
+    public int lastImageId;
+
+    public boolean isStatus = false;
+    public boolean isConfession = false;
+    public boolean isUserImage = false;
 
     public Item() {
 

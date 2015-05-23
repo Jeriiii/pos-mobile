@@ -37,6 +37,9 @@ public class HttpConection {
 
     static InputStream is = null;
 
+    public static final String host = "http://10.0.2.2";
+    public static final String path = "/nette/pos/public/www";
+
     /**
      * Vytvoří nový http context
      */

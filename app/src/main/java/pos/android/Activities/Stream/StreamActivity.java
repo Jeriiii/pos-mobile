@@ -25,6 +25,7 @@ import pos.android.Activities.Stream.exts.Item;
 import pos.android.Activities.Stream.exts.ItemAdapter;
 import pos.android.Activities.Stream.exts.ItemHolder;
 import pos.android.Activities.Stream.exts.JsonToItems;
+import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.R;
 
@@ -60,6 +61,7 @@ public class StreamActivity extends BaseListActivity {
 
         streamItems = new ArrayList<Item>();
         adapter = new ItemAdapter(this, streamItems);
+        adapter.setHttpContext(httpContext);
 
         bar = (ProgressBar) this.findViewById(R.id.progressBar);
 
@@ -137,7 +139,7 @@ public class StreamActivity extends BaseListActivity {
          * getting All products from url
          * */
         protected String doInBackground(String... args) {
-            String url = "http://10.0.2.2/nette/pos/public/www/one-page/stream-in-json";
+            String url = HttpConection.host + HttpConection.path + "/one-page/stream-in-json";
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
             int countItems = listItems.size();

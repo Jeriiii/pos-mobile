@@ -118,6 +118,17 @@ public class JsonToItems {
         Item gallery = new Item(name);
 
         gallery.name = "Galerie";
+        gallery.parentId = galleryObject.getInt("id");
+        gallery.isUserImage = true;
+
+        /* nastavení liků a komentářů */
+        if(isset(galleryObject, "lastImage")) {
+            JSONObject lastImage = galleryObject.getJSONObject("lastImage");
+
+            gallery.countLikes = lastImage.getInt("likes");
+            gallery.countComments = lastImage.getInt("comments");
+            gallery.lastImageId = lastImage.getInt("id");
+        }
 
         return gallery;
     }
@@ -129,12 +140,16 @@ public class JsonToItems {
      * @throws JSONException
      */
     private Item getStreamStatus(JSONObject jsonObject) throws JSONException{
-        JSONObject galleryObject = jsonObject.getJSONObject("status");
-        String message = galleryObject.getString("message");
+        JSONObject statusObject = jsonObject.getJSONObject("status");
+        String message = statusObject.getString("message");
 
         Item status = new Item();
+        status.isStatus = true;
+        status.parentId = statusObject.getInt("id");
         status.message = message.trim();
         status.name = "Status";
+        status.countLikes = statusObject.getInt("likes");
+        status.countComments = statusObject.getInt("comments");
 
         return status;
     }
@@ -146,12 +161,16 @@ public class JsonToItems {
      * @throws JSONException
      */
     private Item getConfession(JSONObject jsonObject) throws JSONException{
-        JSONObject galleryObject = jsonObject.getJSONObject("confession");
-        String message = galleryObject.getString("note");
+        JSONObject confObject = jsonObject.getJSONObject("confession");
+        String message = confObject.getString("note");
 
         Item conf = new Item();
+        conf.isConfession = true;
+        conf.parentId = confObject.getInt("id");
         conf.message = message.trim();
         conf.name = "Přiznání";
+        conf.countLikes = confObject.getInt("likes");
+        conf.countComments = confObject.getInt("comments");
 
         return conf;
     }

@@ -10,6 +10,8 @@
         android:id="@android:id/android:list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:divider="#666"
+        android:dividerHeight="4px"/>
         />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

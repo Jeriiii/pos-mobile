@@ -23,5 +23,32 @@
         android:layout_height="wrap_content"
         android:textSize="20dip" />
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:background="#ffc4c4c4"
+                  android:layout_marginTop="10dip"
+                  android:padding="7dip"
+                  android:paddingBottom="10dip">
+
+        <TextView
+            android:id="@+id/likes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dip"
+            android:layout_weight="0.5"
+            />
+
+        <TextView
+            android:id="@+id/comments"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dip"
+            android:layout_weight="0.5"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>
