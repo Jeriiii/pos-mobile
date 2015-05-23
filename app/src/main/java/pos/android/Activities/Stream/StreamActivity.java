@@ -14,17 +14,16 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import pos.android.Activities.BaseActivities.BaseListActivity;
-import pos.android.Activities.Stream.exts.Item;
-import pos.android.Activities.Stream.exts.ItemAdapter;
-import pos.android.Activities.Stream.exts.ItemHolder;
-import pos.android.Activities.Stream.exts.JsonToItems;
+import pos.android.Activities.Stream.exts.Item.Item;
+import pos.android.Activities.Stream.exts.Item.ItemAdapter;
+import pos.android.Activities.Stream.exts.Item.ItemHolder;
+import pos.android.Activities.Stream.exts.Item.JsonToItems;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.R;
@@ -52,20 +51,34 @@ public class StreamActivity extends BaseListActivity {
 
     public static final String TAG_ITEM = "stream_item";
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_example);
 
         streamItems = new ArrayList<Item>();
         adapter = new ItemAdapter(this, streamItems);
+
+
+        setContentView(R.layout.list_example);
+
         adapter.setHttpContext(httpContext);
 
         bar = (ProgressBar) this.findViewById(R.id.progressBar);
 
         addItems();
+
+    }
+
+    /**
+     * Načte nově přidané příspěvky do streamu.
+     */
+    public void notifyAdapter() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -88,22 +101,7 @@ public class StreamActivity extends BaseListActivity {
         finish();
     }
 
-    /**
-     * Načte nově přidané příspěvky do streamu.
-     */
-    public void notifyAdapter() {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-    }
-
     class LoadStream extends AsyncTask<String, String, String> {
-
-        JSONArray items = null;
 
         /**
          * Http kontext pro čtení dat přihlášeného uživatele.

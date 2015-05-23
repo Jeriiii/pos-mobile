@@ -1,31 +1,21 @@
 package pos.android.Activities.BaseActivities;
 
-import android.app.Activity;
 import android.app.ListActivity;
-import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.ContactsContract;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
-import android.view.ViewGroup.LayoutParams;
 
 import org.apache.http.protocol.HttpContext;
 
-import pos.android.Activities.BaseActivities.BaseActivity;
 import pos.android.Activities.Menus.MainMenu;
 import pos.android.Http.HttpConection;
 import pos.android.Http.PersistentCookieStore;
@@ -44,7 +34,7 @@ public class BaseListActivity extends ListActivity {
     protected HttpContext httpContext;
 
     // This is the Adapter being used to display the list's data
-    protected SimpleCursorAdapter mAdapter;
+    protected ArrayAdapter adapter;
 
     // These are the Contacts rows that we will retrieve
     static final String[] PROJECTION = new String[] {ContactsContract.Data._ID,
@@ -55,9 +45,10 @@ public class BaseListActivity extends ListActivity {
             ContactsContract.Data.DISPLAY_NAME + " NOTNULL) AND (" +
             ContactsContract.Data.DISPLAY_NAME + " != '' ))";
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.adapter = adapter;
 
          /* načtení přihlášeného uživatele */
         UserSessionManager session = new UserSessionManager(
@@ -86,6 +77,19 @@ public class BaseListActivity extends ListActivity {
         // creating a Cursor for the data being displayed.
         return new CursorLoader(this, ContactsContract.Data.CONTENT_URI,
                 PROJECTION, SELECTION, null, null);
+    }
+
+    /**
+     * Načte nově přidané příspěvky do streamu.
+     */
+    public void notifyAdapter() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
  /*   // Called when a previously created loader has finished loading

@@ -5,6 +5,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ListView;
 
 import pos.android.Activities.Stream.StreamActivity;
+import pos.android.Activities.Stream.exts.Item.ItemAdapter;
 
 /**
  * Created by Petr on 21.5.2015.

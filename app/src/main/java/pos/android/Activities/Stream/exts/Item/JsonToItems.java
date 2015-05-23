@@ -1,10 +1,12 @@
-package pos.android.Activities.Stream.exts;
+package pos.android.Activities.Stream.exts.Item;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import pos.android.Activities.Stream.exts.Item.Item;
 
 /**
  * Created by Petr on 22.5.2015.

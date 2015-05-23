@@ -9,13 +9,12 @@ import android.widget.Toast;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import pos.android.Activities.Stream.exts.Item.Item;
 import pos.android.Http.HttpConection;
-import pos.android.Http.JSONParser;
 
 /**
  * Událost kliknutí na tlačítko like.

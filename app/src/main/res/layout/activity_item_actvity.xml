@@ -4,23 +4,99 @@
               android:layout_height="wrap_content"
               android:layout_weight="1">
 
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dip"
+        android:gravity="start"/>
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dip" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dip" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:background="#ffc4c4c4"
+                  android:layout_marginTop="10dip"
+                  android:padding="7dip"
+                  android:paddingBottom="10dip">
+
         <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:id="@+id/likes"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textSize="14dip"
+            android:layout_weight="0.5"
+            />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
+    </ProgressBar>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="#ffc4c4c4"
+                  android:layout_marginTop="1dip"
+                  android:padding="7dip"
+                  android:orientation="horizontal"
+                  android:paddingBottom="10dip">
+        <TextView
+            android:id="@+id/comment_label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dip"
+            android:text="Přidat komentář"
+            />
+
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:padding="7dip"
+                      android:background="#ffc4c4c4"
+                      android:paddingBottom="10dip">
+
+        <ListView
+            android:id="@android:id/android:list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:divider="#666"
             android:textSize="20dip"
-            android:gravity="start"/>
+            android:weightSum="1"
+            android:dividerHeight="4px"/>
+        />
 
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15dip" />
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dip" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:padding="7dip"
+                  android:background="#ffc4c4c4"
+                  android:paddingBottom="10dip">
+        
+    </LinearLayout>
 
 </LinearLayout>
