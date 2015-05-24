@@ -91,12 +91,25 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
+                  android:layout_height="fill_parent"
+                  android:orientation="vertical"
                   android:padding="7dip"
                   android:background="#ffc4c4c4"
                   android:paddingBottom="10dip">
-        
+        <EditText android:id="@+id/comment_msg"
+                  android:layout_weight="1"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:minLines="2"
+                  android:hint="@string/add_comment_field"
+                  android:background="#ffffffff"
+                  android:padding="7dip"
+                  android:textSize="16dip"/>
+        <Button android:id="@+id/addComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_comment_btn"
+                android:textSize="16dip" />
     </LinearLayout>
 
 </LinearLayout>

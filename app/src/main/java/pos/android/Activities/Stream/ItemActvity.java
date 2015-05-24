@@ -1,13 +1,18 @@
 package pos.android.Activities.Stream;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -61,6 +66,13 @@ public class ItemActvity extends BaseListActivity {
         ((TextView)findViewById(R.id.userName)).setText(item.userName);
         setLikes(item);
 
+        View addCommentBtn = findViewById(R.id.addComment);
+        addCommentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addComment();
+            }
+        });
 
         (new LoadComments(httpContext, listComments, this)).execute();
     }
@@ -103,13 +115,23 @@ public class ItemActvity extends BaseListActivity {
     }
 
     /**
-     * Nastaví komentáře příspěvku.
-     * @param item
+     * Přidá komentář.
      */
-    private void setComments(Item item) {
-        if(item.isUserImage) {
+    public void addComment() {
+        EditText et = (EditText)findViewById(R.id.comment_msg);
+        String comment = et.getText().toString();
+        if(comment.equals("")) {
+            et.setError("Napište komentář.");
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), "Komentář byl odeslán.", Toast.LENGTH_SHORT);
+            toast.show();
+            Comment comm = new Comment();
+            comm.comment = comment;
+            comm.userName = "Váš komentář";
 
+            listComments.add(comm);
         }
+
     }
 
     class LoadComments extends AsyncTask<String, String, String> {
@@ -159,6 +181,8 @@ public class ItemActvity extends BaseListActivity {
 
             return null;
         }
+
+
 
         /**
          * After completing background task Dismiss the progress dialog
