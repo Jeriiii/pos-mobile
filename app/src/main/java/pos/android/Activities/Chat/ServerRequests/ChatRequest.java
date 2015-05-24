@@ -5,6 +5,7 @@ import android.content.Context;
 import org.apache.http.protocol.HttpContext;
 
 import pos.android.Http.DatenodeJsonRequest;
+import pos.android.Http.HttpConection;
 
 /**
  *
@@ -19,7 +20,7 @@ public class ChatRequest extends DatenodeJsonRequest{
 
     @Override
     protected String getUrlFilePath(){
-        return "priznani/public/www/chat/android";
+        return HttpConection.path + "/chat/android";
     }
 
     @Override

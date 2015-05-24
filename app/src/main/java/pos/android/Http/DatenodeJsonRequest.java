@@ -58,12 +58,10 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
 
     /*********** PREKRYVATELNE GETRY ********************/
     protected String getUrlDomain(){
-        return "http://10.0.2.2/";
+        return HttpConection.host;
     }
 
-    protected String getUrlFilePath(){
-        return "priznani/public/www/";
-    }
+    protected String getUrlFilePath(){ return HttpConection.path + "/"; }
 
     /* pouzitelne napriklad pri volani komponent, abych nemusel do parametru psat porad to same */
     protected String getUrlParametersPrefix(){
