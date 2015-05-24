@@ -44,6 +44,9 @@ public class StreamActivity extends BaseListActivity {
     /** Má již tlačítko k načtení dalších příspěvků. */
     boolean haveMoreButton = false;
 
+    /** Má již formulář k přidání dalších příspěvků. */
+    boolean haveItemForm = false;
+
     /** Tagy aplikace. */
     private static final String TAG_STREAM_ITEMS = "data";
 
@@ -55,18 +58,16 @@ public class StreamActivity extends BaseListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.list_example);
+
         streamItems = new ArrayList<Item>();
         adapter = new ItemAdapter(this, streamItems);
-
-
-        setContentView(R.layout.list_example);
 
         adapter.setHttpContext(httpContext);
 
         bar = (ProgressBar) this.findViewById(R.id.progressBar);
 
         addItems();
-
     }
 
     /**
@@ -87,6 +88,14 @@ public class StreamActivity extends BaseListActivity {
      */
     public void addItems() {
         new LoadStream(this, httpContext, streamItems).execute();
+    }
+
+    /**
+     * Zobrazí tlačítko když někdo začne psát text.
+     */
+    public void onAddStausTextClick() {
+        View addStatusBtn = findViewById(R.id.addStatusForm);
+        addStatusBtn.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -164,7 +173,8 @@ public class StreamActivity extends BaseListActivity {
         protected void onPostExecute(String file_url) {
             ListView lv = (ListView)findViewById(android.R.id.list);
 
-            this.addMoreButton(lv);
+            addMoreButton(lv);
+            addItemForm(lv);
             setListHeight(lv);
             lv.setSelection(adapter.getCount() - 1);
 
@@ -182,6 +192,29 @@ public class StreamActivity extends BaseListActivity {
                 View moreButton = getLayoutInflater().inflate(R.layout.stream_more_button, null);
                 layout.addFooterView(moreButton);
                 streamActivity.haveMoreButton = true;
+            }
+        }
+
+        /**
+         * Přidá na začátek seznamu formulář pro odeslání příspěvku.
+         */
+        private void addItemForm(ListView layout) {
+            if(! streamActivity.haveItemForm) {
+                View addItem = getLayoutInflater().inflate(R.layout.stream_add_item, null);
+                layout.addHeaderView(addItem);
+                streamActivity.haveItemForm = true;
+
+                /* Schová tlačítko na odeslání formuláře. */
+                View addStatusForm = findViewById(R.id.addStatusForm);
+                addStatusForm.setVisibility(View.GONE);
+
+                View showStatusFormbtn = findViewById(R.id.showAddStatus);
+                showStatusFormbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onAddStausTextClick();
+                    }
+                });
             }
         }
 

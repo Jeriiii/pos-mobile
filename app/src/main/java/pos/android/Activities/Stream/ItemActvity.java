@@ -130,8 +130,10 @@ public class ItemActvity extends BaseListActivity {
             comm.userName = "Váš komentář";
 
             listComments.add(comm);
+            adapter.notifyDataSetChanged();
+            et.setText("");
+            (new SendComment(comm)).execute();
         }
-
     }
 
     class LoadComments extends AsyncTask<String, String, String> {
@@ -188,8 +190,6 @@ public class ItemActvity extends BaseListActivity {
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
-            ListView lv = (ListView)findViewById(android.R.id.list);
-
             setListAdapter(adapter);
 
             bar.setVisibility(View.GONE);
@@ -230,6 +230,57 @@ public class ItemActvity extends BaseListActivity {
             }
             if(item.isConfession) {
                 urlParams.add(new BasicNameValuePair("confessionId", Integer.toString(item.parentId)));
+            }
+
+            return urlParams;
+        }
+    }
+
+    /**
+     * Odešle komentář.
+     */
+    class SendComment extends AsyncTask<String, String, String> {
+
+        /**
+         * Komentář co se má odeslat na server.
+         */
+        private Comment newComment;
+
+        public SendComment(Comment newComment) {
+            this.newComment = newComment;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = HttpConection.host + HttpConection.path + "/http-one-page/";
+            List<NameValuePair> urlParams = getParams();
+
+            HttpConection con = new HttpConection();
+            con.makeHttpRequest(url, "GET", urlParams, httpContext);
+
+            return null;
+        }
+
+        /**
+         * Vrátí správně nastavení parametry url.
+         * @return
+         */
+        private List<NameValuePair> getParams() {
+            List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
+
+            urlParams.add(new BasicNameValuePair("comment", newComment.comment));
+
+            if(item.isUserImage) {
+                urlParams.add(new BasicNameValuePair("imageId", Integer.toString(item.parentId)));
+                urlParams.add(new BasicNameValuePair("do", "addCommentUserGallery"));
+            }
+            if(item.isStatus) {
+                urlParams.add(new BasicNameValuePair("statusId", Integer.toString(item.parentId)));
+                urlParams.add(new BasicNameValuePair("do", "addCommentStatus"));
+            }
+            if(item.isConfession) {
+                urlParams.add(new BasicNameValuePair("confessionId", Integer.toString(item.parentId)));
+                urlParams.add(new BasicNameValuePair("do", "addCommentConfession"));
             }
 
             return urlParams;
