@@ -79,4 +79,16 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
         return url;
     }
 
+    /**
+     * Zkontroluje, jestli je vrácený json validní
+     * @return
+     */
+    protected boolean jsonIsValid(){
+        if(this.json == null){
+            System.out.println("REQUEST ERROR: Invalid json.");
+            return false;
+        }
+        return true;
+    }
+
 }
