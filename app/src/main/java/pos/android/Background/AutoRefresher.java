@@ -25,6 +25,6 @@ public class AutoRefresher implements Runnable {
     @Override
     public void run() {
         System.out.println("Running!");
-        handler.postDelayed(this, 1000);
+        handler.postDelayed(this, 10000);
     }
 }
