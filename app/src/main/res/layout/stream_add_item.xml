@@ -60,7 +60,7 @@
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Vložit komentář"
+                android:text="Vložit status"
                 android:id="@+id/addStausBtn"
                 android:textSize="12dip"
                 />
