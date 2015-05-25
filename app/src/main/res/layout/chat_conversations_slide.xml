@@ -5,18 +5,10 @@
     android:layout_height="match_parent" >
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/textView" />
-
-    <ListView
+    <pos.android.Activities.Chat.Conversations.ConversationsList
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/conversations"
-        android:layout_below="@+id/textView" />
+            android:id="@+id/conversationsListView" />
 
 
 </RelativeLayout>
