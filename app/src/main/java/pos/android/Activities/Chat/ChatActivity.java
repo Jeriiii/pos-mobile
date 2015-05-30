@@ -35,4 +35,8 @@ public class ChatActivity extends BaseFragmentActivity {
         return this.httpContext;
     }
 
+    public ChatPagerAdapter getPagerAdapter(){
+        return (ChatPagerAdapter) pager.getAdapter();
+    }
+
 }

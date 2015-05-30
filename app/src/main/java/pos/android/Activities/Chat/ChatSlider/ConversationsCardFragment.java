@@ -48,7 +48,7 @@ public class ConversationsCardFragment extends Fragment {
         LinkedList<ConversationItem> conversations = new LinkedList<ConversationItem>();
         ConversationsAdapter adapter = new ConversationsAdapter(activity, R.layout.chat_conversation_text_item, conversations);
         list.setAdapter(adapter);
-        list.setOnItemClickListener(new ConversationClickListener());
+        list.setOnItemClickListener(new ConversationClickListener((ChatActivity)this.getActivity()));
 
         position = getArguments().getInt(ARG_POSITION);
 
