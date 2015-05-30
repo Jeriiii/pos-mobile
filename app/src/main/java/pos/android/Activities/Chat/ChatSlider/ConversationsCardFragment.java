@@ -41,7 +41,7 @@ public class ConversationsCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, null, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, container, false);
         ChatActivity activity = (ChatActivity) this.getActivity();
 
         ConversationsList list = (ConversationsList) view.findViewById(R.id.list);
