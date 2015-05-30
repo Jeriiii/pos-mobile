@@ -24,5 +24,6 @@ public class ConversationClickListener implements AdapterView.OnItemClickListene
         ConversationItem conversation = (ConversationItem)parent.getItemAtPosition(position);
         Toast.makeText(parent.getContext(), conversation.userName + conversation.fromId, Toast.LENGTH_LONG).show();
         activity.getPagerAdapter().addConversationCard(conversation.fromId, conversation.userName);
+        activity.getTabs().notifyDataSetChanged();
     }
 }

@@ -6,13 +6,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import java.util.LinkedList;
 
 /**
  * Stránkovač pro chat
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 10.5.2015.
  */
-public class ChatPagerAdapter extends FragmentPagerAdapter {
+public class ChatPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final int COUNT_OF_STATIC_TABS = 1;
     private static final int CONVERSATIONS_POSITION = 0;
@@ -62,6 +64,7 @@ public class ChatPagerAdapter extends FragmentPagerAdapter {
         conversationsHeaders.addFirst(fromName);
         openedIds.addFirst(fromId);
         this.notifyDataSetChanged();
+
     }
 
 

@@ -17,6 +17,8 @@ public class ChatActivity extends BaseFragmentActivity {
 
     private ViewPager pager;
 
+    private PagerSlidingTabStrip tabs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +29,7 @@ public class ChatActivity extends BaseFragmentActivity {
         pager.setAdapter(new ChatPagerAdapter(getSupportFragmentManager()));
 
         // Bind the tabs to the ViewPager
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
     }
 
@@ -37,6 +39,10 @@ public class ChatActivity extends BaseFragmentActivity {
 
     public ChatPagerAdapter getPagerAdapter(){
         return (ChatPagerAdapter) pager.getAdapter();
+    }
+
+    public PagerSlidingTabStrip getTabs(){
+        return tabs;
     }
 
 }
