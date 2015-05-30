@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.LinkedList;
 
 import pos.android.Activities.Chat.ChatActivity;
+import pos.android.Activities.Chat.Conversations.ConversationClickListener;
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
 import pos.android.Activities.Chat.Conversations.ConversationsList;
@@ -40,17 +41,19 @@ public class ConversationsCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, container, false);
-        ChatActivity activity = (ChatActivity)this.getActivity();
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, null, false);
+        ChatActivity activity = (ChatActivity) this.getActivity();
 
-        ConversationsList list = (ConversationsList)view.findViewById(R.id.conversationsListView);
+        ConversationsList list = (ConversationsList) view.findViewById(R.id.list);
         LinkedList<ConversationItem> conversations = new LinkedList<ConversationItem>();
         ConversationsAdapter adapter = new ConversationsAdapter(activity, R.layout.chat_conversation_text_item, conversations);
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new ConversationClickListener());
 
         position = getArguments().getInt(ARG_POSITION);
 
         new LoadConversations(activity.getApplicationContext(), activity.getHttpContext(), conversations, adapter, activity).execute();
+
         return view;
     }
 
