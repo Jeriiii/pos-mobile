@@ -4,6 +4,7 @@ package pos.android.Activities.Chat.ChatSlider;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.LinkedList;
 
@@ -13,32 +14,57 @@ import java.util.LinkedList;
  */
 public class ChatPagerAdapter extends FragmentPagerAdapter {
 
-    private LinkedList<String> headers = new LinkedList<String>();
+    private static final int COUNT_OF_STATIC_TABS = 1;
+    private static final int CONVERSATIONS_POSITION = 0;
+    private static final String CONVERSATIONS_HEADER = "Konverzace";
+
+    /* všechny headery karet*/
+    private LinkedList<String> conversationsHeaders = new LinkedList<String>();
+    /* zdrcadlící kolekce k headerům s id uživatelů, se kterými mám otevřenou kartu s konverzací*/
+    private LinkedList<Integer> openedIds = new LinkedList<Integer>();
 
     public ChatPagerAdapter(FragmentManager fm) {
         super(fm);
-        headers.add(0, "Konverzace");
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return headers.get(position);
+        switch(position){
+            case CONVERSATIONS_POSITION:
+                return CONVERSATIONS_HEADER;
+            default:
+                return conversationsHeaders.get(position - COUNT_OF_STATIC_TABS);
+        }
+
     }
 
     @Override
     public int getCount() {
-        return headers.size();
+        return conversationsHeaders.size() + COUNT_OF_STATIC_TABS;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0:
+            case CONVERSATIONS_POSITION:
                 return ConversationsCardFragment.newInstance(position);
             default:
                 return SingleConversationCardFragment.newInstance(position);
         }
     }
+
+    /**
+     * Přidá kartu s dalším uživatelem k dopisování
+     * @param fromId kódované id uživatele
+     * @param fromName uživatelské jméno uživatele
+     */
+    public void addConversationCard(int fromId, String fromName){
+        conversationsHeaders.addFirst(fromName);
+        openedIds.addFirst(fromId);
+        this.notifyDataSetChanged();
+    }
+
+
 
 }
 

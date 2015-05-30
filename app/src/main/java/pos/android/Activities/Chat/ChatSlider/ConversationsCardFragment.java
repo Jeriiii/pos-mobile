@@ -6,6 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.LinkedList;
+
+import pos.android.Activities.Chat.ChatActivity;
+import pos.android.Activities.Chat.Conversations.ConversationClickListener;
+import pos.android.Activities.Chat.Conversations.ConversationItem;
+import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
+import pos.android.Activities.Chat.Conversations.ConversationsList;
+import pos.android.Activities.Chat.ServerRequests.LoadConversations;
 import pos.android.R;
 
 /**
@@ -19,23 +27,33 @@ public class ConversationsCardFragment extends Fragment {
     private int position;
 
     public static ConversationsCardFragment newInstance(int position) {
-        ConversationsCardFragment f = new ConversationsCardFragment();
+        ConversationsCardFragment fragment = new ConversationsCardFragment();
         Bundle b = new Bundle();
         b.putInt(ARG_POSITION, position);
-        f.setArguments(b);
-        return f;
+        fragment.setArguments(b);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        position = getArguments().getInt(ARG_POSITION);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, container, false);
+        ChatActivity activity = (ChatActivity) this.getActivity();
+
+        ConversationsList list = (ConversationsList) view.findViewById(R.id.list);
+        LinkedList<ConversationItem> conversations = new LinkedList<ConversationItem>();
+        ConversationsAdapter adapter = new ConversationsAdapter(activity, R.layout.chat_conversation_text_item, conversations);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new ConversationClickListener((ChatActivity)this.getActivity()));
+
+        position = getArguments().getInt(ARG_POSITION);
+
+        new LoadConversations(activity.getApplicationContext(), activity.getHttpContext(), conversations, adapter, activity).execute();
+
         return view;
     }
 

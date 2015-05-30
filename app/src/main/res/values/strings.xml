@@ -13,4 +13,10 @@
 
     <string name="add_comment_field">Napište komentář...</string>
     <string name="add_comment_btn">Přidat komentář</string>
+    <string name="Conversations_title">Konverzace</string>
+    <string name="Placeholder_chat_last_message">Poslední zpráva mezi uživateli</string>
+    <string name="Placeholder_conversation_name">Leopold Skočdopole</string>
+    <string name="Placeholder_chat_message_text">Lorem ipsum dolor sit amet, jeden týpek se mnou pěkně zamet.</string>
+    <string name="Placeholder_chat_last_active">online</string>
+    <string name="Placeholder_chat_sended_time">12.5. 2015 15:24</string>
 </resources>

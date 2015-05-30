@@ -52,8 +52,21 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
         return null;
     }
 
+    /**
+     * Přidá parametr do url
+     * @param name název parametru
+     * @param value hodnota parametru
+     */
     protected void addParameter(String name, String value){
         this.urlParams.add(new BasicNameValuePair(this.getUrlParametersPrefix() + name, value));
+    }
+
+    /**
+     * Přidá do url parametr, který zavolá určitý signál (handle) v presenteru či komponentě
+     * @param name název signálu
+     */
+    protected void setHandle(String name){
+        this.urlParams.add(new BasicNameValuePair("do", this.getUrlParametersPrefix() + name));
     }
 
     /*********** PREKRYVATELNE GETRY ********************/
@@ -77,6 +90,18 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
         String url = getUrlDomain() + getUrlFilePath();
 
         return url;
+    }
+
+    /**
+     * Zkontroluje, jestli je vrácený json validní
+     * @return
+     */
+    protected boolean jsonIsValid(){
+        if(this.json == null){
+            System.out.println("REQUEST ERROR: Invalid json.");
+            return false;
+        }
+        return true;
     }
 
 }
