@@ -17,7 +17,7 @@ import java.util.LinkedList;
  */
 public class ChatPagerAdapter extends FragmentStatePagerAdapter {
 
-    private static final int COUNT_OF_STATIC_TABS = 1;
+    public static final int COUNT_OF_STATIC_TABS = 1;
     private static final int CONVERSATIONS_POSITION = 0;
     private static final String CONVERSATIONS_HEADER = "Konverzace";
 
@@ -102,7 +102,17 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
     public void removeCard(int position, ViewPager pager, PagerSlidingTabStrip tabs){
         conversationsHeaders.remove(position);
         openedIds.remove(position);
+        this.notifyDataSetChanged();
         switchToCard(position + COUNT_OF_STATIC_TABS - 1, pager, tabs);
+    }
+
+    /**
+     * Vrátí pozici karty podle uživatelského id nebo -1, pokud není karta tohoto uživatele otevřena
+     * @param fromId kódované id uživatele
+     * @return
+     */
+    public int getCardPosition(int fromId){
+        return openedIds.indexOf(fromId);
     }
 
     /**

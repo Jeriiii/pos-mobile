@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.LinkedList;
 
@@ -47,13 +48,22 @@ public class SingleConversationCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_sinconversation_slide, container, false);
-        ChatActivity activity = (ChatActivity) this.getActivity();
-
-        /*MessagesList list = (MessagesList) view.findViewById(R.id.list);
+        final ChatActivity activity = (ChatActivity) this.getActivity();
+        /* list */
+        MessagesList list = (MessagesList) view.findViewById(R.id.list);
         LinkedList<MessageItem> messages = new LinkedList<MessageItem>();
-        MessagesAdapter adapter = new MessagesAdapter(activity, R.layout.chat_message_text_item, messages);
+        final MessagesAdapter adapter = new MessagesAdapter(activity, R.layout.chat_message_text_item, messages);
         list.setAdapter(adapter);
-        position = getArguments().getInt(ARG_POSITION);*/
+        position = getArguments().getInt(ARG_POSITION);
+
+        /* closeButton */
+        Button closeButton = (Button) view.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.getPagerAdapter().removeCard(position - ChatPagerAdapter.COUNT_OF_STATIC_TABS, activity.getPager(), activity.getTabs());
+            }
+        });
 
         //new LoadConversations(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity).execute();
         return view;
