@@ -9,19 +9,19 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/closeButton"
-        android:hint="Zavřít záložku"
+        android:hint="@string/Closing_hint"
         android:enabled="true"
         android:padding="0dp"
-        android:text="X"
-        android:singleLine="true"
-        android:width="20dp"
+        android:text="@string/ClosingCross"
+        android:singleLine="false"
         android:longClickable="false"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="10dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:paddingTop="0dp" />
 
     <pos.android.Activities.Chat.Messages.MessagesList
         android:layout_width="wrap_content"
@@ -29,26 +29,4 @@
         android:id="@+id/list"
         android:layout_below="@+id/closeButton" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/Placeholder_conversation_name"
-        android:id="@+id/userName"
-        android:layout_alignTop="@+id/closeButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="0dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/Placeholder_chat_last_active"
-        android:id="@+id/userLastActive"
-        android:layout_below="@+id/userName"
-        android:layout_alignLeft="@+id/userName"
-        android:layout_alignStart="@+id/userName" />
 </RelativeLayout>

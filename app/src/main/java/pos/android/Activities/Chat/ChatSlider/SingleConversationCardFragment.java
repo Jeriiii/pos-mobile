@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.LinkedList;
 
@@ -18,6 +21,7 @@ import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 import pos.android.Activities.Chat.Messages.MessagesList;
 import pos.android.Activities.Chat.ServerRequests.LoadConversations;
+import pos.android.Activities.Chat.ServerRequests.LoadSingleConversation;
 import pos.android.R;
 
 /**
@@ -65,8 +69,13 @@ public class SingleConversationCardFragment extends Fragment {
             }
         });
 
-        //new LoadConversations(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity).execute();
+        //new LoadSingleConversation(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity).execute();
         return view;
     }
+
+    public int getPosition(){
+        return position;
+    }
+
 
 }

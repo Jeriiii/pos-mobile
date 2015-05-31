@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -22,7 +23,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
     private static final String CONVERSATIONS_HEADER = "Konverzace";
 
     /* všechny headery karet*/
-    private LinkedList<String> conversationsHeaders = new LinkedList<String>();
+    private LinkedList<String> conversationsUsernames = new LinkedList<String>();
     /* zdrcadlící kolekce k headerům s id uživatelů, se kterými mám otevřenou kartu s konverzací*/
     private LinkedList<Integer> openedIds = new LinkedList<Integer>();
 
@@ -36,14 +37,14 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
             case CONVERSATIONS_POSITION:
                 return CONVERSATIONS_HEADER;
             default:
-                return conversationsHeaders.get(position - COUNT_OF_STATIC_TABS);
+                return conversationsUsernames.get(position - COUNT_OF_STATIC_TABS);
         }
 
     }
 
     @Override
     public int getCount() {
-        return conversationsHeaders.size() + COUNT_OF_STATIC_TABS;
+        return conversationsUsernames.size() + COUNT_OF_STATIC_TABS;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @param tabs objekt tabů - slouží pro obnovení - může být null, pokud má být obnovení provedeno ručně
      */
     public void addConversationCard(int fromId, String fromName, PagerSlidingTabStrip tabs){
-        conversationsHeaders.addFirst(fromName);
+        conversationsUsernames.addFirst(fromName);
         openedIds.addFirst(fromId);
         refreshCards(tabs);
     }
@@ -100,7 +101,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @param tabs objekt tabů - slouží pro obnovení - může být null, ale po akci se neobnoví grafika
      */
     public void removeCard(int position, ViewPager pager, PagerSlidingTabStrip tabs){
-        conversationsHeaders.remove(position);
+        conversationsUsernames.remove(position);
         openedIds.remove(position);
         this.notifyDataSetChanged();
         switchToCard(position + COUNT_OF_STATIC_TABS - 1, pager, tabs);
@@ -116,6 +117,24 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     /**
+     * Vrátí id uživatele podle pozice otevřené karty
+     * @param position pozice mezi DYNAMICKÝMI kartami (tj. 0 je první z karet otevřených před addConversationCard)
+     * @return
+     */
+    public int getIdFromPosition(int position){
+        return openedIds.get(position);
+    }
+
+    /**
+     * Vrátí jméno uživatele podle pozice otevřené karty
+     * @param position pozice mezi DYNAMICKÝMI kartami (tj. 0 je první z karet otevřených před addConversationCard)
+     * @return
+     */
+    public String getNameFromPosition(int position){
+        return conversationsUsernames.get(position);
+    }
+
+    /**
      * Upozorní správce karet na změnu - změní se i grafika. Může být null, ale nebude překreslovat
      * @param tabs objekt tabů
      */
@@ -125,8 +144,5 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
             tabs.notifyDataSetChanged();
         }
     }
-
-
-
 }
 
