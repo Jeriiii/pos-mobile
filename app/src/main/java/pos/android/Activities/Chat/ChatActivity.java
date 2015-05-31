@@ -45,4 +45,8 @@ public class ChatActivity extends BaseFragmentActivity {
         return tabs;
     }
 
+    public ViewPager getPager(){
+        return pager;
+    }
+
 }
