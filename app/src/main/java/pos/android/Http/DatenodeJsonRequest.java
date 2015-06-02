@@ -52,18 +52,29 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
         return null;
     }
 
+    /**
+     * Přidá parametr do url
+     * @param name název parametru
+     * @param value hodnota parametru
+     */
     protected void addParameter(String name, String value){
         this.urlParams.add(new BasicNameValuePair(this.getUrlParametersPrefix() + name, value));
     }
 
-    /*********** PREKRYVATELNE GETRY ********************/
-    protected String getUrlDomain(){
-        return "http://10.0.2.2/";
+    /**
+     * Přidá do url parametr, který zavolá určitý signál (handle) v presenteru či komponentě
+     * @param name název signálu
+     */
+    protected void setHandle(String name){
+        this.urlParams.add(new BasicNameValuePair("do", this.getUrlParametersPrefix() + name));
     }
 
-    protected String getUrlFilePath(){
-        return "priznani/public/www/";
+    /*********** PREKRYVATELNE GETRY ********************/
+    protected String getUrlDomain(){
+        return HttpConection.host;
     }
+
+    protected String getUrlFilePath(){ return HttpConection.path + "/"; }
 
     /* pouzitelne napriklad pri volani komponent, abych nemusel do parametru psat porad to same */
     protected String getUrlParametersPrefix(){
@@ -79,6 +90,18 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
         String url = getUrlDomain() + getUrlFilePath();
 
         return url;
+    }
+
+    /**
+     * Zkontroluje, jestli je vrácený json validní
+     * @return
+     */
+    protected boolean jsonIsValid(){
+        if(this.json == null){
+            System.out.println("REQUEST ERROR: Invalid json.");
+            return false;
+        }
+        return true;
     }
 
 }
