@@ -11,12 +11,14 @@ import android.widget.ProgressBar;
 
 
 import org.apache.http.NameValuePair;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import pos.android.Activities.BaseActivities.BaseListActivity;
@@ -27,6 +29,7 @@ import pos.android.Activities.Stream.exts.Item.JsonToItems;
 import pos.android.Activities.Stream.exts.Item.LoadStream;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
+import pos.android.Http.PersistentCookieStore;
 import pos.android.R;
 
 
@@ -58,6 +61,7 @@ public class StreamActivity extends BaseListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.loginRouter();
 
         setContentView(R.layout.list_example);
 
@@ -91,14 +95,6 @@ public class StreamActivity extends BaseListActivity {
         new LoadStream(this, httpContext, streamItems).execute();
     }
 
-    /**
-     * Zobrazí tlačítko když někdo začne psát text.
-     */
-    public void onAddStausTextClick() {
-        View addStatusBtn = findViewById(R.id.addStatusForm);
-        addStatusBtn.setVisibility(View.VISIBLE);
-    }
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(getApplicationContext(), ItemActvity.class);
@@ -109,6 +105,20 @@ public class StreamActivity extends BaseListActivity {
         startActivity(intent);
 
         finish();
+    }
+
+    private void loginRouter() {
+        PersistentCookieStore mCookieStore = new PersistentCookieStore(
+                getApplicationContext());
+
+        mCookieStore.clearExpired(new Date());
+        List<Cookie> cookies = mCookieStore.getCookies();
+        for (Cookie c : cookies) {
+            if (c.getName().equals("PHPSESSID")) {
+                startActivity(new Intent(this, StreamActivity.class));
+                finish();
+            }
+        }
     }
 
 }

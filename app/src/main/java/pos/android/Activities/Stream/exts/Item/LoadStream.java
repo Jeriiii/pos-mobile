@@ -1,5 +1,6 @@
 package pos.android.Activities.Stream.exts.Item;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,20 +25,19 @@ import pos.android.R;
  */
 public class LoadStream extends AsyncTask<String, String, String> {
 
-    /**
-     * Http kontext pro čtení dat přihlášeného uživatele.
-     */
+    private static int LOAD_IMAGE_RESULTS = 1;
+
+    /** Http kontext pro čtení dat přihlášeného uživatele. */
     private HttpContext httpContext;
 
-    /**
-     * Stream aktivity
-     */
+    /** Stream aktivity */
     StreamActivity streamActivity;
 
-    /**
-     * Seznam položek ve streamu.
-     */
+    /** Seznam položek ve streamu. */
     ArrayList<Item> listItems;
+
+    /** Id vybraného obrázku. */
+    int pickImageId;
 
     public LoadStream(StreamActivity streamActivity, HttpContext httpContext, ArrayList<Item> listItems) {
         this.streamActivity = streamActivity;
@@ -116,18 +116,64 @@ public class LoadStream extends AsyncTask<String, String, String> {
             layout.addHeaderView(addItem);
             streamActivity.haveItemForm = true;
 
-                /* Schová tlačítko na odeslání formuláře. */
-            View addStatusForm = streamActivity.findViewById(R.id.addStatusForm);
-            addStatusForm.setVisibility(View.GONE);
+            hideStatusForm();
+            hideImageForm();
 
-            View showStatusFormbtn = streamActivity.findViewById(R.id.showAddStatus);
-            showStatusFormbtn.setOnClickListener(new View.OnClickListener() {
+            View showStatusFormBtn = streamActivity.findViewById(R.id.showAddStatus);
+            showStatusFormBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    streamActivity.onAddStausTextClick();
+                    showStatusForm();
+                    hideStatusForm();
+                }
+            });
+
+            View showImageFormBtn = streamActivity.findViewById(R.id.showAddImage);
+            showImageFormBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showImageForm();
+                    hideStatusForm();
                 }
             });
         }
+    }
+
+    public void onClickAddImage()
+    {
+
+        /*Intent intent= new Intent();
+        intent.setType("image*//*");
+        intent.setAction(intent.ACTION_SEND);
+        streamActivity.startActivityForResult(intent.createChooser(intent, "Select Picture"), pickImageId);*/
+
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);
+    }
+
+    /** Zobrazí formulář na odeslání statusu. */
+    public void showStatusForm() {
+        View addStatusForm = streamActivity.findViewById(R.id.addStatusForm);
+        addStatusForm.setVisibility(View.VISIBLE);
+    }
+
+    /** Schová formulář na odeslání statusu. */
+    public void hideStatusForm() {
+        View addStatusForm = streamActivity.findViewById(R.id.addStatusForm);
+        addStatusForm.setVisibility(View.GONE);
+    }
+
+    /** Zobrazí formulář na odeslání obrázku. */
+    public void showImageForm() {
+        View addStatusForm = streamActivity.findViewById(R.id.addImageForm);
+        addStatusForm.setVisibility(View.VISIBLE);
+    }
+
+    /** Schová formulář na odeslání obrázku. */
+    public void hideImageForm() {
+        View addStatusForm = streamActivity.findViewById(R.id.addImageForm);
+        addStatusForm.setVisibility(View.GONE);
     }
 
     /**
