@@ -91,6 +91,11 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
         if(!success) {
             Intent i = new Intent(streamActivity.getApplicationContext(), SignInActivity.class);
 
+            PersistentCookieStore mCookieStore = new PersistentCookieStore(
+                    streamActivity.getApplicationContext());
+
+            mCookieStore.clear();
+
             streamActivity.startActivity(i);
             streamActivity.finish();
         }
