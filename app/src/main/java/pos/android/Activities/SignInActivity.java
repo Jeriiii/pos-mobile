@@ -83,6 +83,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.loginRouter();
 
         setContentView(R.layout.activity_sign_in);
 
@@ -112,6 +113,21 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private void loginRouter() {
+        PersistentCookieStore mCookieStore = new PersistentCookieStore(
+                getApplicationContext());
+
+        mCookieStore.clearExpired(new Date());
+        List<Cookie> cookies = mCookieStore.getCookies();
+
+        for (Cookie c : cookies) {
+            if (c.getName().equals("PHPSESSID")) {
+                startActivity(new Intent(this, StreamActivity.class));
+                finish();
+            }
+        }
     }
 
     private void populateAutoComplete() {

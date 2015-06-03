@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -129,7 +130,17 @@ public class PersistentCookieStore implements CookieStore {
         for (ConcurrentHashMap.Entry<String, Cookie> entry : cookies.entrySet()) {
             String name = entry.getKey();
             Cookie cookie = entry.getValue();
-            if (cookie.isExpired(date)) {
+
+            if (cookie.getExpiryDate() == null) {
+                continue;
+            }
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(cookie.getExpiryDate().getTime());
+            cal.add(Calendar.MINUTE, 30);
+            Date expCookie = new Date(cal.getTimeInMillis());
+
+            if (expCookie.before(date) /*cookie.isExpired(date)*/) {
                 // Clear cookies from local store
                 cookies.remove(name);
 

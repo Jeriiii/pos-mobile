@@ -53,9 +53,9 @@ public class JSONParser extends HttpConection {
             is = httpEntity.getContent();
 
             int status = httpResponse.getStatusLine().getStatusCode();
-            if(status >= 400) {
+            /*if(status >= 400) {
                 return null; //nedokázal jsem se připojit
-            }
+            }*/
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

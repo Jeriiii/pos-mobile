@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -15,15 +17,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import pos.android.Activities.SignInActivity;
 import pos.android.Activities.Stream.StreamActivity;
+import pos.android.Activities.Stream.exts.Comment.Comment;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
+import pos.android.Http.PersistentCookieStore;
 import pos.android.R;
 
 /**
  * Created by Petr on 24.5.2015.
  */
-public class LoadStream extends AsyncTask<String, String, String> {
+public class LoadStream extends AsyncTask<Void, Void, Boolean> {
 
     private static int LOAD_IMAGE_RESULTS = 1;
 
@@ -57,7 +62,7 @@ public class LoadStream extends AsyncTask<String, String, String> {
     /**
      * getting All products from url
      * */
-    protected String doInBackground(String... args) {
+    protected Boolean doInBackground(Void... args) {
         String url = HttpConection.host + HttpConection.path + "/one-page/stream-in-json";
 
         List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
@@ -71,18 +76,25 @@ public class LoadStream extends AsyncTask<String, String, String> {
             JsonToItems jsonToItems = new JsonToItems(listItems);
             jsonToItems.saveItemsToList(json);
         } else {
-            //připojení se nezdařilo
+            return false;
         }
 
         streamActivity.notifyAdapter();
 
-        return null;
+        return true;
     }
 
     /**
      * After completing background task Dismiss the progress dialog
      * **/
-    protected void onPostExecute(String file_url) {
+    protected void onPostExecute(Boolean success) {
+        if(!success) {
+            Intent i = new Intent(streamActivity.getApplicationContext(), SignInActivity.class);
+
+            streamActivity.startActivity(i);
+            streamActivity.finish();
+        }
+
         ListView lv = (ListView)streamActivity.findViewById(android.R.id.list);
 
         addMoreButton(lv);
@@ -119,15 +131,17 @@ public class LoadStream extends AsyncTask<String, String, String> {
             hideStatusForm();
             hideImageForm();
 
+            /* tlačítko na ukázání formuláře s přidáním nového statusu */
             View showStatusFormBtn = streamActivity.findViewById(R.id.showAddStatus);
             showStatusFormBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showStatusForm();
-                    hideStatusForm();
+                    hideImageForm();
                 }
             });
 
+            /* tlačítko na ukázání formuláře s přidáním nového obrázku */
             View showImageFormBtn = streamActivity.findViewById(R.id.showAddImage);
             showImageFormBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,20 +150,59 @@ public class LoadStream extends AsyncTask<String, String, String> {
                     hideStatusForm();
                 }
             });
+
+            /* tlačítko na přidání nového statusu */
+            View addStausBtn = streamActivity.findViewById(R.id.addStausBtn);
+            addStausBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickAddStatus();
+                }
+            });
+
+            /* tlačítko na přidání nové fotky */
+            View addImageBtn = streamActivity.findViewById(R.id.addImageBtn);
+            addImageBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickAddImage();
+                }
+            });
         }
     }
 
+    public void onClickAddStatus() {
+        EditText et = (EditText)streamActivity.findViewById(R.id.addStatus);
+        String status = et.getText().toString();
+
+        if(status.equals("")) {
+            et.setError("Napište komentář.");
+        } else {
+            SendStatus st = new SendStatus(status);
+            st.execute();
+
+            et.setText("");
+        }
+    }
+
+
+
     public void onClickAddImage()
     {
+        // Create the Intent for Image Gallery.
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
+        streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);
 
         /*Intent intent= new Intent();
         intent.setType("image*//*");
         intent.setAction(intent.ACTION_SEND);
-        streamActivity.startActivityForResult(intent.createChooser(intent, "Select Picture"), pickImageId);*/
+        streamActivity.startActivityForResult(intent.createChooser(intent, "Select Picture"), pickImageId);
 
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);
+        streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);*/
     }
 
     /** Zobrazí formulář na odeslání statusu. */
@@ -211,5 +264,56 @@ public class LoadStream extends AsyncTask<String, String, String> {
                 streamActivity.addItems();
             }
         });
+    }
+
+    /**
+     * Odešle status uzivatele.
+     */
+    class SendStatus extends AsyncTask<String, String, String> {
+
+        /**
+         * Komentář co se má odeslat na server.
+         */
+        private String newStatus;
+
+        public SendStatus(String newStatus) {
+            this.newStatus = newStatus;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast toast = Toast.makeText(streamActivity.getApplicationContext(), "Status byl přidán.", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = HttpConection.host + HttpConection.path + "/http-one-page/";
+            List<NameValuePair> urlParams = getParams();
+
+            HttpConection con = new HttpConection();
+            con.makeHttpRequest(url, "GET", urlParams, httpContext);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        /**
+         * Vrátí správně nastavení parametry url.
+         * @return
+         */
+        private List<NameValuePair> getParams() {
+            List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
+
+            urlParams.add(new BasicNameValuePair("status", newStatus));
+            urlParams.add(new BasicNameValuePair("do", "addStatus"));
+
+            return urlParams;
+        }
     }
 }
