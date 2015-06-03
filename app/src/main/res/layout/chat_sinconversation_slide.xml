@@ -4,8 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ListView
+    <Button
+        style="@style/AppBaseTheme"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/closeButton"
+        android:hint="@string/Closing_hint"
+        android:enabled="true"
+        android:padding="0dp"
+        android:text="@string/ClosingCross"
+        android:singleLine="false"
+        android:longClickable="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="10dp"
+        android:paddingTop="0dp" />
+
+    <pos.android.Activities.Chat.Messages.MessagesList
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/listView" />
+        android:id="@+id/list"
+        android:layout_below="@+id/closeButton" />
+
 </RelativeLayout>

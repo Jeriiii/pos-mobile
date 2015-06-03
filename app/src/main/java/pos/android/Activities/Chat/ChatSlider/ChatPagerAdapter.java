@@ -5,10 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -17,14 +19,16 @@ import java.util.LinkedList;
  */
 public class ChatPagerAdapter extends FragmentStatePagerAdapter {
 
-    private static final int COUNT_OF_STATIC_TABS = 1;
+    public static final int COUNT_OF_STATIC_TABS = 1;
     private static final int CONVERSATIONS_POSITION = 0;
     private static final String CONVERSATIONS_HEADER = "Konverzace";
 
     /* všechny headery karet*/
-    private LinkedList<String> conversationsHeaders = new LinkedList<String>();
+    private LinkedList<String> conversationsUsernames = new LinkedList<String>();
     /* zdrcadlící kolekce k headerům s id uživatelů, se kterými mám otevřenou kartu s konverzací*/
     private LinkedList<Integer> openedIds = new LinkedList<Integer>();
+    /* všechny otevřené fragmenty */
+    private LinkedList<Fragment> openedObjects = new LinkedList<Fragment>();
 
     public ChatPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -36,24 +40,35 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
             case CONVERSATIONS_POSITION:
                 return CONVERSATIONS_HEADER;
             default:
-                return conversationsHeaders.get(position - COUNT_OF_STATIC_TABS);
+                return conversationsUsernames.get(position - COUNT_OF_STATIC_TABS);
         }
 
     }
 
     @Override
     public int getCount() {
-        return conversationsHeaders.size() + COUNT_OF_STATIC_TABS;
+        return conversationsUsernames.size() + COUNT_OF_STATIC_TABS;
     }
 
     @Override
     public Fragment getItem(int position) {
+        Fragment item;
         switch (position){
             case CONVERSATIONS_POSITION:
-                return ConversationsCardFragment.newInstance(position);
+                item = ConversationsCardFragment.newInstance(position);
+                break;
             default:
-                return SingleConversationCardFragment.newInstance(position);
+                item = SingleConversationCardFragment.newInstance(position);
+                break;
         }
+        openedObjects.add(position, item);
+        return item;
+    }
+
+    /* překryto kvůli mazání */
+    @Override
+    public int getItemPosition(Object object) {
+        return openedObjects.contains((Fragment)object) ? POSITION_UNCHANGED : POSITION_NONE;
     }
 
     /**
@@ -77,7 +92,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @param tabs objekt tabů - slouží pro obnovení - může být null, pokud má být obnovení provedeno ručně
      */
     public void addConversationCard(int fromId, String fromName, PagerSlidingTabStrip tabs){
-        conversationsHeaders.addFirst(fromName);
+        conversationsUsernames.addFirst(fromName);
         openedIds.addFirst(fromId);
         refreshCards(tabs);
     }
@@ -100,9 +115,38 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @param tabs objekt tabů - slouží pro obnovení - může být null, ale po akci se neobnoví grafika
      */
     public void removeCard(int position, ViewPager pager, PagerSlidingTabStrip tabs){
-        conversationsHeaders.remove(position);
+        conversationsUsernames.remove(position);
         openedIds.remove(position);
+        openedObjects.remove(position + COUNT_OF_STATIC_TABS);
+        refreshCards(tabs);
         switchToCard(position + COUNT_OF_STATIC_TABS - 1, pager, tabs);
+    }
+
+    /**
+     * Vrátí pozici karty podle uživatelského id nebo -1, pokud není karta tohoto uživatele otevřena
+     * @param fromId kódované id uživatele
+     * @return
+     */
+    public int getCardPosition(int fromId){
+        return openedIds.indexOf(fromId);
+    }
+
+    /**
+     * Vrátí id uživatele podle pozice otevřené karty
+     * @param position pozice mezi DYNAMICKÝMI kartami (tj. 0 je první z karet otevřených před addConversationCard)
+     * @return
+     */
+    public int getIdFromPosition(int position){
+        return openedIds.get(position);
+    }
+
+    /**
+     * Vrátí jméno uživatele podle pozice otevřené karty
+     * @param position pozice mezi DYNAMICKÝMI kartami (tj. 0 je první z karet otevřených před addConversationCard)
+     * @return
+     */
+    public String getNameFromPosition(int position){
+        return conversationsUsernames.get(position);
     }
 
     /**
@@ -115,8 +159,5 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
             tabs.notifyDataSetChanged();
         }
     }
-
-
-
 }
 
