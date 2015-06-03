@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -26,6 +27,8 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
     private LinkedList<String> conversationsUsernames = new LinkedList<String>();
     /* zdrcadlící kolekce k headerům s id uživatelů, se kterými mám otevřenou kartu s konverzací*/
     private LinkedList<Integer> openedIds = new LinkedList<Integer>();
+    /* všechny otevřené fragmenty */
+    private LinkedList<Fragment> openedObjects = new LinkedList<Fragment>();
 
     public ChatPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -49,12 +52,23 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Fragment item;
         switch (position){
             case CONVERSATIONS_POSITION:
-                return ConversationsCardFragment.newInstance(position);
+                item = ConversationsCardFragment.newInstance(position);
+                break;
             default:
-                return SingleConversationCardFragment.newInstance(position);
+                item = SingleConversationCardFragment.newInstance(position);
+                break;
         }
+        openedObjects.add(position, item);
+        return item;
+    }
+
+    /* překryto kvůli mazání */
+    @Override
+    public int getItemPosition(Object object) {
+        return openedObjects.contains((Fragment)object) ? POSITION_UNCHANGED : POSITION_NONE;
     }
 
     /**
@@ -103,7 +117,8 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
     public void removeCard(int position, ViewPager pager, PagerSlidingTabStrip tabs){
         conversationsUsernames.remove(position);
         openedIds.remove(position);
-        this.notifyDataSetChanged();
+        openedObjects.remove(position + COUNT_OF_STATIC_TABS);
+        refreshCards(tabs);
         switchToCard(position + COUNT_OF_STATIC_TABS - 1, pager, tabs);
     }
 
