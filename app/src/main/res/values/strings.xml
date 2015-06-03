@@ -19,4 +19,10 @@
     <string name="Placeholder_chat_message_text">Lorem ipsum dolor sit amet, jeden týpek se mnou pěkně zamet.</string>
     <string name="Placeholder_chat_last_active">online</string>
     <string name="Placeholder_chat_sended_time">12.5. 2015 15:24</string>
+
+    <!-- Nahrávání obrázku   -->
+    <string name="btnTakePicture">Capture Image</string>
+    <string name="btnRecordVideo">Record Video</string>
+    <string name="or">(or)</string>
+    <string name="btnUploadToServer">Upload to Server</string>
 </resources>

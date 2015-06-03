@@ -151,6 +151,12 @@ public class StreamActivity extends BaseListActivity {
             cursor.moveToFirst();
             String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
 
+            Intent i = new Intent(this, UploadImageActivity.class);
+            i.putExtra("filePath", imagePath);
+            i.putExtra("isImage", true);
+            startActivity(i);
+            finish();
+
             ImageView image = (ImageView)findViewById(R.id.image);
             // Now we need to set the GUI ImageView data with data read from the picked file.
             image.setImageBitmap(BitmapFactory.decodeFile(imagePath));
