@@ -60,14 +60,13 @@ public class LoadSingleConversation extends ChatRequest {
         if(message.getInt("type") != 0){
             type = MessageItem.MessageType.INFO;
         }
-        boolean fromMe = (message.getInt("fromMe") == 1);
         list.addLast(new MessageItem(
-                fromMe ? "Já" : message.getString("name"),
+                message.getString("name"),
                 message.getString("text"),
                 message.getInt("id"),
                 type,
                 (message.getInt("readed") == 1),
-                fromMe,
+                (message.getInt("fromMe") == 1),
                 message.getString("sendedDate")
         ));
     }
