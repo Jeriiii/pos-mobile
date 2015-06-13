@@ -13,6 +13,6 @@ public class POSApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AutoRefresher.getInstance();//zavolání konstruktoru
+        ChatManager.getInstance();//zavolání konstruktoru
     }
 }
