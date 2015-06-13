@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.LinkedList;
 
 import pos.android.Activities.Chat.ChatActivity;
+import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Chat.Conversations.ConversationClickListener;
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
@@ -52,7 +53,7 @@ public class ConversationsCardFragment extends Fragment {
 
         position = getArguments().getInt(ARG_POSITION);
 
-        new LoadConversations(activity.getApplicationContext(), activity.getHttpContext(), conversations, adapter, activity).execute();
+        ChatManager.getInstance().loadConversations(conversations, adapter, activity);
 
         return view;
     }

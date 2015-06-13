@@ -17,7 +17,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginStart="31dp"
         android:layout_marginTop="10dp"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <TextView
@@ -31,19 +31,7 @@
         android:layout_alignStart="@+id/messageSender"
         android:paddingTop="2dp"
         android:paddingBottom="5dp"
-        android:textSize="16dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/Placeholder_chat_last_active"
-        android:id="@+id/chatLastActive"
-        android:layout_alignTop="@+id/messageSender"
-        android:layout_toRightOf="@+id/messageSender"
-        android:layout_toEndOf="@+id/messageSender"
-        android:paddingLeft="15dp"
-        android:textStyle="italic" />
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,9 +39,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/Placeholder_chat_sended_time"
         android:id="@+id/chatMessageTime"
-        android:layout_alignTop="@+id/chatLastActive"
-        android:layout_alignRight="@+id/messageText"
-        android:layout_alignEnd="@+id/messageText"
         android:paddingLeft="5dp"
-        android:paddingRight="10dp" />
+        android:paddingRight="10dp"
+        android:layout_alignTop="@+id/messageSender"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

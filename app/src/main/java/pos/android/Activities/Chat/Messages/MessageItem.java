@@ -13,7 +13,7 @@ import pos.android.R;
  */
 public class MessageItem {
 
-    enum MessageType {
+    public enum MessageType {
         TEXT, INFO
     }
 
@@ -24,17 +24,15 @@ public class MessageItem {
     MessageType type = MessageType.TEXT;
     boolean readed = false;
     boolean fromMe = false;
-    String lastActive = "offline";
     String messageTime = "";
 
-    public MessageItem(String fromUserName, String messageText, int messageId, MessageType type, boolean readed, boolean fromMe, String lastActive, String messageTime) {
+    public MessageItem(String fromUserName, String messageText, int messageId, MessageType type, boolean readed, boolean fromMe, String messageTime) {
         this.fromUserName = fromUserName;
         this.messageText = messageText;
         this.messageId = messageId;
         this.type = type;
         this.readed = readed;
         this.fromMe = fromMe;
-        this.lastActive = lastActive;
         this.messageTime = messageTime;
     }
 
@@ -48,12 +46,10 @@ public class MessageItem {
             case TEXT:
             TextView TVSender = (TextView) convertView.findViewById(R.id.messageSender);
             TextView TVMessageText = (TextView) convertView.findViewById(R.id.messageText);
-            TextView TVLastActive = (TextView) convertView.findViewById(R.id.chatLastActive);
             TextView TVMessageTime = (TextView) convertView.findViewById(R.id.chatMessageTime);
             RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.messageItemLayout);
             TVSender.setText(fromUserName);
             TVMessageText.setText(this.messageText);
-            TVLastActive.setText(this.lastActive);
             TVMessageTime.setText(this.messageTime);
                 break;
             case INFO:

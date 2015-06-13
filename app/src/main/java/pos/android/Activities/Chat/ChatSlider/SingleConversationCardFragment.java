@@ -13,6 +13,7 @@ import org.w3c.dom.Text;
 import java.util.LinkedList;
 
 import pos.android.Activities.Chat.ChatActivity;
+import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Chat.Conversations.ConversationClickListener;
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
@@ -69,7 +70,8 @@ public class SingleConversationCardFragment extends Fragment {
             }
         });
 
-        //new LoadSingleConversation(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity).execute();
+        ChatManager.getInstance().loadLastMessages(messages, adapter, activity);
+        new LoadSingleConversation(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity).execute();
         return view;
     }
 

@@ -21,6 +21,7 @@ import pos.android.Activities.Chat.Messages.MessagesAdapter;
 public class LoadSingleConversation extends ChatRequest {
 
     public static final String TAG_CONVERSATION = "conversation";
+    public static final String TAG_MESSAGES = "messages";
 
     private LinkedList<MessageItem> list;
     private MessagesAdapter adapter;
@@ -31,6 +32,7 @@ public class LoadSingleConversation extends ChatRequest {
         this.list = list;
         this.adapter = adapter;
         this.activity = activity;
+        addParameter("fromId", "8447944");
         setHandle("getSingleConversation");
     }
 
@@ -39,10 +41,13 @@ public class LoadSingleConversation extends ChatRequest {
             return;
         }
         try {
-            JSONArray jarray = json.getJSONArray(TAG_CONVERSATION);
-            int arrLength = jarray.length();
+            JSONObject response = json.getJSONObject(TAG_CONVERSATION);
+            JSONObject userInfo = response.getJSONObject("8447904");
+            JSONArray messages = userInfo.getJSONArray(TAG_MESSAGES);
+
+            int arrLength = messages.length();
             for(int i = 0; i < arrLength; i++){
-                addConversation(jarray.getJSONObject(i));
+                addMessage(messages.getJSONObject(i));
             }
             notifyAdapter();
         } catch (JSONException e) {
@@ -50,13 +55,21 @@ public class LoadSingleConversation extends ChatRequest {
         }
     }
 
-    private void addConversation(JSONObject conversation) throws JSONException{
-        /*list.addLast(new ConversationItem(
-            conversation.getString("from"),
-            conversation.getString("lastMessage"),
-            conversation.getInt("fromId"),
-            conversation.getBoolean("readed")
-        ));*/
+    private void addMessage(JSONObject message) throws JSONException{
+        MessageItem.MessageType type = MessageItem.MessageType.TEXT;
+        if(message.getInt("type") != 0){
+            type = MessageItem.MessageType.INFO;
+        }
+        boolean fromMe = (message.getInt("fromMe") == 1);
+        list.addLast(new MessageItem(
+                fromMe ? "Já" : message.getString("name"),
+                message.getString("text"),
+                message.getInt("id"),
+                type,
+                (message.getInt("readed") == 1),
+                fromMe,
+                message.getString("sendedDate")
+        ));
     }
 
     private void notifyAdapter(){

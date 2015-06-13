@@ -2,6 +2,7 @@ package pos.android;
 
 import android.app.Application;
 
+import pos.android.Activities.Chat.ChatManager;
 import pos.android.Background.AutoRefresher;
 
 /**
