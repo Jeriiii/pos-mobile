@@ -22,4 +22,6 @@
     <string name="Chat_close_tab_hint">Zavřít záložku</string>
     <string name="ClosingCross">X</string>
     <string name="Closing_hint">Zavřít záložku</string>
+    <string name="SendButtonText">Odeslat</string>
+    <string name="LoadMoreMessagesButtonText">Načíst další zprávy...</string>
 </resources>
