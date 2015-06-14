@@ -20,11 +20,16 @@ public class MessageItem {
     public static final int VIEW_ID = R.layout.chat_message_item;
     public String fromUserName = "";
     public String messageText = "";
-    int messageId;
+    public int messageId;
+
+    public MessageType getType() {
+        return type;
+    }
+
     MessageType type = MessageType.TEXT;
     boolean readed = false;
     boolean fromMe = false;
-    String messageTime = "";
+    public String messageTime = "";
 
     public MessageItem(String fromUserName, String messageText, int messageId, MessageType type, boolean readed, boolean fromMe, String messageTime) {
         this.fromUserName = fromUserName;

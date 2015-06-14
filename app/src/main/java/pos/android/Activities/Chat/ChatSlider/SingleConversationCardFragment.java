@@ -71,9 +71,7 @@ public class SingleConversationCardFragment extends Fragment {
         position = getArguments().getInt(ARG_POSITION);
 
         addButtonClickListeners(view, activity);
-
-        //messages.addLast(new MessageItem("test", "initial", 156, MessageItem.MessageType.TEXT, true, true, "ted"));
-        //ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId);
+        ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId);
         return view;
     }
 
