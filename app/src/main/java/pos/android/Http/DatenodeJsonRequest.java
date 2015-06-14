@@ -31,6 +31,7 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
     public DatenodeJsonRequest(Context context, HttpContext httpContext) {
         this.context = context;
         this.httpContext = httpContext;
+        json = null;
     }
 
     /**

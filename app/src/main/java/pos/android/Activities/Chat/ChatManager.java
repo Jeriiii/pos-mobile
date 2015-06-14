@@ -14,6 +14,7 @@ import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
 import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 import pos.android.Activities.Chat.ServerRequests.LoadConversations;
+import pos.android.Activities.Chat.ServerRequests.LoadOlderMessages;
 import pos.android.Activities.Chat.ServerRequests.LoadSingleConversation;
 import pos.android.Activities.Chat.ServerRequests.SendMessage;
 import pos.android.Background.AutoRefresher;
@@ -22,6 +23,8 @@ import pos.android.Background.AutoRefresher;
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 13.6.2015.
  */
 public class ChatManager {
+
+    public static final int NUMBER_OF_OLDER_MESSAGES_LOADED = 5;
 
 
     private static ChatManager ourInstance = new ChatManager();
@@ -61,7 +64,7 @@ public class ChatManager {
 
     public void loadOlderMessages(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity, String userId, Button moreMessagesButton) {
         int fromId = messages.getFirst().messageId;
-        
+        new LoadOlderMessages(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity, moreMessagesButton, userId, fromId, NUMBER_OF_OLDER_MESSAGES_LOADED).execute();
     }
 
     public void sendMessage(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity, String userId, String text) {
