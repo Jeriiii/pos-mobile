@@ -93,7 +93,6 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
 
             PersistentCookieStore mCookieStore = new PersistentCookieStore(
                     streamActivity.getApplicationContext());
-
             mCookieStore.clear();
 
             streamActivity.startActivity(i);
