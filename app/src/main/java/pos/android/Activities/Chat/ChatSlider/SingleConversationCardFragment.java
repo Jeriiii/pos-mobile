@@ -32,13 +32,16 @@ import pos.android.R;
 public class SingleConversationCardFragment extends Fragment {
 
     private static final String ARG_POSITION = "position";
+    private static final String ARG_USER_ID_POSITION = "userId";
 
     private int position;
+    private String userId;
 
-    public static SingleConversationCardFragment newInstance(int position) {
+    public static SingleConversationCardFragment newInstance(int position, String userId) {
         SingleConversationCardFragment f = new SingleConversationCardFragment();
         Bundle b = new Bundle();
         b.putInt(ARG_POSITION, position);
+        b.putString(ARG_USER_ID_POSITION, userId);
         f.setArguments(b);
         return f;
     }
@@ -48,6 +51,7 @@ public class SingleConversationCardFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         position = getArguments().getInt(ARG_POSITION);
+        userId = getArguments().getString(ARG_USER_ID_POSITION);
     }
 
     @Override
@@ -70,8 +74,7 @@ public class SingleConversationCardFragment extends Fragment {
             }
         });
 
-        ChatManager.getInstance().loadLastMessages(messages, adapter, activity);
-        new LoadSingleConversation(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity).execute();
+        ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId);
         return view;
     }
 

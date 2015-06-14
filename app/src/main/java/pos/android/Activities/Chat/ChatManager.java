@@ -11,6 +11,7 @@ import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
 import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 import pos.android.Activities.Chat.ServerRequests.LoadConversations;
+import pos.android.Activities.Chat.ServerRequests.LoadSingleConversation;
 import pos.android.Background.AutoRefresher;
 
 /**
@@ -48,8 +49,9 @@ public class ChatManager {
      * @param messages list napojený na adaptér
      * @param adapter adaptér ovládající daný list
      * @param activity aktivita, ze které se volá načítání
+     * @param userId id uživatele ve stringu (posílá se do url)
      */
-    public void loadLastMessages(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity) {
-
+    public void loadLastMessages(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity, String userId) {
+        new LoadSingleConversation(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity, userId).execute();
     }
 }

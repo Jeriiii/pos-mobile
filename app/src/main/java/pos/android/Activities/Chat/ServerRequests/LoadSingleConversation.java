@@ -26,13 +26,16 @@ public class LoadSingleConversation extends ChatRequest {
     private LinkedList<MessageItem> list;
     private MessagesAdapter adapter;
     private Activity activity;
+    private String userId;
 
-    public LoadSingleConversation(Context context, HttpContext httpContext, LinkedList<MessageItem> list, MessagesAdapter adapter, Activity activity){
+    public LoadSingleConversation(Context context, HttpContext httpContext, LinkedList<MessageItem> list, MessagesAdapter adapter, Activity activity, String userId){
         super(context, httpContext);
         this.list = list;
         this.adapter = adapter;
         this.activity = activity;
-        addParameter("fromId", "8447944");
+        this.userId = userId;
+
+        addParameter("fromId", userId);
         setHandle("getSingleConversation");
     }
 
@@ -42,7 +45,7 @@ public class LoadSingleConversation extends ChatRequest {
         }
         try {
             JSONObject response = json.getJSONObject(TAG_CONVERSATION);
-            JSONObject userInfo = response.getJSONObject("8447904");
+            JSONObject userInfo = response.getJSONObject(userId);
             JSONArray messages = userInfo.getJSONArray(TAG_MESSAGES);
 
             int arrLength = messages.length();
