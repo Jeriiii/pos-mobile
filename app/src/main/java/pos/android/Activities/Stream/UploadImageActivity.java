@@ -10,7 +10,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+        import android.provider.MediaStore;
+        import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,11 +33,13 @@ import org.apache.http.util.EntityUtils;
 import java.io.File;
 import java.io.IOException;
 
-import pos.android.Activities.Stream.exts.AndroidMultiPartEntity;
+        import pos.android.Activities.BaseActivities.BaseActivity;
+        import pos.android.Activities.Stream.exts.AndroidMultiPartEntity;
 import pos.android.Activities.Stream.exts.Config;
-import pos.android.R;
+        import pos.android.Http.HttpConection;
+        import pos.android.R;
 
-public class UploadImageActivity extends Activity {
+public class UploadImageActivity extends BaseActivity {
     // LogCat tag
     private static final String TAG = PickImageActivity.class.getSimpleName();
 
@@ -151,7 +154,8 @@ public class UploadImageActivity extends Activity {
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(Config.FILE_UPLOAD_URL);
+            HttpPost httppost = new HttpPost(HttpConection.host + HttpConection.path +
+                    Config.pres_http_one_page + Config.sig_upload_image);
 
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -169,30 +173,29 @@ public class UploadImageActivity extends Activity {
                 entity.addPart("image", new FileBody(sourceFile));
 
                 // Extra parameters if you want to pass to server
-                entity.addPart("website",
-                        new StringBody("www.androidhive.info"));
+                /*entity.addPart("website",
+                        new StringBody("www.androidhive.info"));*/
                 entity.addPart("email", new StringBody("abc@gmail.com"));
 
                 totalSize = entity.getContentLength();
                 httppost.setEntity(entity);
 
                 // Making server call
-                HttpResponse response = httpclient.execute(httppost);
+                HttpResponse response = httpclient.execute(httppost, httpContext);
                 HttpEntity r_entity = response.getEntity();
 
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == 200) {
                     // Server response
-                    responseString = EntityUtils.toString(r_entity);
+                    responseString = null;//vypsání chyby/úspěchu - EntityUtils.toString(r_entity);
                 } else {
-                    responseString = "Error occurred! Http Status Code: "
-                            + statusCode;
+                    responseString = "Při nahrávání obrázku nastala chyba";
                 }
 
             } catch (ClientProtocolException e) {
-                responseString = e.toString();
+                //vypsání chyby - responseString = e.toString();
             } catch (IOException e) {
-                responseString = e.toString();
+                //vypsání chyby - responseString = e.toString();
             }
 
             return responseString;
@@ -200,13 +203,18 @@ public class UploadImageActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            Log.e(TAG, "Response from server: " + result);
+        protected void onPostExecute(String resultStatus) {
+            Log.e(TAG, "Response from server: " + resultStatus);
 
-            // showing the server response in an alert dialog
-            showAlert(result);
+            if (resultStatus != null) { //pokud se rovná null, jde o chybu
+                showAlert(resultStatus);
+            } else {
+                showAlert("Obrázek byl nahrán.");
+                Intent intent = new Intent(getApplicationContext(), StreamActivity.class);
+                startActivity(intent);
+            }
 
-            super.onPostExecute(result);
+            super.onPostExecute(resultStatus);
         }
 
     }
