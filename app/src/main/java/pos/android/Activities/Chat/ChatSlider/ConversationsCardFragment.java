@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import java.util.LinkedList;
 
@@ -13,7 +14,6 @@ import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Chat.Conversations.ConversationClickListener;
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
-import pos.android.Activities.Chat.Conversations.ConversationsList;
 import pos.android.Activities.Chat.ServerRequests.LoadConversations;
 import pos.android.R;
 
@@ -45,7 +45,7 @@ public class ConversationsCardFragment extends Fragment {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, container, false);
         ChatActivity activity = (ChatActivity) this.getActivity();
 
-        ConversationsList list = (ConversationsList) view.findViewById(R.id.list);
+        ListView list = (ListView) view.findViewById(R.id.list);
         LinkedList<ConversationItem> conversations = new LinkedList<ConversationItem>();
         ConversationsAdapter adapter = new ConversationsAdapter(activity, R.layout.chat_conversation_text_item, conversations);
         list.setAdapter(adapter);

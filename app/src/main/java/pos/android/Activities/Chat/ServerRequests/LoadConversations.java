@@ -15,7 +15,6 @@ import java.util.List;
 
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
-import pos.android.Activities.Chat.Conversations.ConversationsList;
 
 /**
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
