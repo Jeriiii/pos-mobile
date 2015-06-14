@@ -39,7 +39,7 @@ public class SingleConversationCardFragment extends Fragment {
     private int position;
     private String userId;
 
-    private LinkedList<MessageItem> messages;
+    private LinkedList<MessageItem> messages = new LinkedList<MessageItem>();
     private MessagesAdapter adapter;
     private ChatActivity activity;
 
@@ -66,15 +66,14 @@ public class SingleConversationCardFragment extends Fragment {
         activity = (ChatActivity) this.getActivity();
         /* list */
         ListView list = (ListView) view.findViewById(R.id.list);
-        messages = new LinkedList<MessageItem>();
         adapter = new MessagesAdapter(activity, R.layout.chat_message_text_item, messages);
         list.setAdapter(adapter);
         position = getArguments().getInt(ARG_POSITION);
 
         addButtonClickListeners(view, activity);
 
-
-        ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId);
+        //messages.addLast(new MessageItem("test", "initial", 156, MessageItem.MessageType.TEXT, true, true, "ted"));
+        //ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId);
         return view;
     }
 
@@ -103,7 +102,6 @@ public class SingleConversationCardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 sendMessage(messageInput);
-                notifyAdapter();
             }
         });
         messageInput.setImeActionLabel("Odeslat", KeyEvent.KEYCODE_ENTER);
@@ -131,6 +129,7 @@ public class SingleConversationCardFragment extends Fragment {
         }
         textInput.setText("");
         ChatManager.getInstance().sendMessage(messages, adapter, activity, userId, text);
+        notifyAdapter();
         return true;
     }
 

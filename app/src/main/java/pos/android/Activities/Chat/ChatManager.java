@@ -58,14 +58,14 @@ public class ChatManager {
         new LoadSingleConversation(activity.getApplicationContext(), activity.getHttpContext(), messages, adapter, activity, userId).execute();
     }
 
-    public void loadOlderMessages(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity, String userId, Button moreMessagesButton) {
-        Toast.makeText(activity.getBaseContext(), "textytext", Toast.LENGTH_LONG);
+    public void loadOlderMessages(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity, String userId, Button moreMessagesButton) {        Toast.makeText(activity.getBaseContext(), "textytext", Toast.LENGTH_LONG);
         messages.addFirst(new MessageItem("test", "textytext", 156, MessageItem.MessageType.TEXT, true, true, "ted"));
         messages.addFirst(new MessageItem("test", "textytext2", 156, MessageItem.MessageType.TEXT, true, true, "ted"));
     }
 
     public void sendMessage(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity, String userId, String text) {
         Toast.makeText(activity.getApplicationContext(), text, Toast.LENGTH_LONG).show();
+        messages.addLast(new MessageItem("test", text, 156, MessageItem.MessageType.TEXT, true, true, "ted"));
     }
 
 }
