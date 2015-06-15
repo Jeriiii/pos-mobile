@@ -1,28 +1,24 @@
 package pos.android.Activities.Chat;
 
-import android.content.Context;
-import android.widget.Adapter;
+import android.os.Handler;
 import android.widget.Button;
-import android.widget.Toast;
-
-import org.apache.http.protocol.HttpContext;
 
 import java.util.LinkedList;
 
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
+import pos.android.Activities.Chat.Noticing.INoticable;
 import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 import pos.android.Activities.Chat.ServerRequests.LoadConversations;
 import pos.android.Activities.Chat.ServerRequests.LoadOlderMessages;
 import pos.android.Activities.Chat.ServerRequests.LoadSingleConversation;
 import pos.android.Activities.Chat.ServerRequests.SendMessage;
-import pos.android.Background.AutoRefresher;
 
 /**
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 13.6.2015.
  */
-public class ChatManager {
+public class ChatManager implements Runnable{
 
     public static final int NUMBER_OF_OLDER_MESSAGES_LOADED = 5;
 
@@ -33,10 +29,25 @@ public class ChatManager {
         return ourInstance;
     }
 
-    private AutoRefresher refresher;
+    private Handler handler = new Handler();
 
     private ChatManager() {
-        refresher = AutoRefresher.getInstance();/* start refreshování */
+        this.run();
+    }
+
+    /** Objekt, do kterého se pokud je nastaven pošlou nové zprávy */
+    private INoticable activityNoticer = null;
+
+    public void setActivityNoticer(INoticable activityNoticer) {
+        this.activityNoticer = activityNoticer;
+    }
+
+    /** Vlákno pro refreshování */
+    @Override
+    public void run() {
+        System.out.println("Running!");
+        this.handleNewMessages();
+        handler.postDelayed(this, 1000);
     }
 
 
@@ -73,4 +84,11 @@ public class ChatManager {
         new SendMessage(activity.getApplicationContext(), activity.getHttpContext(), message, adapter, activity, userId).execute();
     }
 
+    public void handleNewMessages() {
+        if(activityNoticer != null){
+            System.out.println("ChatActivity!");
+        }else{
+            System.out.println("Other activity!");
+        }
+    }
 }

@@ -11,6 +11,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import org.apache.http.protocol.HttpContext;
 
 import pos.android.Activities.BaseActivities.BaseFragmentActivity;
+import pos.android.Activities.Chat.Noticing.ChatActivityNoticer;
 import pos.android.R;
 
 public class ChatActivity extends BaseFragmentActivity {
@@ -18,6 +19,8 @@ public class ChatActivity extends BaseFragmentActivity {
     private ViewPager pager;
 
     private PagerSlidingTabStrip tabs;
+
+    private ChatActivityNoticer noticer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,22 @@ public class ChatActivity extends BaseFragmentActivity {
         // Bind the tabs to the ViewPager
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
+        noticer = new ChatActivityNoticer();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ChatManager.getInstance().setActivityNoticer(noticer);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ChatManager.getInstance().setActivityNoticer(null);
+    }
+
+
 
     public HttpContext getHttpContext(){
         return this.httpContext;
