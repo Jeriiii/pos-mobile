@@ -13,78 +13,116 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import pos.android.R;
 
 /**
  * Created by Petr on 14.6.2015.
  */
-public class DownloadImageManager {
+public class DownloadImageManager implements Callback {
 
-    final String DOWNLOAD_FILE = "http://goo.gl/w3XV3";
+    public static final int SUCCESSFUL_DOWNLOAD = 200;
 
-    final String strPref_Download_ID = "PREF_DOWNLOAD_ID";
-
-    private DownloadManager dm;
-    private SharedPreferences sp;
-    private Context context;
-    private BroadcastReceiver bcReceiver;
+    private boolean isImageDisplaying = false;
+    private boolean isRequestProblem = false;
+    private boolean isResponseProblem = false;
+    private ImageView imageView;
     private Activity activity;
+    private static final String TAG = "okhttp";
 
-    public DownloadImageManager (Activity activity, DownloadManager dm, SharedPreferences sp, Context context, BroadcastReceiver bcReceiver) {
-        this.dm = dm;
-        this.sp = sp;
-        this.context = context;
-        this.bcReceiver = bcReceiver;
+    public DownloadImageManager (ImageView imageView, boolean isRequestProblem, boolean isResponseProblem, boolean isImageDisplaying, Activity activity) {
+        this.imageView = imageView;
+        this.isRequestProblem = isRequestProblem;
+        this.isImageDisplaying = isImageDisplaying;
+        this.isResponseProblem = isResponseProblem;
         this.activity = activity;
     }
 
-    public void getImg() {
-        Uri downloadUri = Uri.parse(DOWNLOAD_FILE);
-        DownloadManager.Request request = new DownloadManager.Request(downloadUri);
-        long id = dm.enqueue(request);
-
-        //Save the request id
-        SharedPreferences.Editor PrefEdit = sp.edit();
-        PrefEdit.putLong(strPref_Download_ID, id);
-        PrefEdit.commit();
-
-        IntentFilter intentFilter
-                = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        activity.registerReceiver(downloadReceiver, intentFilter);
+    @Override
+    public void onFailure(Request request, IOException e) {
+        e.printStackTrace();
+        isRequestProblem = true;
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                imageView.setImageDrawable(activity.getResources()
+                        .getDrawable(R.drawable.failed));
+            }
+        });
     }
 
-    private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+    @Override
+    public void onResponse(Response response) throws IOException {
+        getResponseDetails(response);
 
-        @Override
-        public void onReceive(Context arg0, Intent arg1) {
-            // TODO Auto-generated method stub
-            DownloadManager.Query query = new DownloadManager.Query();
-            query.setFilterById(sp.getLong(strPref_Download_ID, 0));
-            Cursor cursor = dm.query(query);
-            if(cursor.moveToFirst()){
-                int columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
-                int status = cursor.getInt(columnIndex);
-                if(status == DownloadManager.STATUS_SUCCESSFUL){
+        if (!response.isSuccessful()) {
+            isResponseProblem = true;
+            imageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.setImageDrawable(activity.getResources()
+                            .getDrawable(R.drawable.response_problem));
+                }
+            });
+            throw new IOException("Unexpected code " + response);
+        }
 
-                    //Retrieve the saved request id
-                    long downloadID = sp.getLong(strPref_Download_ID, 0);
+        if(response.code()==SUCCESSFUL_DOWNLOAD){
+            isRequestProblem = false;
+            isResponseProblem = false;
+            ResponseBody in = response.body();
+            InputStream inputStream = in.byteStream();
+            updateImage(BitmapFactory.decodeStream(inputStream));
+        } else {
+            isResponseProblem = true;
+            imageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.setImageDrawable(activity.getResources()
+                            .getDrawable(R.drawable.response_problem));
+                }
+            });
+        }
+    }
 
-                    ParcelFileDescriptor file;
-                    try {
-                        file = dm.openDownloadedFile(downloadID);
-                        FileInputStream fileInputStream
-                                = new ParcelFileDescriptor.AutoCloseInputStream(file);
-                        Bitmap bm = BitmapFactory.decodeStream(fileInputStream);
-                        //image.setImageBitmap(bm);
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+    private void getResponseDetails(Response response) {
+        Headers headers = response.headers();
+        Log.i(TAG, "Response code: " + String.valueOf(response.code()));
+        Log.i(TAG, "Response message: " + response.message());
+        Log.i(TAG, "Protocol: " + response.protocol());
+        Log.i(TAG, "Number headers: " + headers.size());
+        for (int i = 0; i < headers.size(); i++) {
+            Log.i(TAG, headers.name(i) + "=" + headers.value(i));
+        }
+    }
 
+    private void updateImage(final Bitmap bitmap) {
+        Log.i(TAG, "Updating image");
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (bitmap != null) {
+                    imageView.setImageBitmap(bitmap);
+                    isImageDisplaying = true;
+                } else {
+                    imageView.setImageDrawable(activity.getResources()
+                            .getDrawable(R.drawable.ic_launcher));
                 }
             }
-        }
-    };
+        });
+    }
 }

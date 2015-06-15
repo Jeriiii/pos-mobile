@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import pos.android.DownloadManager.DownloadImageManager;
 import pos.android.R;
 
 /*created using Android Studio (Beta) 0.8.14
@@ -51,16 +52,6 @@ public class AsynchronousImageDownload extends Activity {
             isRequestProblem = savedInstanceState.getBoolean("isRequestProblem");
             isResponseProblem = savedInstanceState.getBoolean("isResponseProblem");
         }
-
-        File cacheDirectory = new File(this.getCacheDir(), "http");
-        int cacheSize = 10 * 1024 * 1024;
-/*        try {*/
-            Cache cache = new Cache(cacheDirectory, cacheSize);
-            client.setCache(cache);
-/*        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        imageView = (ImageView) findViewById(R.id.imageView);
     }
 
     @Override
@@ -105,85 +96,22 @@ public class AsynchronousImageDownload extends Activity {
                 .url(imageUrl)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
+        File cacheDirectory = new File(this.getCacheDir(), "http");
+        int cacheSize = 10 * 1024 * 1024;
+/*        try {*/
+        Cache cache = new Cache(cacheDirectory, cacheSize);
+        client.setCache(cache);
+/*        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        imageView = (ImageView) findViewById(R.id.imageView);
 
-            public static final int SUCCESSFUL_DOWNLOAD = 200;
-
-            @Override
-            public void onFailure(Request request, IOException e) {
-                e.printStackTrace();
-                isRequestProblem = true;
-                imageView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageView.setImageDrawable(getResources()
-                                .getDrawable(R.drawable.failed));
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                getResponseDetails(response);
-
-                if (!response.isSuccessful()) {
-                    isResponseProblem = true;
-                    imageView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            imageView.setImageDrawable(getResources()
-                                    .getDrawable(R.drawable.response_problem));
-                        }
-                    });
-                    throw new IOException("Unexpected code " + response);
-                }
-
-                if(response.code()==SUCCESSFUL_DOWNLOAD){
-                    isRequestProblem = false;
-                    isResponseProblem = false;
-                    ResponseBody in = response.body();
-                    InputStream inputStream = in.byteStream();
-                    updateImage(BitmapFactory.decodeStream(inputStream));
-                } else {
-                    isResponseProblem = true;
-                    imageView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            imageView.setImageDrawable(getResources()
-                                    .getDrawable(R.drawable.response_problem));
-                        }
-                    });
-                }
-            }
-        });
+        client.newCall(request).enqueue(new DownloadImageManager(
+                imageView, isRequestProblem, isResponseProblem, isImageDisplaying, this
+        ));
     }
 
-    private void getResponseDetails(Response response) {
-        Headers headers = response.headers();
-        Log.i(TAG, "Response code: " + String.valueOf(response.code()));
-        Log.i(TAG, "Response message: " + response.message());
-        Log.i(TAG, "Protocol: " + response.protocol());
-        Log.i(TAG, "Number headers: " + headers.size());
-        for (int i = 0; i < headers.size(); i++) {
-            Log.i(TAG, headers.name(i) + "=" + headers.value(i));
-        }
-    }
 
-    private void updateImage(final Bitmap bitmap) {
-        Log.i(TAG, "Updating image");
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                    isImageDisplaying = true;
-                } else {
-                    imageView.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_launcher));
-                }
-            }
-        });
-    }
 
     public boolean isOnline() {
 //        check if there is an internet connection
