@@ -53,10 +53,11 @@ public class CheckNewMessages extends ChatRequest {
     }
 
     private void handleIncommingMessages() throws JSONException{
-        JSONObject senders = json.getJSONArray(TAG_NEW_MESSAGES).getJSONObject(0);
-        if(senders.length() == 0){/* uživatel nemá vůbec žádné zprávy*/
+        JSONArray sendersArray = json.getJSONArray(TAG_NEW_MESSAGES);
+        if(sendersArray.getJSONArray(0).length() == 0){/* uživatel nemá vůbec žádné zprávy*/
             return;
         }
+        JSONObject senders = sendersArray.getJSONObject(0);
         while(senders.keys().hasNext()){
             String senderKey = senders.keys().next();
             System.out.println(senderKey+"-----------------");

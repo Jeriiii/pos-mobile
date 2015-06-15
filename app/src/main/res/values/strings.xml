@@ -33,5 +33,6 @@
     <string name="Closing_hint">Zavřít záložku</string>
     <string name="SendButtonText">Odeslat</string>
     <string name="LoadMoreMessagesButtonText">Načíst další zprávy...</string>
+    <string name="StreamTitle">Stream</string>
 
 </resources>

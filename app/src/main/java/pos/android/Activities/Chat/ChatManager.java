@@ -99,7 +99,6 @@ public class ChatManager implements Runnable{
     /** Vlákno pro refreshování */
     @Override
     public void run() {
-        System.out.println("Running!");
         this.handleNewMessages();
         handler.postDelayed(this, delayTime);
     }
