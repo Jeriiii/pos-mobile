@@ -1,7 +1,8 @@
 package pos.android.Activities.Chat.Noticing;
 
 /**
+ * Objekt implementující toto rozhraní umí reagovat na přijmutí nových zpráv
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.6.2015.
  */
-public interface INoticable {
+public interface INewMessageNoticable {
 }
