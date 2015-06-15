@@ -20,6 +20,7 @@ import pos.android.Activities.Chat.ServerRequests.LoadConversations;
 import pos.android.Activities.Chat.ServerRequests.LoadOlderMessages;
 import pos.android.Activities.Chat.ServerRequests.LoadSingleConversation;
 import pos.android.Activities.Chat.ServerRequests.SendMessage;
+import pos.android.Http.HttpConection;
 import pos.android.Http.PersistentCookieStore;
 import pos.android.User.UserSessionManager;
 
@@ -30,9 +31,16 @@ public class ChatManager implements Runnable{
 
     public static final int NUMBER_OF_OLDER_MESSAGES_LOADED = 5;
 
+    /** minimální čas nastavitelný k opakování [ms]*/
+    private static final int MINIMUM_DELAY_TIME = 500;
+
+    /** maximální čas nastavitelný k opakování [ms]*/
+    private static final int MAXIMUM_DELAY_TIME = 120000;
+    private static final int INITIAL_DELAY_TIME = 3000;
+
     public static int lastId = 0;
 
-    private int delayTime = 3000;
+    private int delayTime = INITIAL_DELAY_TIME;
 
 
     private static ChatManager ourInstance = new ChatManager();
@@ -45,8 +53,6 @@ public class ChatManager implements Runnable{
 
     private GlobalNoticer globalNoticer = new GlobalNoticer();
 
-    private HttpContext httpContext;
-
     private Handler handler = new Handler();
 
     private ChatManager() {
@@ -55,10 +61,6 @@ public class ChatManager implements Runnable{
 
     public void setApplicationContext(Context applicationContext) {
         this.applicationContext = applicationContext;
-    }
-
-    public void setHttpContext(HttpContext httpContext) {
-        this.httpContext = httpContext;
     }
 
     /** Objekt, do kterého se pokud je nastaven pošlou nové zprávy */
@@ -75,6 +77,24 @@ public class ChatManager implements Runnable{
         this.unreadedNoticer = unreadedNoticer;
     }
 
+    public int getDelayTime() {
+        return delayTime;
+    }
+
+    public void setDelayTime(int delayTime) {
+        int value;
+        value = Math.max(MINIMUM_DELAY_TIME, delayTime);
+        value = Math.min(MAXIMUM_DELAY_TIME, value);
+        this.delayTime = value;
+    }
+
+    public void incraseDelay(int by){
+        setDelayTime(getDelayTime() + by);
+    }
+
+    public void resetDelay(){
+        this.delayTime = INITIAL_DELAY_TIME;
+    }
 
     /** Vlákno pro refreshování */
     @Override
@@ -120,21 +140,22 @@ public class ChatManager implements Runnable{
 
     public synchronized void handleNewMessages() {
         UserSessionManager session = new UserSessionManager(applicationContext, new PersistentCookieStore(applicationContext));
+        HttpContext httpContext = HttpConection.createHttpContext(applicationContext, false);
         if(!session.isUserLoggedIn()){/* pro nepřihlášeného uživatele nedělá nic */
             return;
         }
-        if(messageNoticer != null){
-            noticeChatActivity();
+        if(messageNoticer != null && unreadedNoticer != null){
+            noticeChatActivity(httpContext);
         }else{
-            noticeGlobally();
+            noticeGlobally(httpContext);
         }
     }
 
-    private void noticeChatActivity() {
+    private void noticeChatActivity(HttpContext httpContext) {
         new CheckNewMessages(applicationContext, httpContext, messageNoticer, unreadedNoticer, ChatManager.lastId).execute();
     }
 
-    private void noticeGlobally() {
+    private void noticeGlobally(HttpContext httpContext) {
         new CheckNewMessages(applicationContext, httpContext, globalNoticer, globalNoticer, ChatManager.lastId).execute();
     }
 }
