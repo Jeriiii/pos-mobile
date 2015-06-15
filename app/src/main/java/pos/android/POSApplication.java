@@ -15,7 +15,6 @@ public class POSApplication extends Application {
     public void onCreate() {
         super.onCreate();
         ChatManager.getInstance().setApplicationContext(getApplicationContext());
-        ChatManager.getInstance().setHttpContext(HttpConection.createHttpContext(getApplicationContext(), false));
         ChatManager.getInstance().run();
     }
 }
