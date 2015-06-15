@@ -40,13 +40,13 @@ public class ChatActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ChatManager.getInstance().setActivityNoticer(noticer);
+        ChatManager.getInstance().setMessageNoticer(noticer);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ChatManager.getInstance().setActivityNoticer(null);
+        ChatManager.getInstance().setMessageNoticer(null);
     }
 
 

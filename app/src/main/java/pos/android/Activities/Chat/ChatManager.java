@@ -10,10 +10,12 @@ import java.util.LinkedList;
 
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
+import pos.android.Activities.Chat.Noticing.GlobalNoticer;
 import pos.android.Activities.Chat.Noticing.INewMessageNoticable;
 import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 import pos.android.Activities.Chat.Noticing.IUnreadedCountNoticable;
+import pos.android.Activities.Chat.ServerRequests.CheckNewMessages;
 import pos.android.Activities.Chat.ServerRequests.LoadConversations;
 import pos.android.Activities.Chat.ServerRequests.LoadOlderMessages;
 import pos.android.Activities.Chat.ServerRequests.LoadSingleConversation;
@@ -41,7 +43,7 @@ public class ChatManager implements Runnable{
 
     private Context applicationContext;
 
-
+    private GlobalNoticer globalNoticer = new GlobalNoticer();
 
     private HttpContext httpContext;
 
@@ -116,7 +118,7 @@ public class ChatManager implements Runnable{
         new SendMessage(activity.getApplicationContext(), activity.getHttpContext(), message, adapter, activity, userId).execute();
     }
 
-    public synchronized void  handleNewMessages() {
+    public synchronized void handleNewMessages() {
         UserSessionManager session = new UserSessionManager(applicationContext, new PersistentCookieStore(applicationContext));
         if(!session.isUserLoggedIn()){/* pro nepřihlášeného uživatele nedělá nic */
             return;
@@ -129,10 +131,10 @@ public class ChatManager implements Runnable{
     }
 
     private void noticeChatActivity() {
-
+        new CheckNewMessages(applicationContext, httpContext, messageNoticer, unreadedNoticer, ChatManager.lastId).execute();
     }
 
     private void noticeGlobally() {
-
+        new CheckNewMessages(applicationContext, httpContext, globalNoticer, globalNoticer, ChatManager.lastId).execute();
     }
 }
