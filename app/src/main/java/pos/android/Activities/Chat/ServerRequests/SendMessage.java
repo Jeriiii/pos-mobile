@@ -15,24 +15,34 @@ import java.util.List;
 
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
+import pos.android.Activities.Chat.Messages.MessageItem;
+import pos.android.Activities.Chat.Messages.MessagesAdapter;
+import pos.android.Http.HttpConection;
 
 /**
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
-public class LoadConversations extends ChatRequest {
+public class SendMessage extends ChatRequest {
 
-    public static final String TAG_CONVERSATIONS = "conversations";
+    public static final String TEXT_MESSAGE_TYPE = "textMessage";
 
-    private LinkedList<ConversationItem> list;
-    private ConversationsAdapter adapter;
+    private MessageItem message;
+    private MessagesAdapter adapter;
     private Activity activity;
 
-    public LoadConversations(Context context, HttpContext httpContext, LinkedList<ConversationItem> list, ConversationsAdapter adapter, Activity activity){
+    public SendMessage(Context context, HttpContext httpContext, MessageItem message, MessagesAdapter adapter, Activity activity, String userId){
         super(context, httpContext);
-        this.list = list;
+        this.message = message;
         this.adapter = adapter;
         this.activity = activity;
-        setHandle("getConversations");
+        if(message.getType() == MessageItem.MessageType.TEXT) {
+            addParameter("type", TEXT_MESSAGE_TYPE);
+        }else{
+            addParameter("type", "");
+        }
+        addParameter("toId", userId);
+        addParameter("text", message.messageText);
+        setHandle("sendMessage");
     }
 
     protected void onPostExecute(String file_url) {
@@ -40,24 +50,13 @@ public class LoadConversations extends ChatRequest {
             return;
         }
         try {
-            JSONArray jarray = json.getJSONArray(TAG_CONVERSATIONS);
-            int arrLength = jarray.length();
-            for(int i = 0; i < arrLength; i++){
-                addConversation(jarray.getJSONObject(i));
-            }
+            message.fromUserName = json.getString("senderName");
+            message.messageId = json.getInt("id");
+            message.messageTime = json.getString("sendedDate");
             notifyAdapter();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private void addConversation(JSONObject conversation) throws JSONException{
-        list.addLast(new ConversationItem(
-            conversation.getString("from"),
-            conversation.getString("lastMessage"),
-            conversation.getInt("fromId"),
-            conversation.getBoolean("readed")
-        ));
     }
 
     private void notifyAdapter(){

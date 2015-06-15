@@ -2,7 +2,7 @@ package pos.android;
 
 import android.app.Application;
 
-import pos.android.Background.AutoRefresher;
+import pos.android.Activities.Chat.ChatManager;
 
 /**
  * Main celé aplikace
@@ -13,6 +13,6 @@ public class POSApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AutoRefresher.getInstance();//zavolání konstruktoru
+        ChatManager.getInstance();//zavolání konstruktoru
     }
 }

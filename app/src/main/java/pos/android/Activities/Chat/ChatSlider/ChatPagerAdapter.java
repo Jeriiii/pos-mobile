@@ -58,7 +58,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
                 item = ConversationsCardFragment.newInstance(position);
                 break;
             default:
-                item = SingleConversationCardFragment.newInstance(position);
+                item = SingleConversationCardFragment.newInstance(position, openedIds.get(position - COUNT_OF_STATIC_TABS) + "");
                 break;
         }
         openedObjects.add(position, item);

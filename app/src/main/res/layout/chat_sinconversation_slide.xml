@@ -23,10 +23,69 @@
         android:layout_marginTop="10dp"
         android:paddingTop="0dp" />
 
-    <pos.android.Activities.Chat.Messages.MessagesList
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/list"
-        android:layout_below="@+id/closeButton" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/closeButton"
+        android:id="@+id/scrollView"
+        android:scrollbars="vertical"
+        android:layout_above="@+id/newMessageLayout"
+        android:fillViewport="true">
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/listContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LoadMoreMessagesButtonText"
+                android:id="@+id/moreMessagesButton" />
+
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/list" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/newMessageLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/closeButton"
+        android:layout_alignEnd="@+id/closeButton">
+
+        <EditText
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/messageInput"
+            android:autoText="false"
+            android:editable="false"
+            android:enabled="true"
+            android:focusable="true"
+            android:lines="2"
+            android:background="#ffeaeaea"
+            android:layout_toLeftOf="@+id/button"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="fill_parent"
+            android:text="@string/SendButtonText"
+            android:id="@+id/sendMessageButton"
+            android:layout_alignBottom="@+id/messageInput"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

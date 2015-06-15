@@ -2,6 +2,8 @@ package pos.android.Activities.Chat.ServerRequests;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.View;
+import android.widget.Button;
 
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
@@ -10,33 +12,36 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-import pos.android.Activities.Chat.Conversations.ConversationItem;
-import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
 import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 
 /**
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
-public class LoadSingleConversation extends ChatRequest {
+public class LoadOlderMessages extends ChatRequest {
 
-    public static final String TAG_CONVERSATION = "conversation";
     public static final String TAG_MESSAGES = "messages";
+    public static final String TAG_OLDER_MESSAGES = "oldermessages";
 
+    private int limit;
     private LinkedList<MessageItem> list;
     private MessagesAdapter adapter;
     private Activity activity;
-    private String userId;
+    private String idUser;
+    private Button moreButton;
 
-    public LoadSingleConversation(Context context, HttpContext httpContext, LinkedList<MessageItem> list, MessagesAdapter adapter, Activity activity, String userId){
+    public LoadOlderMessages(Context context, HttpContext httpContext, LinkedList<MessageItem> list, MessagesAdapter adapter, Activity activity, Button moreMessagesButton, String idUser, int lastId, int limit){
         super(context, httpContext);
-        this.list = list;
         this.adapter = adapter;
         this.activity = activity;
-        this.userId = userId;
-
-        addParameter("fromId", userId);
-        setHandle("getSingleConversation");
+        this.idUser = idUser;
+        this.list = list;
+        this.limit = limit;
+        this.moreButton = moreMessagesButton;
+        addParameter("lastId", lastId + "");
+        addParameter("withUserId", idUser);
+        addParameter("limit", limit + 1 + "");/* o jedna větší, aby se zjistilo, jestli jsou k dispozici i další */
+        setHandle("getOlderMessages");
     }
 
     protected void onPostExecute(String file_url) {
@@ -44,13 +49,21 @@ public class LoadSingleConversation extends ChatRequest {
             return;
         }
         try {
-            JSONObject response = json.getJSONObject(TAG_CONVERSATION);
-            JSONObject userInfo = response.getJSONObject(userId);
-            JSONArray messages = userInfo.getJSONArray(TAG_MESSAGES);
-
+            if(json.isNull(TAG_OLDER_MESSAGES)){/* objekt přišel prázdný */
+                moreButton.setVisibility(View.GONE);/* zmizení tlačítka */
+                return;
+            }
+            int condition;
+            JSONArray messages = json.getJSONObject(TAG_OLDER_MESSAGES).getJSONObject(idUser).getJSONArray(TAG_MESSAGES);
             int arrLength = messages.length();
-            for(int i = 0; i < arrLength; i++){
-                addMessage(messages.getJSONObject(i));
+            if(arrLength == limit + 1){/* opravdu jich přišlo o jeden víc */
+                condition = arrLength - 1;/* je jich o jeden (první) víc, takže ho vynechává */
+            }else{/* je jich míň */
+                condition = arrLength;
+                moreButton.setVisibility(View.GONE);/* zmizení tlačítka */
+            }
+            for(int i = 0; i < condition; i++){
+                addMessage(messages.getJSONObject(arrLength - i - 1));/* prochází se obráceně*/
             }
             notifyAdapter();
         } catch (JSONException e) {
@@ -63,7 +76,7 @@ public class LoadSingleConversation extends ChatRequest {
         if(message.getInt("type") != 0){
             type = MessageItem.MessageType.INFO;
         }
-        list.addLast(new MessageItem(
+        list.addFirst(new MessageItem(
                 message.getString("name"),
                 message.getString("text"),
                 message.getInt("id"),

@@ -31,6 +31,7 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
     public DatenodeJsonRequest(Context context, HttpContext httpContext) {
         this.context = context;
         this.httpContext = httpContext;
+        json = null;
     }
 
     /**
@@ -48,7 +49,7 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
     protected String doInBackground(String... args) {
         String url = this.getContextUrl();
 
-        json = jsonParser.getJSONmakeHttpRequest(url, "GET", this.urlParams, this.httpContext);
+        json = jsonParser.getJSONmakeHttpRequest(url, getMethod(), this.urlParams, this.httpContext);
         return null;
     }
 
@@ -79,6 +80,10 @@ public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
     /* pouzitelne napriklad pri volani komponent, abych nemusel do parametru psat porad to same */
     protected String getUrlParametersPrefix(){
         return "";
+    }
+
+    protected String getMethod(){
+        return "GET";
     }
     /*************************************************/
 

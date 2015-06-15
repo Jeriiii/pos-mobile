@@ -22,9 +22,16 @@
     <string name="Chat_close_tab_hint">Zavřít záložku</string>
     <string name="ClosingCross">X</string>
 
+
     <!-- Nahrávání obrázku   -->
     <string name="btnTakePicture">Capture Image</string>
     <string name="btnRecordVideo">Record Video</string>
     <string name="or">(or)</string>
     <string name="btnUploadToServer">Upload to Server</string>
+
+    <!-- Chatové okno -->
+    <string name="Closing_hint">Zavřít záložku</string>
+    <string name="SendButtonText">Odeslat</string>
+    <string name="LoadMoreMessagesButtonText">Načíst další zprávy...</string>
+
 </resources>
