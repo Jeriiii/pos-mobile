@@ -51,7 +51,7 @@ public class ChatManager implements Runnable{
 
     private Context applicationContext;
 
-    private GlobalNoticer globalNoticer = new GlobalNoticer();
+    private final GlobalNoticer globalNoticer = new GlobalNoticer();
 
     private Handler handler = new Handler();
 
@@ -61,6 +61,7 @@ public class ChatManager implements Runnable{
 
     public void setApplicationContext(Context applicationContext) {
         this.applicationContext = applicationContext;
+        globalNoticer.setContext(applicationContext);
     }
 
     /** Objekt, do kterého se pokud je nastaven pošlou nové zprávy */
@@ -143,7 +144,7 @@ public class ChatManager implements Runnable{
         if(!session.isUserLoggedIn()){/* pro nepřihlášeného uživatele nedělá nic */
             return;
         }
-        if(messageNoticer != null && unreadedNoticer != null){
+        if(messageNoticer != null){
             noticeChatActivity(httpContext);
         }else{
             noticeGlobally(httpContext);
@@ -151,10 +152,10 @@ public class ChatManager implements Runnable{
     }
 
     private void noticeChatActivity(HttpContext httpContext) {
-        new CheckNewMessages(applicationContext, httpContext, messageNoticer, unreadedNoticer, ChatManager.lastId).execute();
+        new CheckNewMessages(applicationContext, httpContext, messageNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId).execute();
     }
 
     private void noticeGlobally(HttpContext httpContext) {
-        new CheckNewMessages(applicationContext, httpContext, globalNoticer, globalNoticer, ChatManager.lastId).execute();
+        new CheckNewMessages(applicationContext, httpContext, globalNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId).execute();
     }
 }

@@ -1,12 +1,14 @@
 package pos.android.Activities.Chat.ServerRequests;
 
 import android.content.Context;
+import android.os.Message;
 
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import pos.android.Activities.Chat.ChatManager;
@@ -53,13 +55,13 @@ public class CheckNewMessages extends ChatRequest {
     }
 
     private void handleIncommingMessages() throws JSONException{
-        JSONArray sendersArray = json.getJSONArray(TAG_NEW_MESSAGES);
-        if(sendersArray.getJSONArray(0).length() == 0){/* uživatel nemá vůbec žádné zprávy*/
+        if(json.isNull(TAG_NEW_MESSAGES)){/* uživatel nemá vůbec žádné zprávy*/
             return;
         }
-        JSONObject senders = sendersArray.getJSONObject(0);
-        while(senders.keys().hasNext()){
-            String senderKey = senders.keys().next();
+        JSONObject senders = json.getJSONObject(TAG_NEW_MESSAGES);
+        Iterator<String> it = senders.keys();
+        while(it.hasNext()){
+            String senderKey = it.next();
             System.out.println(senderKey+"-----------------");
             JSONObject sender = senders.getJSONObject(senderKey);
             handleMessagesFromSender(senderKey, sender);
@@ -70,10 +72,17 @@ public class CheckNewMessages extends ChatRequest {
         LinkedList<MessageItem> list = new LinkedList<MessageItem>();
         JSONArray messages = sender.getJSONArray(TAG_MESSAGES);
         int arrLength = messages.length();
+        MessageItem message;
         for(int i = 0; i < arrLength; i++){
-            list.add(convertToMessage(messages.getJSONObject(i)));
+            message = convertToMessage(messages.getJSONObject(i));
+            list.add(message);
+            updateLastId(message.messageId);
         }
         messageNotifier.incommingMessageFromUser(senderKey, sender.getString("name"), list);
+    }
+
+    private void updateLastId(int messageId) {
+        ChatManager.lastId = Math.max(ChatManager.lastId, messageId);
     }
 
     private void notifyAboutUnreadedCount() throws JSONException {
@@ -87,12 +96,12 @@ public class CheckNewMessages extends ChatRequest {
      * */
     private boolean checkFirstMessage() throws JSONException{
         if(firstAsk){/* první zeptání, zpráva bude jenom jedna */
-            JSONObject senders = json.getJSONArray(TAG_NEW_MESSAGES).getJSONObject(0);
-            if(senders.length() == 0){/* uživatel nemá vůbec žádné zprávy*/
+            if(json.isNull(TAG_NEW_MESSAGES)){/* uživatel nemá vůbec žádné zprávy*/
                 return true;
             }
+            JSONObject senders = json.getJSONObject(TAG_NEW_MESSAGES);
             JSONObject sender = senders.getJSONObject(senders.keys().next());
-            ChatManager.lastId = sender.getJSONArray(TAG_MESSAGES).getJSONObject(0).getInt("id");/* nastaví podle zprávy poslední id */
+            updateLastId(sender.getJSONArray(TAG_MESSAGES).getJSONObject(0).getInt("id"));/* nastaví podle zprávy poslední id */
             return true;
         }
         return false;
