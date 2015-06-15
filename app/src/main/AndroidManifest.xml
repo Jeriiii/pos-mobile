@@ -10,6 +10,7 @@
     <!-- Internet Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".POSApplication"
@@ -31,7 +32,11 @@
             android:label="@string/title_activity_chat" >
         </activity>
         <activity
-            android:name=".Activities.Stream.StreamActivity"
+        android:name=".Activities.Stream.StreamActivity"
+        android:label="@string/title_activity_stream" >
+    </activity>
+        <activity
+            android:name=".Activities.AsynchronousImageDownload"
             android:label="@string/title_activity_stream" >
         </activity>
         <activity
