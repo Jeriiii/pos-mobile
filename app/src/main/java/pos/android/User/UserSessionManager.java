@@ -39,6 +39,9 @@ public class UserSessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
+    public static final String KEY_PASS = "pass";
+
+
     private PersistentCookieStore cookieStore;
 
     // Constructor
@@ -58,7 +61,7 @@ public class UserSessionManager {
     }
 
     //Create login session
-    public void createUserLoginSession(String name, String email){
+    public void createUserLoginSession(String name, String email, String pass){
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
 
@@ -67,6 +70,9 @@ public class UserSessionManager {
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
+
+        // Storing email in pref
+        editor.putString(KEY_PASS, Coder.encode(pass));
 
         // commit changes
         editor.commit();
@@ -114,6 +120,9 @@ public class UserSessionManager {
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
 
+        // user email id
+        user.put(KEY_PASS, pref.getString(KEY_PASS, null));
+
         // return user
         return user;
     }
@@ -148,4 +157,6 @@ public class UserSessionManager {
     public boolean isUserLoggedIn(){
         return pref.getBoolean(IS_USER_LOGIN, false);
     }
+
+
 }

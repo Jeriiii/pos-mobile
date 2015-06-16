@@ -122,26 +122,6 @@ public class StreamActivity extends BaseListActivity {
         finish();
     }
 
-    private void loginRouter() {
-        PersistentCookieStore mCookieStore = new PersistentCookieStore(
-                getApplicationContext());
-
-        List<Cookie> cookies = mCookieStore.getCookies();
-
-        boolean isSignIn = false;
-
-        for (Cookie c : cookies) {
-            if (c.getName().equals("PHPSESSID")) {
-                isSignIn = true;
-            }
-        }
-
-        if(! isSignIn) {
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-        }
-    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

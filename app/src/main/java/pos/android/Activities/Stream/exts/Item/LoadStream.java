@@ -1,7 +1,11 @@
 package pos.android.Activities.Stream.exts.Item;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,12 +18,17 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import pos.android.Activities.SignInActivity;
 import pos.android.Activities.Stream.StreamActivity;
 import pos.android.Activities.Stream.exts.Comment.Comment;
+import pos.android.Activities.Stream.exts.Config;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.Http.PersistentCookieStore;
@@ -29,6 +38,14 @@ import pos.android.R;
  * Created by Petr on 24.5.2015.
  */
 public class LoadStream extends AsyncTask<Void, Void, Boolean> {
+
+    private static final String TAG = LoadStream.class.getSimpleName();
+
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
 
     private static int LOAD_IMAGE_RESULTS = 1;
 
@@ -175,7 +192,26 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
                     onClickAddImage();
                 }
             });
+
+            View cameraBtn = streamActivity.findViewById(R.id.cameraBtn);
+            cameraBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickCamera();
+                }
+            });
         }
+    }
+
+    private void onClickCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        Uri fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+        // Intent pro kameru
+        streamActivity.startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
     public void onClickAddStatus() {
@@ -193,23 +229,13 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
 
-
+    /**
+     * Přesměrování do galerie pro výběr obrázku
+     */
     public void onClickAddImage()
     {
-        // Create the Intent for Image Gallery.
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
         streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);
-
-        /*Intent intent= new Intent();
-        intent.setType("image*//*");
-        intent.setAction(intent.ACTION_SEND);
-        streamActivity.startActivityForResult(intent.createChooser(intent, "Select Picture"), pickImageId);
-
-        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);*/
     }
 
     /** Zobrazí formulář na odeslání statusu. */
@@ -237,28 +263,12 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * Dočasná metoda pro nastavení výšky streamu.
+     * Pro nastavení výšky streamu.
      */
     private void setListHeight(ListView layout) {
-        //findViewById(R.id.layout_to_hide).setMinimumHeight(View.VISIBLE);
         layout = (ListView)streamActivity.findViewById(android.R.id.list);
-        // Gets the layout params that will allow you to resize the layout
         ViewGroup.LayoutParams params = layout.getLayoutParams();
-        // Changes the height and width to the specified *pixels*
         params.height = -1;
-    }
-
-    private int getTotalHeightofListView() {
-        ListView lv = (ListView)streamActivity.findViewById(android.R.id.list);
-        int listviewElementsheight = 0;
-        for (int i = 0; i < streamActivity.adapter.getCount(); i++) {
-            View mView = streamActivity.adapter.getView(i, null, lv);
-            mView.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-            listviewElementsheight += mView.getMeasuredHeight();
-        }
-        return listviewElementsheight;
     }
 
     /**
@@ -271,6 +281,50 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
                 streamActivity.addItems();
             }
         });
+    }
+
+    /**
+     * Creating file uri to store image/video
+     */
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    /**
+     * Vrátí obrázek / video
+     */
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                Config.IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "Oops! Failed create "
+                        + Config.IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
     }
 
     /**
@@ -323,4 +377,6 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
             return urlParams;
         }
     }
+
+
 }

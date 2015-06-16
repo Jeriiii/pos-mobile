@@ -339,7 +339,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             showProgress(false);
 
             if (success) {
-                session.createUserLoginSession("Zatim Bezejmeny", mEmail);
+                session.createUserLoginSession("Zatim Bezejmeny", mEmail, mPassword);
 
                 Intent i = new Intent(getApplicationContext(), StreamActivity.class);
                 startActivity(i);

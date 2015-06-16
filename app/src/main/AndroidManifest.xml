@@ -42,7 +42,8 @@
         </activity>
         <activity
             android:name=".Activities.Stream.ItemActvity"
-            android:label="@string/title_activity_item_actvity" >
+            android:label="@string/title_activity_item_actvity"
+            android:parentActivityName=".Activities.Stream.StreamActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.Stream.StreamActivity" />
