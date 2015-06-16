@@ -49,15 +49,19 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:text="Vyberte obrázek" />
+                android:text="Vyberte z galerie" />
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/cameraBtn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_launcher" />
+                android:layout_marginLeft="45dp"
+                android:text="Fotit"
+                android:layout_marginStart="55dp"
+                android:layout_alignTop="@+id/addImageBtn"
+                android:layout_toRightOf="@+id/addImageBtn"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentEnd="true"/>
 
         </RelativeLayout>
 
