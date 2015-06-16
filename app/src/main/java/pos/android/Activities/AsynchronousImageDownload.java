@@ -110,7 +110,7 @@ public class AsynchronousImageDownload extends Activity {
         StreamImageView streamImageView = new StreamImageView(imageView, this);
 
         client.newCall(request).enqueue(new DownloadImageManager(
-                streamImageView
+                streamImageView, null, null
         ));
     }
 

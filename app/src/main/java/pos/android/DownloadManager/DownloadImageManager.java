@@ -39,11 +39,20 @@ public class DownloadImageManager implements Callback {
 
     public static final int SUCCESSFUL_DOWNLOAD = 200;
 
+    /** Obrázek v šabloně, který se má nastavit. */
     private StreamImageView imageView;
     private static final String TAG = "okhttp";
 
-    public DownloadImageManager (StreamImageView imageView) {
+    /** Cache, do které se má obrázek uložit po svém stažení. */
+    private MemoryCache memoryCache;
+
+    /** Id obrázku. */
+    private String imgId;
+
+    public DownloadImageManager (StreamImageView imageView, MemoryCache memoryCache, String imgId) {
         this.imageView = imageView;
+        this.memoryCache = memoryCache;
+        this.imgId = imgId;
     }
 
     @Override
@@ -64,7 +73,9 @@ public class DownloadImageManager implements Callback {
         if(response.code()==SUCCESSFUL_DOWNLOAD){
             ResponseBody in = response.body();
             InputStream inputStream = in.byteStream();
-            imageView.updateImage(BitmapFactory.decodeStream(inputStream));
+            Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+            memoryCache.put(imgId, bmp);
+            imageView.updateImage(bmp);
         } else {
             imageView.setResponseProblemImg();
         }
