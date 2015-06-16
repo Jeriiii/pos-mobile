@@ -14,6 +14,7 @@ import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Menus.MainMenu;
 import pos.android.Http.HttpConection;
 import pos.android.Http.PersistentCookieStore;
+import pos.android.R;
 import pos.android.User.UserSessionManager;
 
 /////////////////////////////
@@ -58,6 +59,16 @@ public class BaseFragmentActivity extends FragmentActivity implements LoaderCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean done = MainMenu.onOptionsItemSelected(this, item);
+
+        if (item.getItemId()== R.id.action_logout)
+        {
+            UserSessionManager session = new UserSessionManager(
+                    this.getApplicationContext(),
+                    new PersistentCookieStore(getApplicationContext())
+            );
+            session.logoutUser();
+        }
+
         if(done){
             return done;
         }

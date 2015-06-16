@@ -2,20 +2,24 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:layout_weight="1">
+              android:layout_weight="1"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dip"
-        android:gravity="start"/>
+        android:textSize="12dip"
+        android:gravity="start"
+        android:textColor="#ffaaaaaa" />
 
     <TextView
         android:id="@+id/userName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="15dip" />
+        android:textSize="20dip"
+        android:paddingLeft="5dp"
+        android:textColor="#cf0707" />
 
     <ImageView
         android:id="@+id/image"
@@ -26,17 +30,20 @@
         android:id="@+id/message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dip" />
+        android:textSize="14dip"
+        android:padding="5dp"
+        android:textAlignment="gravity" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
-                  android:layout_width="fill_parent"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
-                  android:background="#ffc4c4c4"
+                  android:background="#cf0707"
                   android:layout_marginTop="10dip"
-                  android:padding="7dip"
-                  android:paddingBottom="10dip">
+                  android:padding="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
 
         <TextView
             android:id="@+id/likes"
@@ -44,7 +51,7 @@
             android:layout_height="wrap_content"
             android:textSize="14dip"
             android:layout_weight="0.5"
-            />
+            android:textColor="#ffffffff" />
 
     </LinearLayout>
 
@@ -60,27 +67,26 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:background="#ffc4c4c4"
-                  android:layout_marginTop="1dip"
+        android:layout_marginTop="1dip"
                   android:padding="7dip"
                   android:orientation="horizontal"
-                  android:paddingBottom="10dip">
+                  android:paddingBottom="3dp">
         <TextView
             android:id="@+id/comment_label"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="14dip"
             android:text="Přidat komentář"
-            />
+            android:textColor="#cf0707" />
 
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:layout_weight="1"
-                      android:padding="7dip"
-                      android:background="#ffc4c4c4"
-                      android:paddingBottom="10dip">
+        android:background="#fffafafa"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <ListView
             android:id="@android:id/android:list"
@@ -98,23 +104,23 @@
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:orientation="vertical"
-                  android:padding="7dip"
-                  android:background="#ffc4c4c4"
-                  android:paddingBottom="10dip">
+        android:paddingBottom="0dp">
         <EditText android:id="@+id/comment_msg"
                   android:layout_weight="1"
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"
                   android:minLines="2"
                   android:hint="@string/add_comment_field"
-                  android:background="#ffffffff"
+                  android:background="#ffeeeeee"
                   android:padding="7dip"
-                  android:textSize="16dip"/>
+                  android:textSize="16dip"
+            android:theme="@style/AppTheme" />
         <Button android:id="@+id/addComment"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_comment_btn"
-                android:textSize="16dip" />
+                android:textSize="16dip"
+            android:layout_gravity="left" />
     </LinearLayout>
 
 </LinearLayout>
