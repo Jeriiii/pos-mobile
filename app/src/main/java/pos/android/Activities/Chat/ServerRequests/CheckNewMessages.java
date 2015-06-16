@@ -8,8 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Chat.Messages.MessageItem;
@@ -30,13 +32,16 @@ public class CheckNewMessages extends ChatRequest {
 
     private boolean firstAsk = false;
 
-    public CheckNewMessages(Context context, HttpContext httpContext, INewMessageNoticable notifier, IUnreadedCountNoticable unreadedNotifier, int lastId){
+    public CheckNewMessages(Context context, HttpContext httpContext, INewMessageNoticable notifier, IUnreadedCountNoticable unreadedNotifier, int lastId, HashMap<Integer, Integer> readedMessages){
         super(context, httpContext);
         if(notifier == null || unreadedNotifier == null) throw new IllegalArgumentException("Notifikátory nemohou být null.");
         this.messageNotifier = notifier;
         this.unreadedNotifier = unreadedNotifier;
         firstAsk = (lastId == 0);
         addParameter("lastId", lastId + "");
+        for(Map.Entry<Integer, Integer> pair : readedMessages.entrySet()){
+            addParameter("readedMessages[" + pair.getKey() + "]", pair.getValue() + "");
+        }
         setHandle("refreshMessages");
     }
 

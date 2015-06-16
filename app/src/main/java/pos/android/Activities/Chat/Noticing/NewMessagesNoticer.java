@@ -28,8 +28,6 @@ public class NewMessagesNoticer implements INewMessageNoticable {
         SingleConversationCardFragment card = adapter.getConversationFragment(senderId);
         if(card != null){
             addNewMessages(card, messages);
-        }else{
-
         }
         updateConversationsList(senderId, userName, messages.get(messages.size() - 1));
     }

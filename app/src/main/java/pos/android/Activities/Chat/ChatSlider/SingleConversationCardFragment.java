@@ -136,7 +136,11 @@ public class SingleConversationCardFragment extends Fragment {
     }
 
     public int getUserId(){
-        return Integer.parseInt(userId);
+        try {
+            return Integer.parseInt(userId);
+        }catch(NumberFormatException e){
+            return -1;
+        }
     }
 
     public LinkedList<MessageItem> getMessages(){

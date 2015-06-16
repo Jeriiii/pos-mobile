@@ -69,7 +69,7 @@ public class ConversationsCardFragment extends Fragment {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter.notifyDataSetInvalidated();
+                adapter.notifyDataSetChanged();
             }
         });
     }

@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import org.apache.http.protocol.HttpContext;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import pos.android.Activities.Chat.Conversations.ConversationItem;
@@ -54,6 +55,8 @@ public class ChatManager implements Runnable{
     private final GlobalNoticer globalNoticer = new GlobalNoticer();
 
     private Handler handler = new Handler();
+
+    private HashMap<Integer, Integer> readedMessages = new HashMap<Integer,Integer>();
 
     private ChatManager() {
 
@@ -152,10 +155,21 @@ public class ChatManager implements Runnable{
     }
 
     private void noticeChatActivity(HttpContext httpContext) {
-        new CheckNewMessages(applicationContext, httpContext, messageNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId).execute();
+        new CheckNewMessages(applicationContext, httpContext, messageNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId, readedMessages).execute();
+        readedMessages.clear();
     }
 
     private void noticeGlobally(HttpContext httpContext) {
-        new CheckNewMessages(applicationContext, httpContext, globalNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId).execute();
+        new CheckNewMessages(applicationContext, httpContext, globalNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId, readedMessages).execute();
+        readedMessages.clear();
+    }
+
+    /**
+     * Přidá do pravidelného požadavku informaci o tom, že uživatel
+     * @param userId
+     * @param lastId
+     */
+    public void addReadedMessages(int userId, int lastId) {
+        readedMessages.put(userId, lastId);
     }
 }

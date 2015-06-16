@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
+import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
 import pos.android.Activities.Chat.Messages.MessageItem;
@@ -53,6 +54,7 @@ public class LoadSingleConversation extends ChatRequest {
                 addMessage(messages.getJSONObject(i));
             }
             notifyAdapter();
+            ChatManager.getInstance().addReadedMessages(Integer.parseInt(userId), list.getLast().messageId);
         } catch (JSONException e) {
             e.printStackTrace();
         }

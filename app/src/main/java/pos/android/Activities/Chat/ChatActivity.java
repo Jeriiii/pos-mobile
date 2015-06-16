@@ -4,6 +4,7 @@ import pos.android.Activities.Chat.ChatSlider.*;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -34,6 +35,7 @@ public class ChatActivity extends BaseFragmentActivity {
         // Bind the tabs to the ViewPager
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
+        tabs.setOnPageChangeListener(new OnChatCardChangeListener(getPagerAdapter()));
         noticer = new NewMessagesNoticer((ChatActivity)this);
     }
 
