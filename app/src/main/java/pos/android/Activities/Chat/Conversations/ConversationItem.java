@@ -37,7 +37,7 @@ public class ConversationItem {
         TVName.setText(userName);
         TVLastMessage.setText(this.lastMessage);
         if(!this.readed){
-            layout.setBackgroundColor(Color.parseColor("#FFBC3C3"));
+            layout.setBackgroundColor(Color.parseColor("#efb3b3"));
         }
         return convertView;
     }
