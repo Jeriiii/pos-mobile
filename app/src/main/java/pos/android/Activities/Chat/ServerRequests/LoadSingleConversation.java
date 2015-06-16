@@ -53,8 +53,8 @@ public class LoadSingleConversation extends ChatRequest {
             for(int i = 0; i < arrLength; i++){
                 addMessage(messages.getJSONObject(i));
             }
-            notifyAdapter();
             ChatManager.getInstance().addReadedMessages(Integer.parseInt(userId), list.getLast().messageId);
+            notifyAdapter();
         } catch (JSONException e) {
             e.printStackTrace();
         }

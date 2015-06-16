@@ -67,7 +67,6 @@ public class CheckNewMessages extends ChatRequest {
         Iterator<String> it = senders.keys();
         while(it.hasNext()){
             String senderKey = it.next();
-            System.out.println(senderKey+"-----------------");
             JSONObject sender = senders.getJSONObject(senderKey);
             handleMessagesFromSender(senderKey, sender);
         }

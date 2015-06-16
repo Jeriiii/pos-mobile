@@ -42,12 +42,12 @@ public class ConversationsCardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = (ChatActivity) this.getActivity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, container, false);
-        activity = (ChatActivity) this.getActivity();
 
         ListView list = (ListView) view.findViewById(R.id.list);
         adapter = new ConversationsAdapter(activity, R.layout.chat_conversation_text_item, conversations);
