@@ -56,11 +56,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_image"
-                android:layout_alignParentTop="true"
+                android:layout_marginLeft="62dp"
+                android:layout_marginStart="62dp"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/addImageBtn"
-                android:layout_toEndOf="@+id/addImageBtn"
-                android:layout_marginLeft="70dp"
-                android:layout_marginStart="70dp" />
+                android:layout_toEndOf="@+id/addImageBtn" />
 
         </RelativeLayout>
 

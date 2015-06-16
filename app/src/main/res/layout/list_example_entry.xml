@@ -3,25 +3,28 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:layout_weight="1">
+              android:layout_weight="1"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dip" />
+        android:textSize="14dip"
+        android:textColor="#ff444444" />
 
     <TextView
         android:id="@+id/userName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="15dip" />
+        android:textSize="18dip"
+        android:textColor="#ffcf0707" />
 
     <TextView
         android:id="@+id/message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dip" />
+        android:textSize="15dip" />
 
     <ImageView
         android:id="@+id/image"
@@ -33,7 +36,7 @@
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
-                  android:background="#ffc4c4c4"
+                  android:background="#ffcf0707"
                   android:layout_marginTop="10dip"
                   android:padding="7dip"
                   android:paddingBottom="10dip">
@@ -42,16 +45,17 @@
             android:id="@+id/likes"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dip"
+            android:textSize="14dip"
             android:layout_weight="0.5"
-            />
+            android:textColor="#ffffffff" />
 
         <TextView
             android:id="@+id/comments"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dip"
-            android:layout_weight="0.5"/>
+            android:textSize="14dip"
+            android:layout_weight="0.5"
+            android:textColor="#ffffffff" />
 
     </LinearLayout>
 
