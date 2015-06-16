@@ -12,6 +12,7 @@ public class Item {
     public String name = "";
     public String userName = "";
     public String message = "";
+    public String imgUrl = null;
 
     /* specifické pro galerie */
     public int lastImageId;

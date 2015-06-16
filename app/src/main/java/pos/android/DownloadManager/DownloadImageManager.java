@@ -117,6 +117,8 @@ public class DownloadImageManager implements Callback {
             public void run() {
                 if (bitmap != null) {
                     imageView.setImageBitmap(bitmap);
+                    imageView.getLayoutParams().height = bitmap.getHeight();
+                    imageView.getLayoutParams().width = bitmap.getWidth();
                     isImageDisplaying = true;
                 } else {
                     imageView.setImageDrawable(activity.getResources()

@@ -25,6 +25,9 @@ public class JsonToItems {
     /** Seznam příspěvků ve streamu. */
     ArrayList<Item> listItems;
 
+    /** Seznam nově přidaých příspěvků */
+    ArrayList<Item> newListItems;
+
     public JsonToItems(ArrayList<Item> listItems) {
         this.listItems = listItems;
     }
@@ -32,9 +35,10 @@ public class JsonToItems {
     /**
      * Uloží příspěvky.
      */
-    public void saveItemsToList(JSONObject jsonItems) {
+    public ArrayList<Item> saveItemsToList(JSONObject jsonItems) {
         JSONObject c;
         int i;
+        newListItems = new ArrayList<Item>();
 
         try {
             // products found
@@ -48,10 +52,13 @@ public class JsonToItems {
                 Item item = getItem(c);
 
                 listItems.add(item);
+                newListItems.add(item);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        return newListItems;
     }
 
     private Item getItem(JSONObject jsonObject) throws JSONException{
@@ -100,6 +107,10 @@ public class JsonToItems {
      * @return TRUE = hodnota je nastavená, jinak FALSE
      */
     private boolean isset(JSONObject jsonObject, String paramName) throws JSONException {
+        if(!jsonObject.has(paramName)) {
+            return false;
+        }
+
         String user = jsonObject.getString(paramName);
         if(! user.equals("null") && ! user.equals("false")) {
             return true;
@@ -130,6 +141,7 @@ public class JsonToItems {
             gallery.countLikes = lastImage.getInt("likes");
             gallery.countComments = lastImage.getInt("comments");
             gallery.lastImageId = lastImage.getInt("id");
+            gallery.imgUrl = jsonObject.getString("imgUrl");
         }
 
         return gallery;
