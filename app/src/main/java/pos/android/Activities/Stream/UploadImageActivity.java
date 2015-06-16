@@ -41,7 +41,7 @@ import pos.android.Activities.Stream.exts.Config;
 
 public class UploadImageActivity extends BaseActivity {
     // LogCat tag
-    private static final String TAG = PickImageActivity.class.getSimpleName();
+    private static final String TAG = UploadImageActivity.class.getSimpleName();
 
     private ProgressBar progressBar;
     private String filePath = null;
