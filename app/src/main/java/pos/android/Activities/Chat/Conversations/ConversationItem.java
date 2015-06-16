@@ -36,7 +36,9 @@ public class ConversationItem {
         RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.conversationItemLayout);
         TVName.setText(userName);
         TVLastMessage.setText(this.lastMessage);
-        layout.setBackgroundColor(Color.RED);
+        if(!this.readed){
+            layout.setBackgroundColor(Color.parseColor("#FFBC3C3"));
+        }
         return convertView;
     }
 
