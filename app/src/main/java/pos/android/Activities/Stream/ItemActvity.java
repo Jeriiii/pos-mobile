@@ -170,6 +170,13 @@ public class ItemActvity extends BaseListActivity {
         }
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        Intent intent = new Intent(getApplicationContext(), StreamActivity.class);
+        startActivity(intent);
+    }
+
     class LoadComments extends AsyncTask<String, String, String> {
 
         /** Http kontext pro čtení dat přihlášeného uživatele. */
