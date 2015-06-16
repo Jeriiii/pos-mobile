@@ -193,23 +193,13 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
 
-
+    /**
+     * Přesměrování do galerie pro výběr obrázku
+     */
     public void onClickAddImage()
     {
-        // Create the Intent for Image Gallery.
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
         streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);
-
-        /*Intent intent= new Intent();
-        intent.setType("image*//*");
-        intent.setAction(intent.ACTION_SEND);
-        streamActivity.startActivityForResult(intent.createChooser(intent, "Select Picture"), pickImageId);
-
-        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        streamActivity.startActivityForResult(i, LOAD_IMAGE_RESULTS);*/
     }
 
     /** Zobrazí formulář na odeslání statusu. */
@@ -237,28 +227,12 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * Dočasná metoda pro nastavení výšky streamu.
+     * Pro nastavení výšky streamu.
      */
     private void setListHeight(ListView layout) {
-        //findViewById(R.id.layout_to_hide).setMinimumHeight(View.VISIBLE);
         layout = (ListView)streamActivity.findViewById(android.R.id.list);
-        // Gets the layout params that will allow you to resize the layout
         ViewGroup.LayoutParams params = layout.getLayoutParams();
-        // Changes the height and width to the specified *pixels*
         params.height = -1;
-    }
-
-    private int getTotalHeightofListView() {
-        ListView lv = (ListView)streamActivity.findViewById(android.R.id.list);
-        int listviewElementsheight = 0;
-        for (int i = 0; i < streamActivity.adapter.getCount(); i++) {
-            View mView = streamActivity.adapter.getView(i, null, lv);
-            mView.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-            listviewElementsheight += mView.getMeasuredHeight();
-        }
-        return listviewElementsheight;
     }
 
     /**
