@@ -7,10 +7,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -159,5 +161,34 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
             tabs.notifyDataSetChanged();
         }
     }
+
+    /**
+     * Vrátí fragment (kartu) obsluhující uživatele s daným id. Pokud neexisuje, vrátí null
+     * @param userId id uživatele, se kterým si píšu
+     * @return SingleConversationCardFragment|null
+     */
+    public SingleConversationCardFragment getConversationFragment(int userId){
+        Iterator<Fragment> iterator = openedObjects.listIterator();
+        while(iterator.hasNext()){
+            Fragment fragment = iterator.next();
+            if(!(fragment instanceof SingleConversationCardFragment)) continue;
+            SingleConversationCardFragment conversationFragment = (SingleConversationCardFragment) fragment;
+            if(userId == conversationFragment.getUserId()){
+                return conversationFragment;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Vrátí fragment (kartu) se seznamem konverzací
+     * @param userId
+     * @return
+     */
+    public ConversationsCardFragment getConversationsListFragment(){
+        return (ConversationsCardFragment)openedObjects.get(CONVERSATIONS_POSITION);
+    }
+
+
 }
 

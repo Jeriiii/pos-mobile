@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 
 import org.apache.http.protocol.HttpContext;
 
+import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Menus.MainMenu;
 import pos.android.Http.HttpConection;
 import pos.android.Http.PersistentCookieStore;
@@ -69,6 +70,7 @@ public class BaseListActivity extends ListActivity {
         // Must add the progress bar to the root of the layout
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
         root.addView(progressBar);
+        ChatManager.getInstance().setApplicationContext(getApplicationContext());
     }
 
     // Called when a new Loader needs to be created

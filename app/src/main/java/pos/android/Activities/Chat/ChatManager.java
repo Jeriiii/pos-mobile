@@ -1,19 +1,29 @@
 package pos.android.Activities.Chat;
 
+import android.content.Context;
 import android.os.Handler;
 import android.widget.Button;
 
+import org.apache.http.protocol.HttpContext;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Conversations.ConversationsAdapter;
-import pos.android.Activities.Chat.Noticing.INoticable;
+import pos.android.Activities.Chat.Noticing.GlobalNoticer;
+import pos.android.Activities.Chat.Noticing.INewMessageNoticable;
 import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
+import pos.android.Activities.Chat.Noticing.IUnreadedCountNoticable;
+import pos.android.Activities.Chat.ServerRequests.CheckNewMessages;
 import pos.android.Activities.Chat.ServerRequests.LoadConversations;
 import pos.android.Activities.Chat.ServerRequests.LoadOlderMessages;
 import pos.android.Activities.Chat.ServerRequests.LoadSingleConversation;
 import pos.android.Activities.Chat.ServerRequests.SendMessage;
+import pos.android.Http.HttpConection;
+import pos.android.Http.PersistentCookieStore;
+import pos.android.User.UserSessionManager;
 
 /**
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 13.6.2015.
@@ -22,6 +32,17 @@ public class ChatManager implements Runnable{
 
     public static final int NUMBER_OF_OLDER_MESSAGES_LOADED = 5;
 
+    /** minimální čas nastavitelný k opakování [ms]*/
+    private static final int MINIMUM_DELAY_TIME = 500;
+
+    /** maximální čas nastavitelný k opakování [ms]*/
+    private static final int MAXIMUM_DELAY_TIME = 120000;
+    private static final int INITIAL_DELAY_TIME = 3000;
+
+    public static int lastId = 0;
+
+    private int delayTime = INITIAL_DELAY_TIME;
+
 
     private static ChatManager ourInstance = new ChatManager();
 
@@ -29,25 +50,61 @@ public class ChatManager implements Runnable{
         return ourInstance;
     }
 
+    private Context applicationContext;
+
+    private final GlobalNoticer globalNoticer = new GlobalNoticer();
+
     private Handler handler = new Handler();
 
+    private HashMap<Integer, Integer> readedMessages = new HashMap<Integer,Integer>();
+
     private ChatManager() {
-        this.run();
+
+    }
+
+    public void setApplicationContext(Context applicationContext) {
+        this.applicationContext = applicationContext;
+        globalNoticer.setContext(applicationContext);
     }
 
     /** Objekt, do kterého se pokud je nastaven pošlou nové zprávy */
-    private INoticable activityNoticer = null;
+    private INewMessageNoticable messageNoticer = null;
 
-    public void setActivityNoticer(INoticable activityNoticer) {
-        this.activityNoticer = activityNoticer;
+
+    private IUnreadedCountNoticable unreadedNoticer = null;
+
+    public synchronized void setMessageNoticer(INewMessageNoticable messageNoticer) {
+        this.messageNoticer = messageNoticer;
+    }
+
+    public synchronized void setUnreadedNoticer(IUnreadedCountNoticable unreadedNoticer) {
+        this.unreadedNoticer = unreadedNoticer;
+    }
+
+    public int getDelayTime() {
+        return delayTime;
+    }
+
+    public void setDelayTime(int delayTime) {
+        int value;
+        value = Math.max(MINIMUM_DELAY_TIME, delayTime);
+        value = Math.min(MAXIMUM_DELAY_TIME, value);
+        this.delayTime = value;
+    }
+
+    public void incraseDelay(int by){
+        setDelayTime(getDelayTime() + by);
+    }
+
+    public void resetDelay(){
+        this.delayTime = INITIAL_DELAY_TIME;
     }
 
     /** Vlákno pro refreshování */
     @Override
     public void run() {
-        System.out.println("Running!");
         this.handleNewMessages();
-        handler.postDelayed(this, 1000);
+        handler.postDelayed(this, delayTime);
     }
 
 
@@ -84,11 +141,35 @@ public class ChatManager implements Runnable{
         new SendMessage(activity.getApplicationContext(), activity.getHttpContext(), message, adapter, activity, userId).execute();
     }
 
-    public void handleNewMessages() {
-        if(activityNoticer != null){
-            System.out.println("ChatActivity!");
-        }else{
-            System.out.println("Other activity!");
+    public synchronized void handleNewMessages() {
+        UserSessionManager session = new UserSessionManager(applicationContext, new PersistentCookieStore(applicationContext));
+        HttpContext httpContext = HttpConection.createHttpContext(applicationContext, false);
+        if(!session.isUserLoggedIn()){/* pro nepřihlášeného uživatele nedělá nic */
+            return;
         }
+        if(messageNoticer != null){
+            noticeChatActivity(httpContext);
+        }else{
+            noticeGlobally(httpContext);
+        }
+    }
+
+    private void noticeChatActivity(HttpContext httpContext) {
+        new CheckNewMessages(applicationContext, httpContext, messageNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId, readedMessages).execute();
+        readedMessages.clear();
+    }
+
+    private void noticeGlobally(HttpContext httpContext) {
+        new CheckNewMessages(applicationContext, httpContext, globalNoticer, (unreadedNoticer != null)? unreadedNoticer : globalNoticer, ChatManager.lastId, readedMessages).execute();
+        readedMessages.clear();
+    }
+
+    /**
+     * Přidá do pravidelného požadavku informaci o tom, že uživatel
+     * @param userId
+     * @param lastId
+     */
+    public void addReadedMessages(int userId, int lastId) {
+        readedMessages.put(userId, lastId);
     }
 }

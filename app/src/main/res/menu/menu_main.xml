@@ -3,17 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item android:id="@+id/action_stream"
+        android:title="@string/StreamTitle"
         android:icon="@drawable/ic_action_group"
         android:showAsAction="ifRoom"  />
 
     <item android:id="@+id/action_chat"
         android:icon="@drawable/ic_action_chat"
-        android:title="@string/title_activity_chat"
-        android:showAsAction="ifRoom"  />
+        android:title=""
+        android:showAsAction="ifRoom|withText"  />
 
-
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_logout" android:title="@string/action_logout"
           android:orderInCategory="100" app:showAsAction="never" />
 </menu>

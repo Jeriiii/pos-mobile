@@ -4,6 +4,7 @@ import pos.android.Activities.Chat.ChatSlider.*;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -11,7 +12,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import org.apache.http.protocol.HttpContext;
 
 import pos.android.Activities.BaseActivities.BaseFragmentActivity;
-import pos.android.Activities.Chat.Noticing.ChatActivityNoticer;
+import pos.android.Activities.Chat.Noticing.NewMessagesNoticer;
 import pos.android.R;
 
 public class ChatActivity extends BaseFragmentActivity {
@@ -20,7 +21,7 @@ public class ChatActivity extends BaseFragmentActivity {
 
     private PagerSlidingTabStrip tabs;
 
-    private ChatActivityNoticer noticer;
+    private NewMessagesNoticer noticer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +35,20 @@ public class ChatActivity extends BaseFragmentActivity {
         // Bind the tabs to the ViewPager
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
-        noticer = new ChatActivityNoticer();
+        //tabs.setOnPageChangeListener(new OnChatCardChangeListener(getPagerAdapter()));
+        noticer = new NewMessagesNoticer((ChatActivity)this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ChatManager.getInstance().setActivityNoticer(noticer);
+        ChatManager.getInstance().setMessageNoticer(noticer);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ChatManager.getInstance().setActivityNoticer(null);
+        ChatManager.getInstance().setMessageNoticer(null);
     }
 
 

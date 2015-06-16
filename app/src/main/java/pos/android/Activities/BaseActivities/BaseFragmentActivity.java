@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import org.apache.http.protocol.HttpContext;
 
+import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Menus.MainMenu;
 import pos.android.Http.HttpConection;
 import pos.android.Http.PersistentCookieStore;
@@ -41,6 +42,7 @@ public class BaseFragmentActivity extends FragmentActivity implements LoaderCall
 
         /* načtení httpContextu pro posílání požadavků */
         httpContext = HttpConection.createHttpContext(getApplicationContext(), false);
+        ChatManager.getInstance().setApplicationContext(getApplicationContext());
     }
 
     /**

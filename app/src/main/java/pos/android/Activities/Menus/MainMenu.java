@@ -7,6 +7,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import pos.android.Activities.Chat.ChatActivity;
+import pos.android.Activities.Chat.ChatManager;
+import pos.android.Activities.Chat.Noticing.UnreadedCountNoticer;
 import pos.android.R;
 import pos.android.Activities.Stream.StreamActivity;
 
@@ -18,6 +20,7 @@ import pos.android.Activities.Stream.StreamActivity;
  */
 public class MainMenu {
 
+    private static final int CHAT_BUTTON_MENU_POSITION = 1;
 
     /**
      * Překrývá stejnojmennou metodu dané aktivity.
@@ -29,6 +32,7 @@ public class MainMenu {
     public static boolean onCreateOptionsMenu(Activity activity, Menu menu, MenuInflater menuInflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu);
+        ChatManager.getInstance().setUnreadedNoticer(new UnreadedCountNoticer(menu.getItem(CHAT_BUTTON_MENU_POSITION)));
         return true;
     }
 

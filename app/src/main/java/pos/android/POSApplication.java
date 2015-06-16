@@ -3,6 +3,7 @@ package pos.android;
 import android.app.Application;
 
 import pos.android.Activities.Chat.ChatManager;
+import pos.android.Http.HttpConection;
 
 /**
  * Main celé aplikace
@@ -13,6 +14,7 @@ public class POSApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ChatManager.getInstance();//zavolání konstruktoru
+        ChatManager.getInstance().setApplicationContext(getApplicationContext());
+        ChatManager.getInstance().run();
     }
 }

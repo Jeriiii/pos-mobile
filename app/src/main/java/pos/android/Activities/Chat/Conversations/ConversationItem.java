@@ -15,8 +15,8 @@ public class ConversationItem {
     public static final int VIEW_ID = R.layout.chat_conversation_item;
     public String userName = "";
     public String lastMessage = "";
-    int fromId;
-    boolean readed = false;
+    public int fromId;
+    public boolean readed = false;
 
     public ConversationItem(String userName, String lastMessage, int fromId, boolean readed){
         this.userName = userName;
@@ -36,7 +36,9 @@ public class ConversationItem {
         RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.conversationItemLayout);
         TVName.setText(userName);
         TVLastMessage.setText(this.lastMessage);
-        layout.setBackgroundColor(Color.RED);
+        if(!this.readed){
+            layout.setBackgroundColor(Color.parseColor("#FFBC3C3"));
+        }
         return convertView;
     }
 
