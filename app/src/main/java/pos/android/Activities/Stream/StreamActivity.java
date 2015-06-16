@@ -15,6 +15,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 
+import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
@@ -22,6 +26,7 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +38,7 @@ import pos.android.Activities.Stream.exts.Item.ItemAdapter;
 import pos.android.Activities.Stream.exts.Item.ItemHolder;
 import pos.android.Activities.Stream.exts.Item.JsonToItems;
 import pos.android.Activities.Stream.exts.Item.LoadStream;
+import pos.android.DownloadManager.DownloadImageManager;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.Http.PersistentCookieStore;
@@ -139,9 +145,6 @@ public class StreamActivity extends BaseListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Here we need to check if the activity that was triggers was the Image Gallery.
-        // If it is the requestCode will match the LOAD_IMAGE_RESULTS value.
-        // If the resultCode is RESULT_OK and there is some data we know that an image was picked.
         if (requestCode == LOAD_IMAGE_RESULTS && resultCode == RESULT_OK && data != null) {
             // Let's read picked image data - its URI
             Uri pickedImage = data.getData();

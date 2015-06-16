@@ -36,4 +36,5 @@ dependencies {
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.github.sromku:android-simple-storage:1.0.0'
     compile "org.apache.httpcomponents:httpmime:4.2.3"
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
 }

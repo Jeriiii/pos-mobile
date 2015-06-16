@@ -44,6 +44,9 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     /** Id vybraného obrázku. */
     int pickImageId;
 
+    /** Seznam nově přidaých příspěvků */
+    ArrayList<Item> newListItems;
+
     public LoadStream(StreamActivity streamActivity, HttpContext httpContext, ArrayList<Item> listItems) {
         this.streamActivity = streamActivity;
         this.httpContext = httpContext;
@@ -74,7 +77,7 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
 
         if(json != null) {
             JsonToItems jsonToItems = new JsonToItems(listItems);
-            jsonToItems.saveItemsToList(json);
+            newListItems = jsonToItems.saveItemsToList(json);
         } else {
             return false;
         }
