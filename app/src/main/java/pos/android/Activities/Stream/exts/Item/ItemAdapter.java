@@ -2,28 +2,19 @@ package pos.android.Activities.Stream.exts.Item;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.Request;
 
 import org.apache.http.protocol.HttpContext;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import pos.android.Activities.Stream.exts.LikeOnClickListener;
-import pos.android.DownloadManager.DownloadImageManager;
 import pos.android.DownloadManager.LoadImageManager;
-import pos.android.Http.HttpConection;
 import pos.android.R;
 
 /**
@@ -37,7 +28,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
     private Context context;
 
     public ItemAdapter(Activity activity, ArrayList<Item> users) {
-        super(activity, R.layout.list_example_entry, users);
+        super(activity, R.layout.stream_list_entry, users);
         this.loadImageManager = new LoadImageManager(activity);
         this.context = activity;
     }
@@ -49,7 +40,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.list_example_entry, parent, false);
+        convertView = inflater.inflate(R.layout.stream_list_entry, parent, false);
 
         // Get the data item for this position
         Item item = getItem(position);

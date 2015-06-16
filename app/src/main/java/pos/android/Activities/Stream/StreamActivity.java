@@ -4,44 +4,21 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HttpContext;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import pos.android.Activities.BaseActivities.BaseListActivity;
-import pos.android.Activities.SignInActivity;
 import pos.android.Activities.Stream.exts.Item.Item;
 import pos.android.Activities.Stream.exts.Item.ItemAdapter;
 import pos.android.Activities.Stream.exts.Item.ItemHolder;
-import pos.android.Activities.Stream.exts.Item.JsonToItems;
 import pos.android.Activities.Stream.exts.Item.LoadStream;
-import pos.android.DownloadManager.DownloadImageManager;
-import pos.android.Http.HttpConection;
-import pos.android.Http.JSONParser;
-import pos.android.Http.PersistentCookieStore;
 import pos.android.R;
 
 
@@ -78,7 +55,7 @@ public class StreamActivity extends BaseListActivity {
         super.onCreate(savedInstanceState);
         //this.loginRouter();
 
-        setContentView(R.layout.list_example);
+        setContentView(R.layout.stream_list);
 
         streamItems = new ArrayList<Item>();
         adapter = new ItemAdapter(this, streamItems);
