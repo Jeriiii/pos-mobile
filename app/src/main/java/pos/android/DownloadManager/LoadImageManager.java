@@ -39,32 +39,30 @@ public class LoadImageManager {
     /**
      * Nastaví obrázek pro view nalezený pomoví viewId. Pokud se obrázek nalézá a disku, tak ho
      * využije. Pokud ne, tak ho nejdříve stáhne, pak ho uloží na disk a nastaví ho šabloně.
-     * @param item Data k obrázku, co se mají stáhnout.
-     * @param view View, kde se má obrázek hledat.
-     * @param viewId Id obrázku, co se má nastavit.
+     * @param imgUrl Krátká verze url k obrázku. (bez hosta a path)
+     * @param imageView Obrázek, který se má nastavit.
      */
-    public void loadImg(Item item, View view, int viewId) {
-        ImageView imageView = (ImageView) view.findViewById(viewId);
+    public void loadImg(String imgUrl, ImageView imageView) {
         StreamImageView streamImageView = new StreamImageView(imageView, activity);
 
-        if(memoryCache.isIn(item.imgUrl)) {
+        if(memoryCache.isIn(imgUrl)) {
             Log.i(TAG, "Load image from cache");
-            Bitmap bmp = memoryCache.get(item.imgUrl);
+            Bitmap bmp = memoryCache.get(imgUrl);
             streamImageView.updateImage(bmp);
         } else {
             Log.i(TAG, "Load download from web");
-            downloadImage(streamImageView, item);
+            downloadImage(streamImageView, imgUrl);
         }
     }
 
     /**
      * Stáhne obrázek z webu.
      * @param streamImageView Obrázek co se má po stáhnutí nastavit.
-     * @param item Data k obrázku, co se mají stáhnout.
+     * @param imgUrl Url k obrázku, co se má stáhnout.
      */
-    private void downloadImage(StreamImageView streamImageView, Item item) {
+    private void downloadImage(StreamImageView streamImageView, String imgUrl) {
         Request request = new Request.Builder()
-                .url(HttpConection.host + HttpConection.path + item.imgUrl)
+                .url(HttpConection.host + HttpConection.path + imgUrl)
                 .build();
 
         File cacheDirectory = new File(activity.getCacheDir(), "http");
@@ -73,7 +71,7 @@ public class LoadImageManager {
         client.setCache(cache);
 
         client.newCall(request).enqueue(new DownloadImageManager(
-                streamImageView, memoryCache, item.imgUrl
+                streamImageView, memoryCache, imgUrl
         ));
     }
 

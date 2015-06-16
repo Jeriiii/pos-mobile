@@ -112,7 +112,8 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         ImageView image = (ImageView) convertView.findViewById(viewId);
         if(item.imgUrl != null) {
             image.setVisibility(View.VISIBLE);
-            loadImageManager.loadImg(item, convertView, viewId);
+            ImageView imageView = (ImageView) convertView.findViewById(viewId);
+            loadImageManager.loadImg(item.imgUrl, imageView);
         } else {
             image.setVisibility(View.GONE);
         }
