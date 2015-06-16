@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -31,6 +32,7 @@ import pos.android.Activities.Stream.exts.Item.ItemAdapter;
 import pos.android.Activities.Stream.exts.Item.ItemHolder;
 import pos.android.Activities.Stream.exts.Comment.JsonToComments;
 import pos.android.Activities.Stream.exts.LikeOnClickListener;
+import pos.android.DownloadManager.LoadImageManager;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.R;
@@ -49,23 +51,55 @@ public class ItemActvity extends BaseListActivity {
     /** Seznam komentářů u příspěvku. */
     ArrayList<Comment> listComments;
 
+    /** Načítání obrázků */
+    LoadImageManager loadImageManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_item_actvity);
+
+        loadImageManager = new LoadImageManager(this);
+
         listComments = new ArrayList<Comment>();
         adapter = new CommentAdapter(this, listComments);
 
-        setContentView(R.layout.activity_item_actvity);
+        this.setViewData();
+        this.setComments();
+    }
 
+    /**
+     * Načte základní data pro příspěvek, tedy všechny data mimo komentářů
+     */
+    private void setViewData() {
         item = ItemHolder.getInstance().item;
 
         bar = (ProgressBar) this.findViewById(R.id.progressBar);
         ((TextView)findViewById(R.id.name)).setText(item.name);
-        ((TextView)findViewById(R.id.message)).setText(item.message);
+        TextView messageView = ((TextView) findViewById(R.id.message));
+        if(item.message != "") {
+            messageView.setText(item.message);
+        } else {
+            messageView.setVisibility(View.GONE);
+        }
+
+        ImageView image = ((ImageView) findViewById(R.id.image));
+        if(item.imgUrl != null) {
+            loadImageManager.loadImg(item.imgUrl, image);
+        } else {
+            image.setVisibility(View.GONE);
+        }
         ((TextView)findViewById(R.id.userName)).setText(item.userName);
         setLikes(item);
 
+
+    }
+
+    /**
+     * Načte komentáře k příspěvku.
+     */
+    private void setComments() {
         View addCommentBtn = findViewById(R.id.addComment);
         addCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
