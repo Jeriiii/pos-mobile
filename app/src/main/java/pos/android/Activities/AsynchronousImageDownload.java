@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import pos.android.DownloadManager.DownloadImageManager;
+import pos.android.DownloadManager.StreamImageView;
 import pos.android.R;
 
 /*created using Android Studio (Beta) 0.8.14
@@ -106,8 +107,10 @@ public class AsynchronousImageDownload extends Activity {
         }*/
         imageView = (ImageView) findViewById(R.id.imageView);
 
+        StreamImageView streamImageView = new StreamImageView(imageView, this);
+
         client.newCall(request).enqueue(new DownloadImageManager(
-                imageView, isRequestProblem, isResponseProblem, isImageDisplaying, this
+                streamImageView
         ));
     }
 

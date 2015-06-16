@@ -43,9 +43,12 @@ public class LoadImageManager {
         }*/
         ImageView imageView = (ImageView) view.findViewById(viewId);
 
+        StreamImageView streamImageView = new StreamImageView(imageView, activity);
         client.newCall(request).enqueue(new DownloadImageManager(
-                imageView, false, false, false, activity
+                streamImageView
         ));
     }
+
+
 
 }

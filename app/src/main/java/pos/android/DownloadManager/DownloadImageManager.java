@@ -31,38 +31,25 @@ import java.io.InputStream;
 import pos.android.R;
 
 /**
+ * Třída pro stáhnutí obrázku z webu
+ *
  * Created by Petr on 14.6.2015.
  */
 public class DownloadImageManager implements Callback {
 
     public static final int SUCCESSFUL_DOWNLOAD = 200;
 
-    private boolean isImageDisplaying = false;
-    private boolean isRequestProblem = false;
-    private boolean isResponseProblem = false;
-    private ImageView imageView;
-    private Activity activity;
+    private StreamImageView imageView;
     private static final String TAG = "okhttp";
 
-    public DownloadImageManager (ImageView imageView, boolean isRequestProblem, boolean isResponseProblem, boolean isImageDisplaying, Activity activity) {
+    public DownloadImageManager (StreamImageView imageView) {
         this.imageView = imageView;
-        this.isRequestProblem = isRequestProblem;
-        this.isImageDisplaying = isImageDisplaying;
-        this.isResponseProblem = isResponseProblem;
-        this.activity = activity;
     }
 
     @Override
     public void onFailure(Request request, IOException e) {
         e.printStackTrace();
-        isRequestProblem = true;
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                imageView.setImageDrawable(activity.getResources()
-                        .getDrawable(R.drawable.failed));
-            }
-        });
+        imageView.setFailedImg();
     }
 
     @Override
@@ -70,32 +57,16 @@ public class DownloadImageManager implements Callback {
         getResponseDetails(response);
 
         if (!response.isSuccessful()) {
-            isResponseProblem = true;
-            imageView.post(new Runnable() {
-                @Override
-                public void run() {
-                    imageView.setImageDrawable(activity.getResources()
-                            .getDrawable(R.drawable.response_problem));
-                }
-            });
+            imageView.setResponseProblemImg();
             throw new IOException("Unexpected code " + response);
         }
 
         if(response.code()==SUCCESSFUL_DOWNLOAD){
-            isRequestProblem = false;
-            isResponseProblem = false;
             ResponseBody in = response.body();
             InputStream inputStream = in.byteStream();
-            updateImage(BitmapFactory.decodeStream(inputStream));
+            imageView.updateImage(BitmapFactory.decodeStream(inputStream));
         } else {
-            isResponseProblem = true;
-            imageView.post(new Runnable() {
-                @Override
-                public void run() {
-                    imageView.setImageDrawable(activity.getResources()
-                            .getDrawable(R.drawable.response_problem));
-                }
-            });
+            imageView.setResponseProblemImg();
         }
     }
 
@@ -108,23 +79,5 @@ public class DownloadImageManager implements Callback {
         for (int i = 0; i < headers.size(); i++) {
             Log.i(TAG, headers.name(i) + "=" + headers.value(i));
         }
-    }
-
-    private void updateImage(final Bitmap bitmap) {
-        Log.i(TAG, "Updating image");
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                    imageView.getLayoutParams().height = bitmap.getHeight();
-                    imageView.getLayoutParams().width = bitmap.getWidth();
-                    isImageDisplaying = true;
-                } else {
-                    imageView.setImageDrawable(activity.getResources()
-                            .getDrawable(R.drawable.ic_launcher));
-                }
-            }
-        });
     }
 }
