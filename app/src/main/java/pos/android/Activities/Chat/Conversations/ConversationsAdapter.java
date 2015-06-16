@@ -25,11 +25,7 @@ public class ConversationsAdapter extends ArrayAdapter<ConversationItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         ConversationItem item = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(ConversationItem.VIEW_ID, parent, false);
-            return item.createView(convertView);
-        }
-        return convertView;
+        convertView = LayoutInflater.from(getContext()).inflate(ConversationItem.VIEW_ID, parent, false);
+        return item.createView(convertView);
     }
 }

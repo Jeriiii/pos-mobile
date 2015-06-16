@@ -25,7 +25,11 @@ public class ConversationsCardFragment extends Fragment {
 
     private static final String ARG_POSITION = "position";
 
+    private LinkedList<ConversationItem> conversations = new LinkedList<ConversationItem>();
+
     private int position;
+    private ChatActivity activity;
+    private ConversationsAdapter adapter;
 
     public static ConversationsCardFragment newInstance(int position) {
         ConversationsCardFragment fragment = new ConversationsCardFragment();
@@ -43,11 +47,10 @@ public class ConversationsCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.chat_conversations_slide, container, false);
-        ChatActivity activity = (ChatActivity) this.getActivity();
+        activity = (ChatActivity) this.getActivity();
 
         ListView list = (ListView) view.findViewById(R.id.list);
-        LinkedList<ConversationItem> conversations = new LinkedList<ConversationItem>();
-        ConversationsAdapter adapter = new ConversationsAdapter(activity, R.layout.chat_conversation_text_item, conversations);
+        adapter = new ConversationsAdapter(activity, R.layout.chat_conversation_text_item, conversations);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new ConversationClickListener((ChatActivity)this.getActivity()));
 
@@ -56,6 +59,19 @@ public class ConversationsCardFragment extends Fragment {
         ChatManager.getInstance().loadConversations(conversations, adapter, activity);
 
         return view;
+    }
+
+    public LinkedList<ConversationItem> getConversationsList() {
+        return conversations;
+    }
+
+    public void notifyAdapter(){
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetInvalidated();
+            }
+        });
     }
 
 }

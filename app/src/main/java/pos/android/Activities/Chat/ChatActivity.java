@@ -34,7 +34,7 @@ public class ChatActivity extends BaseFragmentActivity {
         // Bind the tabs to the ViewPager
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
-        noticer = new NewMessagesNoticer();
+        noticer = new NewMessagesNoticer((ChatActivity)this);
     }
 
     @Override

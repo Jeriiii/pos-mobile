@@ -15,8 +15,8 @@ public class ConversationItem {
     public static final int VIEW_ID = R.layout.chat_conversation_item;
     public String userName = "";
     public String lastMessage = "";
-    int fromId;
-    boolean readed = false;
+    public int fromId;
+    public boolean readed = false;
 
     public ConversationItem(String userName, String lastMessage, int fromId, boolean readed){
         this.userName = userName;

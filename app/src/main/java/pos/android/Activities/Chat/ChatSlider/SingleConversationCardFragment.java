@@ -111,7 +111,7 @@ public class SingleConversationCardFragment extends Fragment {
         });
     }
 
-    private void notifyAdapter() {
+    public void notifyAdapter() {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -133,6 +133,14 @@ public class SingleConversationCardFragment extends Fragment {
 
     public int getPosition(){
         return position;
+    }
+
+    public int getUserId(){
+        return Integer.parseInt(userId);
+    }
+
+    public LinkedList<MessageItem> getMessages(){
+        return messages;
     }
 
 
