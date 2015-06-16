@@ -5,7 +5,6 @@
 
     <style name="Theme.Postheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
 
-
     </style>
 
     <style name="ActionBar.Solid.Postheme" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
@@ -14,12 +13,14 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_postheme</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_postheme</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Postheme</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="ActionBar.Transparent.Postheme" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:logo">@android:color/transparent</item>
         <item name="android:background">@drawable/ab_transparent_postheme</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Postheme</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="PopupMenu.Postheme" parent="@android:style/Widget.Holo.ListPopupWindow">
@@ -29,7 +30,6 @@
 
     <style name="DropDownListView.Postheme" parent="@android:style/Widget.Holo.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_postheme</item>
-        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="ActionBarTabStyle.Postheme" parent="@android:style/Widget.Holo.ActionBar.TabView">
@@ -40,7 +40,6 @@
         <item name="android:background">@drawable/spinner_background_ab_postheme</item>
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_postheme</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_postheme</item>
-        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="ProgressBar.Postheme" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">

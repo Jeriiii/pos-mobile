@@ -4,7 +4,7 @@
 
     <item android:id="@+id/action_stream"
         android:title="@string/StreamTitle"
-        android:icon="@drawable/ic_action_group"
+        android:icon="@drawable/ic_action_stream"
         android:showAsAction="ifRoom"  />
 
     <item android:id="@+id/action_chat"
