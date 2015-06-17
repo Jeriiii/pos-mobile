@@ -55,9 +55,9 @@ public class ConversationsCardFragment extends Fragment {
         list.setOnItemClickListener(new ConversationClickListener((ChatActivity)this.getActivity()));
 
         position = getArguments().getInt(ARG_POSITION);
-
-        ChatManager.getInstance().loadConversations(conversations, adapter, activity);
-
+        if(conversations.isEmpty()) {
+            ChatManager.getInstance().loadConversations(conversations, adapter, activity);
+        }
         return view;
     }
 

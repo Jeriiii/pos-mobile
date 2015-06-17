@@ -34,7 +34,6 @@ import pos.android.R;
  */
 public class SingleConversationCardFragment extends Fragment {
 
-    private static final String ARG_POSITION = "position";
     private static final String ARG_USER_ID_POSITION = "userId";
 
     private int position;
@@ -55,8 +54,7 @@ public class SingleConversationCardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        position = getArguments().getInt(ARG_POSITION);
+        Log.i("CREATEUSERID", userId +"");
     }
 
     @Override
@@ -67,10 +65,9 @@ public class SingleConversationCardFragment extends Fragment {
         ListView list = (ListView) view.findViewById(R.id.list);
         adapter = new MessagesAdapter(activity, R.layout.chat_message_text_item, messages);
         list.setAdapter(adapter);
-        position = getArguments().getInt(ARG_POSITION);
         userId = getArguments().getInt(ARG_USER_ID_POSITION);
         addButtonClickListeners(view, activity);
-        Log.i("USERID", userId +"");
+        Log.i("VIEWUSERID", userId +"");
         ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId + "");
         return view;
     }
