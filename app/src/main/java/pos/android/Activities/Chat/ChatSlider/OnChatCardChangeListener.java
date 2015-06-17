@@ -26,17 +26,16 @@ public class OnChatCardChangeListener implements ViewPager.OnPageChangeListener 
 
     @Override
     public void onPageSelected(int position) {
-        Fragment item = pagerAdapter.getItem(position);
-        if(item != null && item instanceof SingleConversationCardFragment){
-            SingleConversationCardFragment convItem = (SingleConversationCardFragment) item;
-            int userId = convItem.getUserId();
+        SingleConversationCardFragment item = pagerAdapter.getConversationFragmentOnPosition(position);
+        if(item != null){
+            int userId = item.getUserId();
             if(userId != -1) {/* pokud je id už nastaveno*/
-                try{
-                    int lastMessageId = convItem.getMessages().getLast().messageId;
+               try{
+                    int lastMessageId = item.getMessages().getLast().messageId;
                     ChatManager.getInstance().addReadedMessages(userId, lastMessageId);
                 }catch(NoSuchElementException e){
                     /* když je seznam prázdný, nedělá nic */
-                }
+               }
             }
         }
     }

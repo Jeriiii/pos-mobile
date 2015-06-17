@@ -187,6 +187,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @return SingleConversationCardFragment|null
      */
     public SingleConversationCardFragment getConversationFragmentOnPosition(int position){
+        if(position < COUNT_OF_STATIC_TABS)return null;
         return openedObjects.get(openedIds.get(position - COUNT_OF_STATIC_TABS));
     }
 

@@ -138,6 +138,9 @@ public class ChatManager implements Runnable{
     public void sendMessage(LinkedList<MessageItem> messages, MessagesAdapter adapter, ChatActivity activity, String userId, String text) {
         MessageItem message = new MessageItem("", text, -1, MessageItem.MessageType.TEXT, true, true, "");
         messages.addLast(message);
+        if(messageNoticer != null){
+            messageNoticer.updateConversationsList(Integer.parseInt(userId), "", message);
+        }
         new SendMessage(activity.getApplicationContext(), activity.getHttpContext(), message, adapter, activity, userId).execute();
     }
 

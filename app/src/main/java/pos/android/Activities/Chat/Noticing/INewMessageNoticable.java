@@ -18,4 +18,12 @@ public interface INewMessageNoticable {
      * @param messages zprávy
      */
     void incommingMessageFromUser(String senderKey, String userName, List<MessageItem> messages);
+
+    /**
+     * Přidá informaci o nové zprávě do seznamu konverzací
+     * @param senderId
+     * @param userName
+     * @param messageItem
+     */
+    public void updateConversationsList(int senderId, String userName, MessageItem messageItem);
 }
