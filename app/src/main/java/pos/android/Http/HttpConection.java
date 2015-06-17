@@ -31,6 +31,8 @@ import java.util.List;
 
 
 /**
+ * Práce se serverem pomocí request - response.
+ *
  * Created by Petr on 27.4.2015.
  */
 public class HttpConection {
@@ -49,24 +51,19 @@ public class HttpConection {
         if(clear) {
             cookieStore.clear();
         }
-
-        //CookieStore cookieStore = new BasicCookieStore();
-
-        //cookieStore.clear();
         httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 
         return httpContext;
     }
 
-    /*public HttpResponse makeHttpRequest(String url, String method,
-                                        List<NameValuePair> params) {
-
-        HttpContext httpContext = this.createHttpContext();
-
-        return this.makeHttpRequest(url, method, params, httpContext);
-    }*/
-
-    // by making HTTP POST or GET mehtod
+    /**
+     * Provede http request
+     * @param url Url, kam se má poslat.
+     * @param method Metoda GET nebo POST
+     * @param params Parametry requestu.
+     * @param httpContext Kontext se kterým má request pracovat.
+     * @return Odpověď serveru.
+     */
     public HttpResponse makeHttpRequest(String url, String method,
                                       List<NameValuePair> params, HttpContext httpContext) {
 

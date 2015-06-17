@@ -11,6 +11,9 @@ import pos.android.Activities.SignInActivity;
 import pos.android.Http.PersistentCookieStore;
 
 /**
+ * Zdroj http://androidexample.com/Android_Session_Management_Using_SharedPreferences_-_Android_Example/index.php?view=article_discription&aid=127&aaid=147
+ * Ponechány původní komentáře, komentovány pouze změny.
+ *
  * Created by Petr on 11.5.2015.
  */
 public class UserSessionManager {
@@ -39,6 +42,7 @@ public class UserSessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
+    // password (make variable public to access from outside)
     public static final String KEY_PASS = "pass";
 
 
@@ -52,14 +56,6 @@ public class UserSessionManager {
         this.cookieStore = cookieStore;
     }
 
-    /**
-     * Vrátí aktuálně používanou cookieStore přihlášeným uživatelem.
-     * @return Aktuální cookieStore používaná přihlášeným uživatelem.
-     */
-    public PersistentCookieStore getCookieStore() {
-        return cookieStore;
-    }
-
     //Create login session
     public void createUserLoginSession(String name, String email, String pass){
         // Storing login value as TRUE
@@ -71,7 +67,7 @@ public class UserSessionManager {
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
 
-        // Storing email in pref
+        // Storing pass in pref
         editor.putString(KEY_PASS, Coder.encode(pass));
 
         // commit changes
@@ -117,10 +113,10 @@ public class UserSessionManager {
         // user name
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
 
-        // user email id
+        // user email
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
 
-        // user email id
+        // user pass
         user.put(KEY_PASS, pref.getString(KEY_PASS, null));
 
         // return user

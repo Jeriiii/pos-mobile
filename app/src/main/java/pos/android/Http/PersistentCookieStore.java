@@ -24,26 +24,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
-import android.util.Log;
-
-import org.apache.http.client.CookieStore;
-import org.apache.http.cookie.Cookie;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
+ * Zdroj https://github.com/loopj/android-async-http/blob/master/library/src/main/java/com/loopj/android/http/PersistentCookieStore.java
+ * ponechány původní komentáře.
+ *
  * A persistent cookie store which implements the Apache HttpClient {@link org.apache.http.client.CookieStore} interface.
  * Cookies are stored and will persist on the user's device between application sessions since they
  * are serialized and stored in {@link android.content.SharedPreferences}. <p>&nbsp;</p> Instances of this class are
