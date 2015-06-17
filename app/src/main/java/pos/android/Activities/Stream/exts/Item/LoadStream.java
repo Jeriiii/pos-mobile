@@ -27,8 +27,7 @@ import java.util.Locale;
 
 import pos.android.Activities.SignInActivity;
 import pos.android.Activities.Stream.StreamActivity;
-import pos.android.Activities.Stream.exts.Comment.Comment;
-import pos.android.Activities.Stream.exts.Config;
+import pos.android.Config.Config;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.Http.PersistentCookieStore;
