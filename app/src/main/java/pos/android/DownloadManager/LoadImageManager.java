@@ -17,14 +17,18 @@ import pos.android.Http.HttpConection;
 import pos.android.R;
 
 /**
+ * Třída pro načítání obrázku z cache. Pokud není obrázek v cache, načte se z webu a uloží se do cache.
+ *
  * Created by Petr on 15.6.2015.
  */
 public class LoadImageManager {
-
+    /** Tag pro logy. */
     private static final String TAG = "imageLoader";
 
+    /** Client pro stažení obrázku. */
     private OkHttpClient client;
 
+    /** Aktivita, která používá manager */
     private Activity activity;
 
     /** Slouží pro ukládání obrázků na disk */

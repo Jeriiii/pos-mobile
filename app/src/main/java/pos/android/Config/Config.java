@@ -1,6 +1,7 @@
 package pos.android.Config;
 
 /**
+ * Konfigurační soubor aplikace.
  * Created by Petr on 3.6.2015.
  */
 public class Config {
@@ -21,9 +22,11 @@ public class Config {
     public static final String sig_sign_in = "/in?do=signInForm-submit";
 
     /********************** rendery ******************************/
+    // render streamu v json
     public static final String ren_stream_json = "/stream-in-json";
 
     /************************ složky **********************************/
+    // temp složka pro obrázky
     public static final String IMAGE_DIRECTORY_NAME = "Android File Upload";
 
     /************************ pro upload obrázků **********************/

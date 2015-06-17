@@ -2,7 +2,9 @@ package pos.android.DownloadManager;
 
 /**
  * Created by Petr on 16.6.2015.
- * Slouží pro cachování obrázků
+ * Slouží pro cachování obrázků.
+ * Zdroj http://www.technotalkative.com/android-load-images-from-web-and-caching/
+ * Změny jsou komentovány.
  */
 import java.util.Collections;
 import java.util.Iterator;
@@ -46,7 +48,7 @@ public class MemoryCache {
     /**
      * Zkontroluje, zda se obrázek nachází v cache.
      * @param id ID obrázku.
-     * @return
+     * @return TRUE = obrázek je v cache, jinak FALSE.
      */
     public boolean isIn(String id) {
         if(cache.containsKey(id)) {

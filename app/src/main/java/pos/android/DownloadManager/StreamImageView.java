@@ -10,10 +10,12 @@ import android.widget.ImageView;
 import pos.android.R;
 
 /**
+ * Objekt, který dokáže nastavit ImageView bitmapu.
+ *
  * Created by Petr on 16.6.2015.
  */
 public class StreamImageView {
-
+    /** Tag pro logování */
     private static final String TAG = "okhttp";
 
     /** obrázek, co se má nastavit */
@@ -28,6 +30,7 @@ public class StreamImageView {
     /** problém s response */
     private Drawable resProblemImg;
 
+    /* proměnné se stavem obrázku */
     public boolean isImageDisplaying = false;
     public boolean isRequestProblem = false;
     public boolean isResponseProblem = false;
@@ -43,7 +46,7 @@ public class StreamImageView {
 
     /**
      * Nahraje k obrázku bitmapu.
-     * @param bitmap
+     * @param bitmap Bitmapa obrázku.
      */
     public void updateImage(final Bitmap bitmap) {
         isRequestProblem = false;

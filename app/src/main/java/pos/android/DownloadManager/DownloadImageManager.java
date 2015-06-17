@@ -36,11 +36,12 @@ import pos.android.R;
  * Created by Petr on 14.6.2015.
  */
 public class DownloadImageManager implements Callback {
-
+    /** Kód úspěšného stažení. */
     public static final int SUCCESSFUL_DOWNLOAD = 200;
 
     /** Obrázek v šabloně, který se má nastavit. */
     private StreamImageView imageView;
+    /** Tag pro logy. */
     private static final String TAG = "okhttp";
 
     /** Cache, do které se má obrázek uložit po svém stažení. */
@@ -55,12 +56,20 @@ public class DownloadImageManager implements Callback {
         this.imgId = imgId;
     }
 
+    /**
+     * Pokud dotaz selže.
+     */
     @Override
     public void onFailure(Request request, IOException e) {
         e.printStackTrace();
         imageView.setFailedImg();
     }
 
+    /**
+     * Pokud byl obrázek úspěšně stáhnut, uloží se na disk.
+     * @param response Odpověď serveru.
+     * @throws IOException
+     */
     @Override
     public void onResponse(Response response) throws IOException {
         getResponseDetails(response);
@@ -81,6 +90,10 @@ public class DownloadImageManager implements Callback {
         }
     }
 
+    /**
+     * Zalogování odpovědi serveru.
+     * @param response Odpověď serveru.
+     */
     private void getResponseDetails(Response response) {
         Headers headers = response.headers();
         Log.i(TAG, "Response code: " + String.valueOf(response.code()));
