@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -25,21 +24,15 @@ import java.util.Map;
 public class ChatPagerAdapter extends FragmentStatePagerAdapter {
 
     public static final int COUNT_OF_STATIC_TABS = 1;
-
-
     private static final int CONVERSATIONS_POSITION = 0;
     private static final String CONVERSATIONS_HEADER = "Konverzace";
-    private ConversationsCardFragment conversationsCardFragment = ConversationsCardFragment.newInstance(CONVERSATIONS_POSITION);
 
     /* všechny headery karet*/
     private LinkedList<String> conversationsUsernames = new LinkedList<String>();
-    /* zdrcadlící kolekce k headerům s id uživatelů, se kterými mám otevřenou kartu s konverzací
-    * !!! pozice zde != pozice mezi kartami (toto jsou pouze dynamické karty, abychom získali skutečnou pozici, musíme přičíst počet statických tabů)*/
+    /* zdrcadlící kolekce k headerům s id uživatelů, se kterými mám otevřenou kartu s konverzací*/
     private LinkedList<Integer> openedIds = new LinkedList<Integer>();
 
-    /* kolekce otevřených DYNAMICKÝCH objektů. Obsahuje id uživatele a objekt k němu příslušící.
-    * !!! pozice zde != pozice mezi kartami (toto jsou pouze dynamické karty, abychom získali skutečnou pozici, musíme přičíst počet statických tabů)*/
-    private HashMap<Integer, SingleConversationCardFragment> openedObjects = new HashMap<Integer, SingleConversationCardFragment>();
+    private HashMap<Integer, Fragment> openedObjects = new HashMap<Integer, Fragment>();
 
     public ChatPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -51,8 +44,9 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
             case CONVERSATIONS_POSITION:
                 return CONVERSATIONS_HEADER;
             default:
-                return conversationsUsernames.get(position - COUNT_OF_STATIC_TABS) + "";
+                return openedIds.get(position - COUNT_OF_STATIC_TABS) + "";
         }
+
     }
 
     @Override
@@ -62,15 +56,17 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Fragment item;
         switch (position){
             case CONVERSATIONS_POSITION:
-                return conversationsCardFragment;
+                item = ConversationsCardFragment.newInstance(position);
+                break;
             default:
-                Log.i("CREATING ID", openedIds.get(position - COUNT_OF_STATIC_TABS) + " on position" + position);
-                SingleConversationCardFragment f = openedObjects.get(openedIds.get(position - COUNT_OF_STATIC_TABS));
-                f.setPosition(position);
-                return f;
+                item = SingleConversationCardFragment.newInstance(position, openedIds.get(position - COUNT_OF_STATIC_TABS) + "");
+                break;
         }
+        openedObjects.put(position, item);
+        return item;
     }
 
     /* překryto kvůli mazání */
@@ -78,7 +74,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
     public int getItemPosition(Object object) {
         if(object instanceof ConversationsCardFragment) return CONVERSATIONS_POSITION;
         SingleConversationCardFragment fragment = (SingleConversationCardFragment) object;
-        return openedObjects.containsValue((Integer) fragment.getUserId())? POSITION_UNCHANGED : POSITION_NONE;
+        return openedIds.contains((Integer) fragment.getUserId())? POSITION_UNCHANGED : POSITION_NONE;
     }
 
     /**
@@ -104,8 +100,6 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
     public void addConversationCard(int fromId, String fromName, PagerSlidingTabStrip tabs){
         conversationsUsernames.addFirst(fromName);
         openedIds.addFirst(fromId);
-        openedObjects.put(fromId, SingleConversationCardFragment.newInstance(fromId));
-        Log.i("ADDING CARD", fromId + "");
         refreshCards(tabs);
     }
 
@@ -128,9 +122,8 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      */
     public void removeCard(int position, ViewPager pager, PagerSlidingTabStrip tabs){
         conversationsUsernames.remove(position);
-        int userId = openedIds.get(position);
         openedIds.remove(position);
-        openedObjects.remove(userId);
+        openedObjects.remove(position + COUNT_OF_STATIC_TABS);
         refreshCards(tabs);
         switchToCard(position + COUNT_OF_STATIC_TABS - 1, pager, tabs);
     }
@@ -179,8 +172,10 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @return SingleConversationCardFragment|null
      */
     public SingleConversationCardFragment getConversationFragment(int userId){
-        for(Map.Entry<Integer, SingleConversationCardFragment> entry : openedObjects.entrySet()){
-            SingleConversationCardFragment conversationFragment = entry.getValue();
+        for(Map.Entry<Integer, Fragment> entry : openedObjects.entrySet()){
+            Fragment fragment = entry.getValue();
+            if(!(fragment instanceof SingleConversationCardFragment)) continue;
+            SingleConversationCardFragment conversationFragment = (SingleConversationCardFragment) fragment;
             if(userId == conversationFragment.getUserId()){
                 return conversationFragment;
             }
@@ -193,7 +188,7 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @return
      */
     public ConversationsCardFragment getConversationsListFragment(){
-        return conversationsCardFragment;
+        return (ConversationsCardFragment)openedObjects.get(CONVERSATIONS_POSITION);
     }
 
 
