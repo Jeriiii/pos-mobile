@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -68,7 +67,6 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
                 return conversationsCardFragment;
             default:
                 int userId = openedIds.get(position - COUNT_OF_STATIC_TABS);
-                Log.i("getItem with user ID", userId + " on position" + position);
                 SingleConversationCardFragment item = SingleConversationCardFragment.newInstance(userId);
                 item.setPosition(position);
                 openedObjects.put(userId, item);
@@ -180,13 +178,16 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
      * @return SingleConversationCardFragment|null
      */
     public SingleConversationCardFragment getConversationFragment(int userId){
-        for(Map.Entry<Integer, SingleConversationCardFragment> entry : openedObjects.entrySet()){
-            SingleConversationCardFragment conversationFragment = entry.getValue();
-            if(userId == conversationFragment.getUserId()){
-                return conversationFragment;
-            }
-        }
-        return null;
+        return openedObjects.get(userId);
+    }
+
+    /**
+     * Vrátí dynamický fragment (kartu) na dané pozici (vzhledem ke všem kartám včetně statických). Pokud neexisuje, vrátí null
+     * @param position pozice mezi kartami
+     * @return SingleConversationCardFragment|null
+     */
+    public SingleConversationCardFragment getConversationFragmentOnPosition(int position){
+        return openedObjects.get(openedIds.get(position - COUNT_OF_STATIC_TABS));
     }
 
     /**

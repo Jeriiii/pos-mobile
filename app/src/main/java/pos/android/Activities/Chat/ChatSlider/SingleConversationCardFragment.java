@@ -2,7 +2,6 @@ package pos.android.Activities.Chat.ChatSlider;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +53,7 @@ public class SingleConversationCardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("CREATEUSERID", userId +"");
+        userId = getArguments().getInt(ARG_USER_ID_POSITION);
     }
 
     @Override
@@ -67,7 +66,6 @@ public class SingleConversationCardFragment extends Fragment {
         list.setAdapter(adapter);
         userId = getArguments().getInt(ARG_USER_ID_POSITION);
         addButtonClickListeners(view, activity);
-        Log.i("VIEWUSERID", userId +"");
         ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId + "");
         return view;
     }
