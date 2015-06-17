@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import pos.android.Activities.Stream.exts.Comment.Comment;
 
 /**
- * Created by Petr on 22.5.2015.
  * Převádí komentáře u příspěvku z formátu Json do ArrayList
+ * Created by Petr on 22.5.2015.
  */
 public class JsonToComments {
 
@@ -29,17 +29,15 @@ public class JsonToComments {
 
     /**
      * Uloží příspěvky.
+     * @param jsonItems Komentáře ve formátu JSON
      */
     public void saveToList(JSONObject jsonItems) {
         JSONObject c;
         int i;
 
         try {
-            // products found
-            // Getting Array of Products
             items = jsonItems.getJSONArray(TAG_STREAM_ITEMS);
 
-            // looping through All Products
             for (i = 0; i < items.length(); i++) {
 
                 c = items.getJSONObject(i);
@@ -52,6 +50,12 @@ public class JsonToComments {
         }
     }
 
+    /**
+     * Vrátí komentář s daty poslané v JSONu
+     * @param jsonObject JSON s daty komentáře.
+     * @return Kometář.
+     * @throws JSONException
+     */
     private Comment getItem(JSONObject jsonObject) throws JSONException{
 
         Comment comment = new Comment();
