@@ -54,6 +54,9 @@ public class ItemActvity extends BaseListActivity {
     /** Načítání obrázků */
     LoadImageManager loadImageManager;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,13 +115,18 @@ public class ItemActvity extends BaseListActivity {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_item_actvity, menu);
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -136,7 +144,7 @@ public class ItemActvity extends BaseListActivity {
 
     /**
      * Nastaví počet liků.
-     * @param item
+     * @param item Příspěvek, u kterého se mají nastavit liky.
      */
     private void setLikes(Item item) {
         String text = "Líbí";
@@ -149,7 +157,7 @@ public class ItemActvity extends BaseListActivity {
     }
 
     /**
-     * Přidá komentář.
+     * Přidá komentář - odeslání formuláře.
      */
     public void addComment() {
         EditText et = (EditText)findViewById(R.id.comment_msg);
@@ -170,6 +178,9 @@ public class ItemActvity extends BaseListActivity {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void finish() {
         super.finish();
@@ -177,6 +188,9 @@ public class ItemActvity extends BaseListActivity {
         startActivity(intent);
     }
 
+    /**
+     * Třída sloužící pro asynchroní načtení komentářů.
+     */
     class LoadComments extends AsyncTask<String, String, String> {
 
         /** Http kontext pro čtení dat přihlášeného uživatele. */
@@ -195,8 +209,8 @@ public class ItemActvity extends BaseListActivity {
         }
 
         /**
-         * Before starting background thread Show Progress Dialog
-         * */
+         * {@inheritDoc}
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -204,8 +218,8 @@ public class ItemActvity extends BaseListActivity {
         }
 
         /**
-         * getting All products from url
-         * */
+         * Poslání požadavku na komentáře.
+         */
         protected String doInBackground(String... args) {
             String url = getUrl();
             List<NameValuePair> urlParams = getParams();
@@ -226,10 +240,9 @@ public class ItemActvity extends BaseListActivity {
         }
 
 
-
         /**
-         * After completing background task Dismiss the progress dialog
-         * **/
+         * Nastavení komentářů, zneviditelnění progress baru.
+         */
         protected void onPostExecute(String file_url) {
             setListAdapter(adapter);
 
@@ -239,7 +252,6 @@ public class ItemActvity extends BaseListActivity {
 
         /**
          * Vrátí správně url.
-         * @return
          */
         private String getUrl() {
             String url = HttpConection.host + HttpConection.path + "/http-one-page/";
@@ -259,7 +271,6 @@ public class ItemActvity extends BaseListActivity {
 
         /**
          * Vrátí správně nastavení parametry url.
-         * @return
          */
         private List<NameValuePair> getParams() {
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
@@ -278,19 +289,20 @@ public class ItemActvity extends BaseListActivity {
     }
 
     /**
-     * Odešle komentář.
+     * Asynchroně odešle komentář na server.
      */
     class SendComment extends AsyncTask<String, String, String> {
 
-        /**
-         * Komentář co se má odeslat na server.
-         */
+        /** Komentář co se má odeslat na server. */
         private Comment newComment;
 
         public SendComment(Comment newComment) {
             this.newComment = newComment;
         }
 
+        /**
+         * Odešle koentář na server.
+         */
         @Override
         protected String doInBackground(String... params) {
             String url = HttpConection.host + HttpConection.path + "/http-one-page/";
@@ -304,7 +316,6 @@ public class ItemActvity extends BaseListActivity {
 
         /**
          * Vrátí správně nastavení parametry url.
-         * @return
          */
         private List<NameValuePair> getParams() {
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
