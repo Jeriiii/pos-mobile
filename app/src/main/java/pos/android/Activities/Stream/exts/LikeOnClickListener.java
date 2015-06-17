@@ -32,6 +32,9 @@ public class LikeOnClickListener implements View.OnClickListener {
         this.httpContext = httpContext;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onClick(View v) {
         item.countLikes++;
@@ -45,18 +48,21 @@ public class LikeOnClickListener implements View.OnClickListener {
     }
 
 
-
+    /**
+     * Asynchroní událost - poslání like komentáře na server.
+     */
     class LikeItem extends AsyncTask<String, String, String> {
 
-        /**
-         * Http kontext pro čtení dat přihlášeného uživatele.
-         */
+        /** Http kontext pro čtení dat přihlášeného uživatele. */
         private HttpContext httpContext;
 
         public LikeItem(HttpContext httpContext) {
             this.httpContext = httpContext;
         }
 
+        /**
+         * Odešle na server zprávu o liknutí příspěvku.
+         */
         @Override
         protected String doInBackground(String... params) {
             String url = HttpConection.host + HttpConection.path + "/http-one-page/";
@@ -69,8 +75,7 @@ public class LikeOnClickListener implements View.OnClickListener {
         }
 
         /**
-         * Nastaví parametry do URL
-         * @return urlParams
+         * Vrátí správné parametry do URL
          */
         private List<NameValuePair> getParams() {
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
