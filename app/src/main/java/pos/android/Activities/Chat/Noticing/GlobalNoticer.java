@@ -27,6 +27,11 @@ public class GlobalNoticer implements INewMessageNoticable, IUnreadedCountNotica
     }
 
     @Override
+    public void updateConversationsList(int senderId, String userName, MessageItem messageItem) {
+        
+    }
+
+    @Override
     public void onUnreadedCountIncomming(int unreadedCount) {
         //nedělá nic
     }

@@ -3,7 +3,10 @@ package pos.android.Activities.Chat.ChatSlider;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import java.util.NoSuchElementException;
+
 import pos.android.Activities.Chat.ChatManager;
+import pos.android.Activities.Chat.Messages.MessageItem;
 
 /**
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 16.6.2015.
@@ -23,12 +26,16 @@ public class OnChatCardChangeListener implements ViewPager.OnPageChangeListener 
 
     @Override
     public void onPageSelected(int position) {
-        Fragment item = pagerAdapter.getItem(position);
-        if(item != null && item instanceof SingleConversationCardFragment){
-            SingleConversationCardFragment convItem = (SingleConversationCardFragment) item;
-            int userId = convItem.getUserId();
+        SingleConversationCardFragment item = pagerAdapter.getConversationFragmentOnPosition(position);
+        if(item != null){
+            int userId = item.getUserId();
             if(userId != -1) {/* pokud je id už nastaveno*/
-                ChatManager.getInstance().addReadedMessages(userId, convItem.getMessages().getLast().messageId);
+               try{
+                    int lastMessageId = item.getMessages().getLast().messageId;
+                    ChatManager.getInstance().addReadedMessages(userId, lastMessageId);
+                }catch(NoSuchElementException e){
+                    /* když je seznam prázdný, nedělá nic */
+               }
             }
         }
     }

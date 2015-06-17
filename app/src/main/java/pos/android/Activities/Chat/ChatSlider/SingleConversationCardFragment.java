@@ -33,21 +33,19 @@ import pos.android.R;
  */
 public class SingleConversationCardFragment extends Fragment {
 
-    private static final String ARG_POSITION = "position";
     private static final String ARG_USER_ID_POSITION = "userId";
 
     private int position;
-    private String userId;
+    private int userId;
 
     private LinkedList<MessageItem> messages = new LinkedList<MessageItem>();
     private MessagesAdapter adapter;
     private ChatActivity activity;
 
-    public static SingleConversationCardFragment newInstance(int position, String userId) {
+    public static SingleConversationCardFragment newInstance(int userId) {
         SingleConversationCardFragment f = new SingleConversationCardFragment();
         Bundle b = new Bundle();
-        b.putInt(ARG_POSITION, position);
-        b.putString(ARG_USER_ID_POSITION, userId);
+        b.putInt(ARG_USER_ID_POSITION, userId);
         f.setArguments(b);
         return f;
     }
@@ -55,9 +53,7 @@ public class SingleConversationCardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        position = getArguments().getInt(ARG_POSITION);
-        userId = getArguments().getString(ARG_USER_ID_POSITION);
+        userId = getArguments().getInt(ARG_USER_ID_POSITION);
     }
 
     @Override
@@ -68,11 +64,18 @@ public class SingleConversationCardFragment extends Fragment {
         ListView list = (ListView) view.findViewById(R.id.list);
         adapter = new MessagesAdapter(activity, R.layout.chat_message_text_item, messages);
         list.setAdapter(adapter);
-        position = getArguments().getInt(ARG_POSITION);
-
+        userId = getArguments().getInt(ARG_USER_ID_POSITION);
         addButtonClickListeners(view, activity);
-        ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId);
+        ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId + "");
         return view;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getUserId(){
+        return userId;
     }
 
     private void addButtonClickListeners(ViewGroup view, final ChatActivity activity) {
@@ -89,7 +92,7 @@ public class SingleConversationCardFragment extends Fragment {
         moreMessagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatManager.getInstance().loadOlderMessages(messages, adapter, activity, userId, moreMessagesButton);
+                ChatManager.getInstance().loadOlderMessages(messages, adapter, activity, userId + "", moreMessagesButton);
                 notifyAdapter();
             }
         });
@@ -126,7 +129,7 @@ public class SingleConversationCardFragment extends Fragment {
             return false;
         }
         textInput.setText("");
-        ChatManager.getInstance().sendMessage(messages, adapter, activity, userId, text);
+        ChatManager.getInstance().sendMessage(messages, adapter, activity, userId + "", text);
         notifyAdapter();
         return true;
     }
@@ -135,13 +138,6 @@ public class SingleConversationCardFragment extends Fragment {
         return position;
     }
 
-    public int getUserId(){
-        try {
-            return Integer.parseInt(userId);
-        }catch(NumberFormatException e){
-            return -1;
-        }
-    }
 
     public LinkedList<MessageItem> getMessages(){
         return messages;

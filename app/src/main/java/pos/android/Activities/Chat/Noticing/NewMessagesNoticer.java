@@ -38,7 +38,7 @@ public class NewMessagesNoticer implements INewMessageNoticable {
         card.notifyAdapter();
     }
 
-    private void updateConversationsList(int senderId, String userName, MessageItem messageItem) {
+    public void updateConversationsList(int senderId, String userName, MessageItem messageItem) {
         ConversationsCardFragment conversationsFragment = adapter.getConversationsListFragment();
         LinkedList<ConversationItem> conversations = conversationsFragment.getConversationsList();
         ConversationItem targetItem = null;
@@ -52,7 +52,6 @@ public class NewMessagesNoticer implements INewMessageNoticable {
             targetItem = new ConversationItem(userName, messageItem.messageText, senderId, false);
             conversations.addFirst(targetItem);
         }else{
-            targetItem.userName = userName;
             targetItem.lastMessage = messageItem.messageText;
             targetItem.readed = false;
         }
