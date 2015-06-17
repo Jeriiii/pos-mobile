@@ -36,6 +36,11 @@ import pos.android.Config.Config;
         import pos.android.Http.HttpConection;
         import pos.android.R;
 
+/**
+ * Aktivita pro upload obrázku na server. Zdroj
+ * http://www.androidhive.info/2014/12/android-uploading-camera-image-video-to-server-with-progress-bar/
+ * Ponechán původní kód a komentáře, dokomentovány jsou pouze změny.
+ */
 public class UploadImageActivity extends BaseActivity {
     // LogCat tag
     private static final String TAG = UploadImageActivity.class.getSimpleName();
@@ -170,8 +175,6 @@ public class UploadImageActivity extends BaseActivity {
                 entity.addPart("image", new FileBody(sourceFile));
 
                 // Extra parameters if you want to pass to server
-                /*entity.addPart("website",
-                        new StringBody("www.androidhive.info"));*/
                 entity.addPart("email", new StringBody("abc@gmail.com"));
 
                 totalSize = entity.getContentLength();
