@@ -19,5 +19,5 @@ public class Config {
     public static final String sig_sign_in = "/in?do=signInForm-submit";
 
     /************************ složky **********************************/
-    public static final String IMAGE_DIRECTORY_NAME = "images";
+    public static final String IMAGE_DIRECTORY_NAME = "Android File Upload";
 }
