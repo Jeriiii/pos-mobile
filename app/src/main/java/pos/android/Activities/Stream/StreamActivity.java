@@ -19,14 +19,14 @@ import pos.android.Activities.Stream.exts.Item.Item;
 import pos.android.Activities.Stream.exts.Item.ItemAdapter;
 import pos.android.Activities.Stream.exts.Item.ItemHolder;
 import pos.android.Activities.Stream.exts.Item.LoadStream;
+import pos.android.Config.Config;
 import pos.android.R;
 
 
-
+/**
+ * Aktivita zobrazující nekonečný seznam příspěvků. Umožňuje vložit příspěvek nebo nahrát foto.
+ */
 public class StreamActivity extends BaseListActivity {
-
-    // Image loading result to pass to startActivityForResult method.
-    private static int LOAD_IMAGE_RESULTS = 1;
 
     /** Sata která se mají načíst do streamu. */
     public ArrayList<Item> streamItems;
@@ -45,15 +45,15 @@ public class StreamActivity extends BaseListActivity {
 
     /** Tagy aplikace. */
     private static final String TAG_STREAM_ITEMS = "data";
-
     private static final String TAG_ID = "id";
-
     public static final String TAG_ITEM = "stream_item";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.loginRouter();
 
         setContentView(R.layout.stream_list);
 
@@ -87,6 +87,9 @@ public class StreamActivity extends BaseListActivity {
         new LoadStream(this, httpContext, streamItems).execute();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(getApplicationContext(), ItemActvity.class);
@@ -99,13 +102,17 @@ public class StreamActivity extends BaseListActivity {
         finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == LOAD_IMAGE_RESULTS && resultCode == RESULT_OK && data != null) {
-            // Let's read picked image data - its URI
+        /* Vytáhne obrázek z proměnné data a pošle ho aktivitě pro upload */
+        if (requestCode == Config.LOAD_IMAGE_RESULTS && resultCode == RESULT_OK && data != null) {
+            // Začne číst data obrázku - je to Uri
             Uri pickedImage = data.getData();
-            // Let's read picked image path using content resolver
             String[] filePath = { MediaStore.Images.Media.DATA };
             Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
             cursor.moveToFirst();
@@ -118,10 +125,9 @@ public class StreamActivity extends BaseListActivity {
             finish();
 
             ImageView image = (ImageView)findViewById(R.id.image);
-            // Now we need to set the GUI ImageView data with data read from the picked file.
+
             image.setImageBitmap(BitmapFactory.decodeFile(imagePath));
 
-            // At the end remember to close the cursor or you will end with the RuntimeException!
             cursor.close();
         }
     }

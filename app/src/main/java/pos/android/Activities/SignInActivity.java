@@ -60,6 +60,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
     private View mProgressView;
     private View mLoginFormView;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -220,10 +223,10 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         }
     }
 
-    @Override
     /**
-     * Generovaná metoda
+     * {@inheritDoc}
      */
+    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
@@ -241,7 +244,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
     }
 
     /**
-     * Generovaná metoda
+     * {@inheritDoc}
      */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
@@ -256,7 +259,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
     }
 
     /**
-     * Generovaná metoda
+     * {@inheritDoc}
      */
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
@@ -358,7 +361,7 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         }
 
         /**
-         * Generováno
+         * {@inheritDoc}
          */
         @Override
         protected void onCancelled() {

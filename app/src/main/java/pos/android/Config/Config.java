@@ -20,4 +20,7 @@ public class Config {
 
     /************************ složky **********************************/
     public static final String IMAGE_DIRECTORY_NAME = "Android File Upload";
+
+    /************************ pro upload obrázků **********************/
+    public static int LOAD_IMAGE_RESULTS = 1;
 }
