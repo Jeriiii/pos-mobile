@@ -57,7 +57,6 @@ public class SingleConversationCardFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         position = getArguments().getInt(ARG_POSITION);
-        userId = getArguments().getString(ARG_USER_ID_POSITION);
     }
 
     @Override
@@ -69,8 +68,10 @@ public class SingleConversationCardFragment extends Fragment {
         adapter = new MessagesAdapter(activity, R.layout.chat_message_text_item, messages);
         list.setAdapter(adapter);
         position = getArguments().getInt(ARG_POSITION);
-
+        userId = getArguments().getString(ARG_USER_ID_POSITION);
         addButtonClickListeners(view, activity);
+        Button closeButton = (Button) view.findViewById(R.id.closeButton);
+        closeButton.setText(userId);
         ChatManager.getInstance().loadLastMessages(messages, adapter, activity, userId);
         return view;
     }
