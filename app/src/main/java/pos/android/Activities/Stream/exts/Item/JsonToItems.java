@@ -9,15 +9,13 @@ import java.util.ArrayList;
 import pos.android.Activities.Stream.exts.Item.Item;
 
 /**
- * Created by Petr on 22.5.2015.
  * Převádí příspěvky ve formátu Json do ArrayList
+ * Created by Petr on 22.5.2015.
  */
 public class JsonToItems {
 
     /** Tagy aplikace. */
     private static final String TAG_STREAM_ITEMS = "data";
-
-    private static final String TAG_ID = "id";
 
     /** Příspěvky ve formátu json */
     JSONArray items = null;
@@ -33,7 +31,7 @@ public class JsonToItems {
     }
 
     /**
-     * Uloží příspěvky.
+     * Uloží příspěvky z JSON do seznamu.
      */
     public ArrayList<Item> saveItemsToList(JSONObject jsonItems) {
         JSONObject c;
@@ -41,11 +39,8 @@ public class JsonToItems {
         newListItems = new ArrayList<Item>();
 
         try {
-            // products found
-            // Getting Array of Products
             items = jsonItems.getJSONArray(TAG_STREAM_ITEMS);
 
-            // looping through All Products
             for (i = 0; i < items.length(); i++) {
 
                 c = items.getJSONObject(i);
@@ -61,10 +56,13 @@ public class JsonToItems {
         return newListItems;
     }
 
+    /**
+     * Vrátí správně nastavený příspěvek.
+     * @param jsonObject JSON ze kterého se vytváří příspěvek.
+     * @return Správně nastavený příspěvek podle svého typu.
+     * @throws JSONException
+     */
     private Item getItem(JSONObject jsonObject) throws JSONException{
-
-        // Storing each json item in variable
-
         Item item = new Item();
 
         if(isset(jsonObject, "userGallery")) {
@@ -121,8 +119,8 @@ public class JsonToItems {
 
     /**
      * Vrátí uživatelskou galerii.
-     * @param jsonObject
-     * @return
+     * @param jsonObject JSON ze kterého se vytváří příspěvek.
+     * @return Nastavený příspěvek jako galerie.
      * @throws JSONException
      */
     private Item getUserGallery(JSONObject jsonObject) throws JSONException{
@@ -149,8 +147,8 @@ public class JsonToItems {
 
     /**
      * Vrátí uživatelský status.
-     * @param jsonObject
-     * @return
+     * @param jsonObject JSON ze kterého se vytváří příspěvek.
+     * @return Nastavený příspěvek jako status.
      * @throws JSONException
      */
     private Item getStreamStatus(JSONObject jsonObject) throws JSONException{
@@ -170,8 +168,8 @@ public class JsonToItems {
 
     /**
      * Vrátí přiznání.
-     * @param jsonObject
-     * @return
+     * @param jsonObject JSON ze kterého se vytváří příspěvek.
+     * @return Nastavený příspěvek jako přiznání.
      * @throws JSONException
      */
     private Item getConfession(JSONObject jsonObject) throws JSONException{
