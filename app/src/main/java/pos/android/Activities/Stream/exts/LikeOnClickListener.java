@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pos.android.Activities.Stream.exts.Item.Item;
+import pos.android.Config.Config;
 import pos.android.Http.HttpConection;
 
 /**
@@ -65,7 +66,7 @@ public class LikeOnClickListener implements View.OnClickListener {
          */
         @Override
         protected String doInBackground(String... params) {
-            String url = HttpConection.host + HttpConection.path + "/http-one-page/";
+            String url = HttpConection.host + HttpConection.path + Config.pres_http_one_page;
             List<NameValuePair> urlParams = getParams();
 
             HttpConection con = new HttpConection();
@@ -87,12 +88,12 @@ public class LikeOnClickListener implements View.OnClickListener {
             }
             if(item.isConfession) {
                 urlParams.add(new BasicNameValuePair("confessionID", Integer.toString(item.parentId)));
-                urlParams.add(new BasicNameValuePair("do", "likeStatus"));
+                urlParams.add(new BasicNameValuePair("do", "likeConfession"));
             }
             if(item.isStatus) {
                 urlParams.add(new BasicNameValuePair("statusID", Integer.toString(item.parentId)));
                 urlParams.add(new BasicNameValuePair("ownerID", Integer.toString(item.userId)));
-                urlParams.add(new BasicNameValuePair("do", "likeConfession"));
+                urlParams.add(new BasicNameValuePair("do", "likeStatus"));
             }
 
             return urlParams;

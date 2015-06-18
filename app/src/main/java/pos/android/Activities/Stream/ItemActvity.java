@@ -32,6 +32,7 @@ import pos.android.Activities.Stream.exts.Item.ItemAdapter;
 import pos.android.Activities.Stream.exts.Item.ItemHolder;
 import pos.android.Activities.Stream.exts.Comment.JsonToComments;
 import pos.android.Activities.Stream.exts.LikeOnClickListener;
+import pos.android.Config.Config;
 import pos.android.DownloadManager.LoadImageManager;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
@@ -254,16 +255,16 @@ public class ItemActvity extends BaseListActivity {
          * Vrátí správně url.
          */
         private String getUrl() {
-            String url = HttpConection.host + HttpConection.path + "/http-one-page/";
+            String url = HttpConection.host + HttpConection.path + Config.pres_http_one_page;
 
             if(item.isUserImage) {
-                url = url + "user-image-comments/";
+                url = url + "/user-image-comments/";
             }
             if(item.isStatus) {
-                url = url + "status-comments/";
+                url = url + "/status-comments/";
             }
             if(item.isConfession) {
-                url = url + "confession-comments/";
+                url = url + "/confession-comments/";
             }
 
             return url;
@@ -305,7 +306,7 @@ public class ItemActvity extends BaseListActivity {
          */
         @Override
         protected String doInBackground(String... params) {
-            String url = HttpConection.host + HttpConection.path + "/http-one-page/";
+            String url = HttpConection.host + HttpConection.path + Config.pres_http_one_page;
             List<NameValuePair> urlParams = getParams();
 
             HttpConection con = new HttpConection();
