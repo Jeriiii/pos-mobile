@@ -12,6 +12,7 @@ import java.util.List;
 import pos.android.Activities.Chat.Conversations.ConversationItem;
 
 /**
+ * Adaptér starající se o zprávy v seznamu zpráv
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 25.5.2015.
  */
 public class MessagesAdapter extends ArrayAdapter<MessageItem> {
