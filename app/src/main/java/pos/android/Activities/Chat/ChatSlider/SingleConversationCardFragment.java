@@ -38,10 +38,16 @@ public class SingleConversationCardFragment extends Fragment {
     private int position;
     private int userId;
 
+    /** Seznam zpráv, na které je napojený adaptér */
     private LinkedList<MessageItem> messages = new LinkedList<MessageItem>();
     private MessagesAdapter adapter;
     private ChatActivity activity;
 
+    /**
+     * Vytvářeč instancí
+     * @param userId id uživatele (ze serveru), se kterým si píšeme
+     * @return
+     */
     public static SingleConversationCardFragment newInstance(int userId) {
         SingleConversationCardFragment f = new SingleConversationCardFragment();
         Bundle b = new Bundle();
@@ -70,14 +76,27 @@ public class SingleConversationCardFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Explicitní nastavení pozice karty kvůli listenerům
+     * @param position
+     */
     public void setPosition(int position) {
         this.position = position;
     }
 
+    /**
+     * Vrací uživatelské ID, kterého se tato karta týká
+     * @return
+     */
     public int getUserId(){
         return userId;
     }
 
+    /**
+     * Přidává všechny potřebné listenery
+     * @param view upravený view karty
+     * @param activity aktivita, kde je stránkovač
+     */
     private void addButtonClickListeners(ViewGroup view, final ChatActivity activity) {
         /* closeButton */
         Button closeButton = (Button) view.findViewById(R.id.closeButton);
@@ -114,6 +133,9 @@ public class SingleConversationCardFragment extends Fragment {
         });
     }
 
+    /**
+     * Upozorní adaptér na změnu zpráv v seznamu
+     */
     public void notifyAdapter() {
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -123,6 +145,11 @@ public class SingleConversationCardFragment extends Fragment {
         });
     }
 
+    /**
+     * Pošle zprávu na server a upraví podle toho seznamy - pomocí ChatManageru
+     * @param textInput
+     * @return
+     */
     private boolean sendMessage(TextView textInput){
         String text = textInput.getText().toString();
         if(text.isEmpty()){
@@ -134,11 +161,18 @@ public class SingleConversationCardFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Vrátí pozici mezi kartami
+     * @return
+     */
     public int getPosition(){
         return position;
     }
 
-
+    /**
+     * Vrátí zprávy zobrazené na kartě
+     * @return
+     */
     public LinkedList<MessageItem> getMessages(){
         return messages;
     }

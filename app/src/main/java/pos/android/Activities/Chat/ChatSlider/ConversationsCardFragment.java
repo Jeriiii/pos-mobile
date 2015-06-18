@@ -31,6 +31,11 @@ public class ConversationsCardFragment extends Fragment {
     private ChatActivity activity;
     private ConversationsAdapter adapter;
 
+    /**
+     * Vytvářeč instancí karty
+     * @param position pozice ve stránkovači
+     * @return
+     */
     public static ConversationsCardFragment newInstance(int position) {
         ConversationsCardFragment fragment = new ConversationsCardFragment();
         Bundle b = new Bundle();
@@ -61,10 +66,17 @@ public class ConversationsCardFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Vrací seznam, na který je napojený adaptér
+     * @return
+     */
     public LinkedList<ConversationItem> getConversationsList() {
         return conversations;
     }
 
+    /**
+     * Upozorní související adaptér na změnu v datech seznamu
+     */
     public void notifyAdapter(){
         activity.runOnUiThread(new Runnable() {
             @Override

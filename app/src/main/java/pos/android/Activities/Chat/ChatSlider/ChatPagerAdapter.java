@@ -23,11 +23,14 @@ import java.util.Map;
  */
 public class ChatPagerAdapter extends FragmentStatePagerAdapter {
 
+    /** počet statických karet (které nejdou zavřít) */
     public static final int COUNT_OF_STATIC_TABS = 1;
 
-
+    /* pozice statické karty konverzací */
     private static final int CONVERSATIONS_POSITION = 0;
+    /* název statické karty konverzací */
     private static final String CONVERSATIONS_HEADER = "Konverzace";
+    /* fragment konverzací*/
     private ConversationsCardFragment conversationsCardFragment = ConversationsCardFragment.newInstance(CONVERSATIONS_POSITION);
 
     /* všechny headery karet*/
@@ -44,6 +47,11 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
+    /**
+     * Implementace pro pager - název zobrazený pro danou pozici v navigaci karet
+     * @param position
+     * @return
+     */
     @Override
     public CharSequence getPageTitle(int position) {
         switch(position){
@@ -52,14 +60,22 @@ public class ChatPagerAdapter extends FragmentStatePagerAdapter {
             default:
                 return conversationsUsernames.get(position - COUNT_OF_STATIC_TABS) + "";
         }
-
     }
 
+    /**
+     * Implementace pro pager - kolik karet je otevřených
+     * @return
+     */
     @Override
     public int getCount() {
         return openedIds.size() + COUNT_OF_STATIC_TABS;
     }
 
+    /**
+     * Implementace pro pager - vrací fragment, který má být na dané pozici
+     * @param position pozice mezi kartami
+     * @return
+     */
     @Override
     public Fragment getItem(int position) {
         switch (position){
