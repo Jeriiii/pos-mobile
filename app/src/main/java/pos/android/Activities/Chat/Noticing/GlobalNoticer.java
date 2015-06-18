@@ -15,6 +15,8 @@ import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.R;
 
 /**
+ * Implementace rozhraní použitých k upozorňování na příchozí zprávy a počet nepřečtených zpráv.
+ * Používá se v situacích, kdy není otevřená žádná relevantní aktivita či aplikace běží na pozadí.
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.6.2015.
  */
 public class GlobalNoticer implements INewMessageNoticable, IUnreadedCountNoticable {
@@ -28,15 +30,20 @@ public class GlobalNoticer implements INewMessageNoticable, IUnreadedCountNotica
 
     @Override
     public void updateConversationsList(int senderId, String userName, MessageItem messageItem) {
-        
+        /*nedělá nic*/
     }
 
     @Override
     public void onUnreadedCountIncomming(int unreadedCount) {
-        //nedělá nic
+        /*nedělá nic*/
     }
 
-
+    /**
+     * Vytvoří a zobrazí uživateli notifikaci o tom, že přišla nová zpráva
+     * @param userId id uživatele - použito jako id notifikace
+     * @param userName jméno uživatele - zobrazeno
+     * @param messageItem dotyčná entita zprávy
+     */
     private void notifyAboutMessage(int userId, String userName, MessageItem messageItem){
         Notification n;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
