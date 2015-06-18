@@ -8,10 +8,13 @@ import java.nio.charset.Charset;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 
+/**
+ * Třída pro odeslání fotky na server.
+ * Zdroj http://www.androidhive.info/2014/12/android-uploading-camera-image-video-to-server-with-progress-bar/
+ * ponecháno v původní podobě
+ */
 @SuppressWarnings("deprecation")
-public class AndroidMultiPartEntity extends MultipartEntity
-
-{
+public class AndroidMultiPartEntity extends MultipartEntity {
 
     private final ProgressListener listener;
 

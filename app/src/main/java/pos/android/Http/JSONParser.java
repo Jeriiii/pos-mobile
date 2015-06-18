@@ -1,6 +1,8 @@
 package pos.android.Http;
 
 /**
+ * Převádí response na JSON objekty.
+ *
  * Created by Petr on 27.4.2015.
  */
 import java.io.BufferedReader;
@@ -24,38 +26,29 @@ import pos.android.Http.HttpConection;
 
 public class JSONParser extends HttpConection {
 
-    static InputStream is = null;
-    static JSONObject jObj = null;
-    static String json = "";
-
-    // constructor
     public JSONParser() {
 
     }
 
-    // function get json from url
-    // by making HTTP POST or GET mehtod
-    /*public JSONObject getJSONmakeHttpRequest(String url, String method, List<NameValuePair> params) {
-        HttpContext httpContext = this.createHttpContext();
-
-        return this.getJSONmakeHttpRequest(url, method, params, httpContext);
-    }*/
-
-    // function get json from url
-    // by making HTTP POST or GET mehtod
+    /**
+     * Pošle Http request a odpověď zpracuje jako JSON
+     * @param url Url, kam se má poslat.
+     * @param method Metoda GET nebo POST
+     * @param params Parametry requestu.
+     * @param httpContext Kontext se kterým má request pracovat.
+     * @return JSON objekt
+     */
     public JSONObject getJSONmakeHttpRequest(String url, String method,
                                       List<NameValuePair> params, HttpContext httpContext) {
+        InputStream is = null;
+        JSONObject jObj = null;
+        String json = "";
 
-        // Making HTTP request
+        // Pošle HTTP request
         try {
             HttpResponse httpResponse = super.makeHttpRequest(url, method, params, httpContext);
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
-
-            int status = httpResponse.getStatusLine().getStatusCode();
-            /*if(status >= 400) {
-                return null; //nedokázal jsem se připojit
-            }*/
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -79,14 +72,13 @@ public class JSONParser extends HttpConection {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
 
-        // try parse the string to a JSON object
+        /* Zkusí parsovat JSON Objekt */
         try {
             jObj = new JSONObject(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
 
-        // return JSON String
         return jObj;
 
     }

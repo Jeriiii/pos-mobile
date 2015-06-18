@@ -26,24 +26,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
 
 import pos.android.Activities.Stream.StreamActivity;
+import pos.android.Config.Config;
 import pos.android.Http.JSONParser;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.CookieStore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,33 +45,24 @@ import pos.android.Http.PersistentCookieStore;
 import pos.android.R;
 import pos.android.User.UserSessionManager;
 
-/////////////////////////////
-
 
 /**
- * A login screen that offers login via email/password.
+ * Pro přihlášení uživatele.
  */
 public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+    /** Asynchroní task pro přihlášení na server */
     private UserLoginTask mAuthTask = null;
 
-    // UI references.
+    // UI
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +70,6 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
 
         setContentView(R.layout.activity_sign_in);
 
-        // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
@@ -115,6 +97,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    /**
+     * Slouží pro rozhodnutí, zda není uživatel již přihlášen.
+     */
     private void loginRouter() {
         PersistentCookieStore mCookieStore = new PersistentCookieStore(
                 getApplicationContext());
@@ -134,37 +119,30 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         getLoaderManager().initLoader(0, null, this);
     }
 
-
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * Obsloužení odeslání formuláře pro přihlášení.
      */
     public void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
 
-        // Reset errors.
+        // Resetování chybových hlášek.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-
-        // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
-        // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -176,12 +154,10 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+            //Tady se zobrazí error a focus se zaměří na první pole s errorem
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            //Pokusí se o přihlášení na server na pozadí
             showProgress(true);
             HttpContext httpContext = HttpConection.createHttpContext(getApplicationContext(), true);
             UserSessionManager session = new UserSessionManager(
@@ -193,16 +169,26 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         }
     }
 
+    /**
+     * Rozhoduje, zda je email validní
+     * @param email Emailová adreasa.
+     * @return TRUE = validní, jinak FALSE
+     */
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
 
+    /**
+     * Rozhoduje, zda je heslo validní.
+     * @param password Heslo.
+     * @return TRUE = validní, jinak FALSE
+     */
     private boolean isPasswordValid(String password) {
         return password.length() >= 3;
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Zobrazí progress bar dokud se nedokončí přihlášení
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
@@ -237,6 +223,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -254,6 +243,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<String>();
@@ -266,11 +258,17 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         addEmailsToAutoComplete(emails);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
 
+    /**
+     * Generovaná metoda
+     */
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -281,7 +279,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
         int IS_PRIMARY = 1;
     }
 
-
+    /**
+     * Generovaná metoda
+     */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -292,14 +292,17 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Asynchroní přihlášení na server.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        /** email */
         private final String mEmail;
+        /** heslo */
         private final String mPassword;
+        /** http kontext celé aplikace */
         private HttpContext httpContext;
+        /** session celé aplikace */
         private UserSessionManager session;
 
         UserLoginTask(String email, String password, HttpContext httpContext, UserSessionManager session) {
@@ -310,9 +313,12 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             this.session = session;
         }
 
+        /**
+         * Samotné přihlášení http požadavkem.
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
-            String url = HttpConection.host + HttpConection.path + "/sign/in?do=signInForm-submit";
+            String url = HttpConection.host + HttpConection.path + Config.pres_sign + Config.sig_sign_in;
 
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
 
@@ -333,13 +339,17 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             }
         }
 
+        /**
+         * Uložení přihlášeného uživatele nebo nastavení chyby.
+         * @param success TRUE = přihlášení proběhlo úspěšně.
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
 
             if (success) {
-                session.createUserLoginSession("Zatim Bezejmeny", mEmail, mPassword);
+                session.createUserLoginSession(null, mEmail, mPassword);
 
                 Intent i = new Intent(getApplicationContext(), StreamActivity.class);
                 startActivity(i);
@@ -350,6 +360,9 @@ public class SignInActivity extends Activity implements LoaderCallbacks<Cursor> 
             }
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected void onCancelled() {
             mAuthTask = null;

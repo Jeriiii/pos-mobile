@@ -1,8 +1,8 @@
 package pos.android.Activities.Stream.exts.Item;
 
 /**
- * Created by Petr on 22.5.2015.
  * Zapamatuje si jeden příspěvek. Používá se k předání příspěvku mezi třídami. Návrhový vzor jedináček.
+ * Created by Petr on 22.5.2015.
  */
 public class ItemHolder {
     /** Instance třídy */

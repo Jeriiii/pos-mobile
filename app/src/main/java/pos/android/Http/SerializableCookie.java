@@ -23,6 +23,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * Zdroj https://github.com/couchbase/couchbase-lite-java-core/blob/master/src/main/java/com/couchbase/lite/support/SerializableCookie.java
+ * ponechány původní komentáře
+ *
  * A wrapper class around {@link org.apache.http.cookie.Cookie} and/or {@link org.apache.http.impl.cookie.BasicClientCookie} designed for use in {@link
  * PersistentCookieStore}.
  */

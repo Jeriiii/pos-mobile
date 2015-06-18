@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import pos.android.R;
 
 /**
+ * Nastavuje data pro seznam komentářů.
  * Created by Petr on 20.5.2015.
  */
 
@@ -20,6 +21,9 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         super(context, 0, comments);
     }
 
+    /**
+     * Vrátí view se správně nastavenými daty.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -39,9 +43,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
     }
 
     /**
-     * Zobrazí políčko - text - obrázek, pokud existuje.
-     * @param convertView
-     * @param itemParam
+     * Nastaví text komentáře.
      */
     private void setTextView(View convertView, String itemParam, int viewId) {
         TextView tvName = (TextView) convertView.findViewById(viewId);

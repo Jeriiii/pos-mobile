@@ -1,7 +1,6 @@
 package pos.android.Activities.Stream;
 
-        import android.app.Activity;
-import android.app.AlertDialog;
+        import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-        import android.provider.MediaStore;
         import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,17 +26,21 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
-import java.io.File;
+        import java.io.File;
 import java.io.IOException;
 
         import pos.android.Activities.BaseActivities.BaseActivity;
         import pos.android.Activities.Stream.exts.AndroidMultiPartEntity;
-import pos.android.Activities.Stream.exts.Config;
+import pos.android.Config.Config;
         import pos.android.Http.HttpConection;
         import pos.android.R;
 
+/**
+ * Aktivita pro upload obrázku na server. Zdroj
+ * http://www.androidhive.info/2014/12/android-uploading-camera-image-video-to-server-with-progress-bar/
+ * Ponechán původní kód a komentáře, dokomentovány jsou pouze změny.
+ */
 public class UploadImageActivity extends BaseActivity {
     // LogCat tag
     private static final String TAG = UploadImageActivity.class.getSimpleName();
@@ -173,8 +175,6 @@ public class UploadImageActivity extends BaseActivity {
                 entity.addPart("image", new FileBody(sourceFile));
 
                 // Extra parameters if you want to pass to server
-                /*entity.addPart("website",
-                        new StringBody("www.androidhive.info"));*/
                 entity.addPart("email", new StringBody("abc@gmail.com"));
 
                 totalSize = entity.getContentLength();

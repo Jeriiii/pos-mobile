@@ -18,13 +18,21 @@ import pos.android.DownloadManager.LoadImageManager;
 import pos.android.R;
 
 /**
+ * Nastavuje view příspěvků.
  * Created by Petr on 20.5.2015.
  */
 
 public class ItemAdapter extends ArrayAdapter<Item> {
+    /** výška seznamu */
     public int listHeight = 0;
+
+    /** kontext aplikace */
     private HttpContext httpContext;
+
+    /** Sloužba pro načítání obrázků ze serveru. */
     private LoadImageManager loadImageManager;
+
+    /** Kontext aplikace = aktivita. */
     private Context context;
 
     public ItemAdapter(Activity activity, ArrayList<Item> users) {
@@ -33,10 +41,16 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         this.context = activity;
     }
 
+    /**
+     * Setter na httpContext
+     */
     public void setHttpContext(HttpContext httpContext) {
         this.httpContext = httpContext;
     }
 
+    /**
+     * Správně nastaví právě vykreslovaný příspěvek a přiřadí mu data.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -64,9 +78,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
     }
 
     /**
-     * Zobrazí políčko - text - obrázek, pokud existuje.
-     * @param convertView
-     * @param itemParam
+     * Zobrazí políčko - text - obrázek, pokud existuje a naplní ho daty.
      */
     private void setTextView(View convertView, String itemParam, int viewId) {
         TextView tvName = (TextView) convertView.findViewById(viewId);
@@ -78,7 +90,9 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         }
     }
 
-
+    /**
+     * Nastaví liky u příspěvku.
+     */
     private void setLikesView(View convertView, int countLikes, int viewId, Item item) {
         String text = "Líbí";
         if(countLikes != 0) {
@@ -91,6 +105,9 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         setTextView(convertView, text, viewId);
     }
 
+    /**
+     * Nastaví tlačítko přidat komentář.
+     */
     private void setCommentsView(View convertView, int countComments, int viewId) {
         String text = "Přidat komentář";
         if(countComments != 0) {
@@ -99,6 +116,9 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         setTextView(convertView, text, viewId);
     }
 
+    /**
+     * Nastaví obrázek, pokud existuje.
+     */
     private void setImgView(View convertView, int viewId, Item item, int position) {
         ImageView image = (ImageView) convertView.findViewById(viewId);
         if(item.imgUrl != null) {
@@ -112,8 +132,6 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 
     /**
      * Vrátí výšku seznamu.
-     * @param mView
-     * @return
      */
     private int getViewHeight(View mView) {
         mView.measure(

@@ -27,23 +27,26 @@ import java.util.Locale;
 
 import pos.android.Activities.SignInActivity;
 import pos.android.Activities.Stream.StreamActivity;
-import pos.android.Activities.Stream.exts.Comment.Comment;
-import pos.android.Activities.Stream.exts.Config;
+import pos.android.Config.Config;
 import pos.android.Http.HttpConection;
 import pos.android.Http.JSONParser;
 import pos.android.Http.PersistentCookieStore;
 import pos.android.R;
 
 /**
+ * Slouží pro načítání příspěvků do nekonečného seznamu.
  * Created by Petr on 24.5.2015.
  */
 public class LoadStream extends AsyncTask<Void, Void, Boolean> {
 
+    /** tag pro logování */
     private static final String TAG = LoadStream.class.getSimpleName();
 
+    /* konstanty pro rozlišení videa a obrázku v odpovědi */
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
 
+    /* konstanty pro rozlišení videa a obrázku */
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
@@ -71,8 +74,8 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * Before starting background thread Show Progress Dialog
-     * */
+     * {@inheritDoc}
+     */
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -80,10 +83,10 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * getting All products from url
-     * */
+     * Načte příspěvky ze serveru.
+     */
     protected Boolean doInBackground(Void... args) {
-        String url = HttpConection.host + HttpConection.path + "/one-page/stream-in-json";
+        String url = HttpConection.host + HttpConection.path + Config.pres_one_page + Config.ren_stream_json;
 
         List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
         int countItems = listItems.size();
@@ -105,10 +108,11 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * After completing background task Dismiss the progress dialog
-     * **/
+     * Načtení příspěvků přijatých ze serveru do aplikace.
+     */
     protected void onPostExecute(Boolean success) {
         if(!success) {
+            /* odhlášení uživatele, pokud JSON selže */
             Intent i = new Intent(streamActivity.getApplicationContext(), SignInActivity.class);
 
             PersistentCookieStore mCookieStore = new PersistentCookieStore(
@@ -203,6 +207,9 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
+    /**
+     * Spuštění fotoaparátu.
+     */
     private void onClickCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -214,6 +221,9 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
         streamActivity.startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
+    /**
+     * Odeslání statusu.
+     */
     public void onClickAddStatus() {
         EditText et = (EditText)streamActivity.findViewById(R.id.addStatus);
         String status = et.getText().toString();
@@ -284,7 +294,7 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * Creating file uri to store image/video
+     * Vytvoření uri pro uložení obrázku.
      */
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
@@ -301,7 +311,7 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 Config.IMAGE_DIRECTORY_NAME);
 
-        // Create the storage directory if it does not exist
+        // Vytvoří složku pro uložení obrázku, pokud neexistuje.
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 Log.d(TAG, "Oops! Failed create "
@@ -310,7 +320,7 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
             }
         }
 
-        // Create a media file name
+        // Vytvoří media soubor (video, obrázek)
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
         File mediaFile;
@@ -341,6 +351,9 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
             this.newStatus = newStatus;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -348,6 +361,9 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
             toast.show();
         }
 
+        /**
+         * Odeslání statusu na server.
+         */
         @Override
         protected String doInBackground(String... params) {
             String url = HttpConection.host + HttpConection.path + "/http-one-page/";
@@ -359,6 +375,9 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
             return null;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
@@ -366,7 +385,6 @@ public class LoadStream extends AsyncTask<Void, Void, Boolean> {
 
         /**
          * Vrátí správně nastavení parametry url.
-         * @return
          */
         private List<NameValuePair> getParams() {
             List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
