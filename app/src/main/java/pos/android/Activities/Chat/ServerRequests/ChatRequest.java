@@ -8,8 +8,7 @@ import pos.android.Http.DatenodeJsonRequest;
 import pos.android.Http.HttpConection;
 
 /**
- *
- * Pta se na konverzace ze serveru
+ * Požadavek na server sloužící jako rodičovský pro další požadavky chatu
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
 public class ChatRequest extends DatenodeJsonRequest{

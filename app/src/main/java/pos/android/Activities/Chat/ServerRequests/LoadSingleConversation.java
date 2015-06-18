@@ -17,6 +17,7 @@ import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 
 /**
+ * Načte poslední zprávy s daným uživatelem do dané karty
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
 public class LoadSingleConversation extends ChatRequest {
@@ -29,6 +30,15 @@ public class LoadSingleConversation extends ChatRequest {
     private Activity activity;
     private String userId;
 
+    /**
+     * Konstruktor požadavku
+     * @param context kontext, ze kterého se požadavek volá
+     * @param httpContext http kontext použitý k volání
+     * @param list seznam, který se má naplnit zprávami
+     * @param adapter adaptér nad seznamem
+     * @param activity aktivita, ze které se volá
+     * @param userId id uživatele, se kterým si píšu
+     */
     public LoadSingleConversation(Context context, HttpContext httpContext, LinkedList<MessageItem> list, MessagesAdapter adapter, Activity activity, String userId){
         super(context, httpContext);
         this.list = list;
@@ -60,6 +70,11 @@ public class LoadSingleConversation extends ChatRequest {
         }
     }
 
+    /**
+     * Konvertuje zprávu z json formátu a přidá ji do seznamu
+     * @param message
+     * @throws JSONException
+     */
     private void addMessage(JSONObject message) throws JSONException{
         MessageItem.MessageType type = MessageItem.MessageType.TEXT;
         if(message.getInt("type") != 0){
@@ -76,6 +91,9 @@ public class LoadSingleConversation extends ChatRequest {
         ));
     }
 
+    /**
+     * Upozorní adaptér na změnu dat
+     */
     private void notifyAdapter(){
         activity.runOnUiThread(new Runnable() {
             @Override
