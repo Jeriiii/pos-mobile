@@ -15,6 +15,9 @@ import pos.android.Activities.BaseActivities.BaseFragmentActivity;
 import pos.android.Activities.Chat.Noticing.NewMessagesNoticer;
 import pos.android.R;
 
+/**
+ * Aktivita obsahující kompletní chat.
+ */
 public class ChatActivity extends BaseFragmentActivity {
 
     private ViewPager pager;
@@ -23,6 +26,10 @@ public class ChatActivity extends BaseFragmentActivity {
 
     private NewMessagesNoticer noticer;
 
+    /**
+     * Vytvoří pager a nastaví mu potřebné parametry
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,32 +46,52 @@ public class ChatActivity extends BaseFragmentActivity {
         noticer = new NewMessagesNoticer((ChatActivity)this);
     }
 
+    /**
+     * Registrace notifieru u chat manageru (dává tím znamení, že je tato aktivita aktivní)
+     */
     @Override
     protected void onResume() {
         super.onResume();
         ChatManager.getInstance().setMessageNoticer(noticer);
     }
 
+    /**
+     * Odregistrování notifieru zpráv z chat manageru, když uživatel tuto aktivitu opustí
+     */
     @Override
     protected void onPause() {
         super.onPause();
         ChatManager.getInstance().setMessageNoticer(null);
     }
 
-
-
+    /**
+     * Vrátí http kontext používaný touto aktivitou.
+     * @return
+     */
     public HttpContext getHttpContext(){
         return this.httpContext;
     }
 
+    /**
+     * Vrátí adaptér nad stránkovačem
+     * @return
+     */
     public ChatPagerAdapter getPagerAdapter(){
         return (ChatPagerAdapter) pager.getAdapter();
     }
 
+    /**
+     * Vrátí celou komponentu se stránkovačem
+     * @return
+     */
     public PagerSlidingTabStrip getTabs(){
         return tabs;
     }
 
+    /**
+     * Vrátí pager
+     * @return
+     */
     public ViewPager getPager(){
         return pager;
     }
