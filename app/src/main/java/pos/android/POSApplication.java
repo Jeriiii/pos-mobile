@@ -14,6 +14,7 @@ public class POSApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        /* vytvoření a spuštění chat manageru */
         ChatManager.getInstance().setApplicationContext(getApplicationContext());
         ChatManager.getInstance().run();
     }

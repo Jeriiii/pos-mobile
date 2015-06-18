@@ -15,6 +15,8 @@ import pos.android.Activities.Chat.ChatActivity;
 import pos.android.Http.JSONParser;
 
 /**
+ * Třída zapouzdřující http požadavky na server. Je schopná nastavit url a parametry.
+ * Odpověď ve formátu json je zpracována a rozparsována do glovální proměnné json.
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
 public class DatenodeJsonRequest extends AsyncTask<String, String, String> {
