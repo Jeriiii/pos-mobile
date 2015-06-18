@@ -12,6 +12,7 @@ import pos.android.Activities.Stream.exts.Item.Item;
 import pos.android.R;
 
 /**
+ * Adaptér starající se o seznam konverzací
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 25.5.2015.
  */
 public class ConversationsAdapter extends ArrayAdapter<ConversationItem> {

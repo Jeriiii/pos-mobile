@@ -9,6 +9,7 @@ import pos.android.Activities.Chat.ChatActivity;
 
 
 /**
+ * Listener naslouchající událostem na kartě se seznamem konverzací
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 30.5.2015.
  */
 public class ConversationClickListener implements AdapterView.OnItemClickListener {
