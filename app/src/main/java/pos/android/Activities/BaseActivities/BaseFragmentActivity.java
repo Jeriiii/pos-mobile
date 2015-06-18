@@ -21,7 +21,7 @@ import pos.android.User.UserSessionManager;
 
 
 /**
- * A login screen that offers login via email/password.
+ * Rodičovská aktivita pro všechny fragmentové aktivity
  */
 public class BaseFragmentActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 
@@ -47,7 +47,7 @@ public class BaseFragmentActivity extends FragmentActivity implements LoaderCall
     }
 
     /**
-     * Horní menu
+     * Vytvoření action baru
      * @param menu
      * @return
      */
@@ -56,6 +56,11 @@ public class BaseFragmentActivity extends FragmentActivity implements LoaderCall
         return MainMenu.onCreateOptionsMenu(this, menu, getMenuInflater());
     }
 
+    /**
+     * Obsluha kliknutí na tlačítko v actionbaru
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean done = MainMenu.onOptionsItemSelected(this, item);

@@ -9,6 +9,7 @@ import pos.android.Activities.Chat.ChatManager;
 import pos.android.Activities.Chat.Messages.MessageItem;
 
 /**
+ * Listener naslouchající přepínání karet
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 16.6.2015.
  */
 public class OnChatCardChangeListener implements ViewPager.OnPageChangeListener {
@@ -24,6 +25,11 @@ public class OnChatCardChangeListener implements ViewPager.OnPageChangeListener 
 
     }
 
+    /**
+     * Nastane, když uživatel nějakým způsobem zobrazí stránku ve stránkovači.
+     * Do pravidelného požadavku o nové zprávy pak přidá informaci o tom, že zobrazené zprávy uživatel četl
+     * @param position
+     */
     @Override
     public void onPageSelected(int position) {
         SingleConversationCardFragment item = pagerAdapter.getConversationFragmentOnPosition(position);

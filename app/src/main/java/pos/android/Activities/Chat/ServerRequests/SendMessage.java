@@ -21,6 +21,7 @@ import pos.android.Activities.Chat.Messages.MessagesAdapter;
 import pos.android.Http.HttpConection;
 
 /**
+ * Požadavek použitý k poslání zprávy na server.
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
 public class SendMessage extends ChatRequest {
@@ -31,6 +32,15 @@ public class SendMessage extends ChatRequest {
     private MessagesAdapter adapter;
     private Activity activity;
 
+    /**
+     * Konstruktor požadavku
+     * @param context kontext, ze kterého se požadavek volá
+     * @param httpContext http kontext použitý k odeslání požadavku
+     * @param message zpráva, která má být odeslána na server
+     * @param adapter adaptér starající se o seznam konverzací
+     * @param activity aktivita, ze které se volá požadavek
+     * @param userId id uživatele, kterému má být zpráva poslána
+     */
     public SendMessage(Context context, HttpContext httpContext, MessageItem message, MessagesAdapter adapter, Activity activity, String userId){
         super(context, httpContext);
         this.message = message;
@@ -60,6 +70,9 @@ public class SendMessage extends ChatRequest {
         }
     }
 
+    /**
+     * Upozornění adaptéru na změnu dat.
+     */
     private void notifyAdapter(){
         activity.runOnUiThread(new Runnable() {
             @Override

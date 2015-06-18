@@ -5,6 +5,7 @@ import android.content.Context;
 import pos.android.Data.CachedDatabase;
 
 /**
+ * Objekt k použití pro cachování zpráv v databázi na zařízení
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 3.6.2015.
  */
 public class MessageDatabase extends CachedDatabase {

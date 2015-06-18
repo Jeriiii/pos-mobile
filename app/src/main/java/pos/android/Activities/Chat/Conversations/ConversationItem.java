@@ -8,6 +8,7 @@ import android.widget.TextView;
 import pos.android.R;
 
 /**
+ * Entita zastupující jedinou položku seznamu konverzací. Také umí vytvořit svůj view v seznamu
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 24.5.2015.
  */
 public class ConversationItem {

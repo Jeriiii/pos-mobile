@@ -12,6 +12,8 @@ import pos.android.Activities.Chat.Conversations.ConversationItem;
 import pos.android.Activities.Chat.Messages.MessageItem;
 
 /**
+ * Objekt implementující rozhraní, které je voláno při příchodu nových zpráv.
+ * Používá se, když je aktivní aktivita s chatem.
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.6.2015.
  */
 public class NewMessagesNoticer implements INewMessageNoticable {
@@ -32,12 +34,24 @@ public class NewMessagesNoticer implements INewMessageNoticable {
         updateConversationsList(senderId, userName, messages.get(messages.size() - 1));
     }
 
+    /**
+     * Přidá příchozí zprávy do příslušné karty chatu
+     * @param card karta chatu
+     * @param messages seznam příchozích zpráv
+     */
     private void addNewMessages(SingleConversationCardFragment card, List<MessageItem> messages){
         LinkedList<MessageItem> cardList = card.getMessages();
         cardList.addAll(messages);
         card.notifyAdapter();
     }
 
+    /**
+     * Aktualizuje seznam konverzací o dotyčnou zprávu - buď aktualizuje konverzaci již existujícího uživatele, nebo vytvoří
+     * novou položku seznamu konverzací
+     * @param senderId id dotyčného uživatele
+     * @param userName jméno dotyčného uživatele
+     * @param messageItem zpráva, která má aktualizovat položku uživatele v seznamu konverzací (typicky poslední příchozí zpráva)
+     */
     public void updateConversationsList(int senderId, String userName, MessageItem messageItem) {
         ConversationsCardFragment conversationsFragment = adapter.getConversationsListFragment();
         LinkedList<ConversationItem> conversations = conversationsFragment.getConversationsList();

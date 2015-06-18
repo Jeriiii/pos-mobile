@@ -16,6 +16,7 @@ import pos.android.Activities.Chat.Messages.MessageItem;
 import pos.android.Activities.Chat.Messages.MessagesAdapter;
 
 /**
+ * Požadavek na server používaný k načítání starších zpráv.
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
 public class LoadOlderMessages extends ChatRequest {
@@ -30,6 +31,18 @@ public class LoadOlderMessages extends ChatRequest {
     private String idUser;
     private Button moreButton;
 
+    /**
+     * Konstruktor požadavku
+     * @param context kontext, ze kterého se volá požadavek
+     * @param httpContext http kontext, kterým se volá
+     * @param list seznam zpráv, který má být naplněn požadavkem
+     * @param adapter adaptér pověšený na seznam zpráv
+     * @param activity aktivita, ze které se požadavek volá
+     * @param moreMessagesButton tlačítko, které má zmizet, když starší zprávy neexistují
+     * @param idUser id uživatele, se kterým si píšu
+     * @param lastId poslední známé id zprávy (nejmenší)
+     * @param limit počet zpráv, které má požadavek přidat
+     */
     public LoadOlderMessages(Context context, HttpContext httpContext, LinkedList<MessageItem> list, MessagesAdapter adapter, Activity activity, Button moreMessagesButton, String idUser, int lastId, int limit){
         super(context, httpContext);
         this.adapter = adapter;
@@ -71,6 +84,11 @@ public class LoadOlderMessages extends ChatRequest {
         }
     }
 
+    /**
+     * Konvertuje zprávu z json formátu do MessageItem a přidá ji do seznamu zpráv
+     * @param message
+     * @throws JSONException
+     */
     private void addMessage(JSONObject message) throws JSONException{
         MessageItem.MessageType type = MessageItem.MessageType.TEXT;
         if(message.getInt("type") != 0){
@@ -87,6 +105,9 @@ public class LoadOlderMessages extends ChatRequest {
         ));
     }
 
+    /**
+     * Upozorní daný adaptér na změnu dat.
+     */
     private void notifyAdapter(){
         activity.runOnUiThread(new Runnable() {
             @Override

@@ -19,6 +19,7 @@ import pos.android.Activities.Chat.Noticing.INewMessageNoticable;
 import pos.android.Activities.Chat.Noticing.IUnreadedCountNoticable;
 
 /**
+ * Požadavek, který se pravidelně volá, aby zjistil, zda má server nějaké nové zprávy.
  * Created by Jan Kotalík <jan.kotalik.pro@gmail.com> on 15.5.2015.
  */
 public class CheckNewMessages extends ChatRequest {
@@ -32,6 +33,15 @@ public class CheckNewMessages extends ChatRequest {
 
     private boolean firstAsk = false;
 
+    /**
+     * Konstruktor požadavku
+     * @param context kontext, ze kterého se volá
+     * @param httpContext http kontext, který je použit k požadavku
+     * @param notifier notifikátor, který má být po odpovědi upozorněn na nové zprávy
+     * @param unreadedNotifier notifikátor, který má být upozorněn na počet nepřečtených zpráv
+     * @param lastId poslední (nejvyšší) id zprávy, které aplikace zná
+     * @param readedMessages seznam již přečtených zpráv, o jejichž přečtení chceme informovat server (stačí vždy poslední zpráva z konverzace s daným uživatelem)
+     */
     public CheckNewMessages(Context context, HttpContext httpContext, INewMessageNoticable notifier, IUnreadedCountNoticable unreadedNotifier, int lastId, HashMap<Integer, Integer> readedMessages){
         super(context, httpContext);
         if(notifier == null || unreadedNotifier == null) throw new IllegalArgumentException("Notifikátory nemohou být null.");
@@ -59,6 +69,10 @@ public class CheckNewMessages extends ChatRequest {
         }
     }
 
+    /**
+     * Zpracuje příchozí json odpověď
+     * @throws JSONException
+     */
     private void handleIncommingMessages() throws JSONException{
         if(json.isNull(TAG_NEW_MESSAGES)){/* uživatel nemá vůbec žádné zprávy*/
             return;
@@ -72,6 +86,12 @@ public class CheckNewMessages extends ChatRequest {
         }
     }
 
+    /**
+     * Zpracuje tu část odpovědi, která obsahuje jediného uživatele
+     * @param senderKey
+     * @param sender
+     * @throws JSONException
+     */
     private void handleMessagesFromSender(String senderKey, JSONObject sender) throws JSONException {
         LinkedList<MessageItem> list = new LinkedList<MessageItem>();
         JSONArray messages = sender.getJSONArray(TAG_MESSAGES);
@@ -85,10 +105,18 @@ public class CheckNewMessages extends ChatRequest {
         messageNotifier.incommingMessageFromUser(senderKey, sender.getString("name"), list);
     }
 
+    /**
+     * Aktualizuje poslední známé id zprávy.
+     * @param messageId
+     */
     private void updateLastId(int messageId) {
         ChatManager.lastId = Math.max(ChatManager.lastId, messageId);
     }
 
+    /**
+     * Upozorní daný notifier na počet nepřečtených zpráv
+     * @throws JSONException
+     */
     private void notifyAboutUnreadedCount() throws JSONException {
         int unreaded = json.getInt(TAG_UNREADED_MESSAGES_COUNT);
         unreadedNotifier.onUnreadedCountIncomming(unreaded);
@@ -111,6 +139,12 @@ public class CheckNewMessages extends ChatRequest {
         return false;
     }
 
+    /**
+     * Překonvertuje zprávu z json formátu do MessageItemu
+     * @param message zpráva z odpovědi serveru
+     * @return
+     * @throws JSONException
+     */
     private MessageItem convertToMessage(JSONObject message) throws JSONException{
         MessageItem.MessageType type = MessageItem.MessageType.TEXT;
         if(message.getInt("type") != 0){
